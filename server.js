@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const MongoClient = require('mongodb').MongoClient;
 
 const app = express();
 app.use(express.static('static'));
@@ -60,12 +61,19 @@ function validateIssue(issue) {
 }
 
 app.get('/api/issues', (req, res) => {
-    const metadata = {
-        total_count: issues.length
-    };
-    res.json({
-        _metadata: metadata,
-        records: issues
+    db.collection('issues').find().toArray().then(issues => {
+        const metadata = {
+            total_count: issues.length
+        };
+        res.json({
+            _metadata: metadata,
+            records: issues
+        })
+    }).catch(error => {
+        console.log(error);
+        res.status(500).json({
+            message: `Internal Server Error: ${error}`
+        });
     });
 });
 
@@ -88,7 +96,12 @@ app.post('/api/issues', (req, res) => {
     res.json(newIssue);
 });
 
-
-app.listen(port_number, () => {
-    console.log('App started on port ' + port_number);
+let db;
+MongoClient.connect('mongodb://localhost/issuetracker').then(connection => {
+    db = connection;
+    app.listen(port_number, () => {
+        console.log('App started on port ' + port_number);
+    });
+}).catch(error => {
+    console.log('ERROR:', error);
 });

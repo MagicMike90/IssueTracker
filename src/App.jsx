@@ -60,19 +60,27 @@ class IssueList extends React.Component {
         this.loadData();
     }
     loadData() {
-        fetch('/api/issues').then(response =>
-            response.json()
-        ).then(data => {
-            console.log("Total count of records:", data._metadata.total_count);
-            data.records.forEach(issue => {
-                issue.created = new Date(issue.created);
-                if (issue.completionDate)
-                    issue.completionDate = new Date(issue.completionDate);
+        fetch('/api/issues').then(response => {
+            if (response.ok) {
+                response.json().then(data => {
+                    console.log("Total count of records:", data._metadata.total_count);
+                    data.records.forEach(issue => {
+                        issue.created = new Date(issue.created);
+                        if (issue.completionDate)
+                            issue.completionDate = new Date(issue.completionDate);
+                    });
+                    this.setState({
+                        issues: data.records
+                    });
+                });
+            } else {
+                response.json().then(error => {
+                    alert("Failed to fetch issues:" + error.message)
+                });
+            }
+            }).catch(err => {
+                alert("Error in fetching data from server:", err);
             });
-            this.setState({ issues: data.records });
-        }).catch(err => {
-            console.log(err);
-        });
     }
     createIssue(newIssue) {
         fetch('/api/issues', {
@@ -117,7 +125,7 @@ class IssueRow extends React.Component {
         const issue = this.props.issue;
         return (
             <tr>
-                <td>{issue.id}</td>
+                <td>{issue._id}</td>
                 <td>{issue.status}</td>
                 <td>{issue.owner}</td>
                 <td>{issue.created.toDateString()}</td>
@@ -132,7 +140,7 @@ class IssueRow extends React.Component {
 class IssueTable extends React.Component {
     render() {
         const borderedStyle = { border: "1px solid silver", padding: 6 };
-        const issueRows = this.props.issues.map(issue => <IssueRow key={issue.id} issue={issue} />)
+        const issueRows = this.props.issues.map(issue => <IssueRow key={issue._id} issue={issue} />)
         return (
             <table className="bordered-table">
                 <thead>

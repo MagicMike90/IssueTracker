@@ -51,3 +51,7 @@ Running on http://localhost:8080
 $ docker exec -it <container id> /bin/bash
 Test
 ```
+
+
+# Run project
+- Open two terminals, one is for `npm run watch` to auto transform ES2015, another is for `npm start` to start node server.

@@ -7,15 +7,21 @@ app.use(bodyParser.json());
 
 const port_number = 8000;;
 
-const issues = [
-    {
-        id: 1, status: 'Open', owner: 'Ravan',
-        created: new Date('2016-08-15'), effort: 5, completionDate: undefined,
+const issues = [{
+        id: 1,
+        status: 'Open',
+        owner: 'Ravan',
+        created: new Date('2016-08-15'),
+        effort: 5,
+        completionDate: undefined,
         title: 'Error in console when clicking Add',
     },
     {
-        id: 2, status: 'Assigned', owner: 'Eddie',
-        created: new Date('2016-08-16'), effort: 14,
+        id: 2,
+        status: 'Assigned',
+        owner: 'Eddie',
+        created: new Date('2016-08-16'),
+        effort: 14,
         completionDate: new Date('2016-08-30'),
         title: 'Missing bottom border on panel',
     },
@@ -37,6 +43,7 @@ const issueFieldType = {
     completionDate: 'optional',
     title: 'required',
 }
+
 function validateIssue(issue) {
     for (const field in issueFieldType) {
         const type = issueFieldType[field];
@@ -53,16 +60,30 @@ function validateIssue(issue) {
 }
 
 app.get('/api/issues', (req, res) => {
-    const metadata = { total_count: issues.length };
-    res.json({ _metadata: metadata, records: issues });
+    const metadata = {
+        total_count: issues.length
+    };
+    res.json({
+        _metadata: metadata,
+        records: issues
+    });
 });
 
 app.post('/api/issues', (req, res) => {
+
     const newIssue = req.body;
-    newIssue.id = issues.lenght + 1;
+    newIssue.id = issues.length + 1;
     newIssue.created = new Date();
     if (!newIssue.status)
         newIssue.status = 'New';
+
+    const err = validateIssue(newIssue)
+    if (err) {
+        res.status(422).json({
+            message: `Invalid requrest: ${err}`
+        });
+        return;
+    }
     issues.push(newIssue);
     res.json(newIssue);
 });
@@ -71,4 +92,3 @@ app.post('/api/issues', (req, res) => {
 app.listen(port_number, () => {
     console.log('App started on port ' + port_number);
 });
-

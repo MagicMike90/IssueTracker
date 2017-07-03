@@ -5,7 +5,8 @@ services:
     container_name: node-app
     image: michael/node-app
     build: .
-    command: nodemon --debug=5858
+    # command: nodemon --debug=5858
+    command: npm start && run watch
     volumes:
       - .:/usr/src/app
     ports:

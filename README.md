@@ -83,3 +83,11 @@ const myfoo = require('./foo.js');).
 //use function of part of the object
 myfoo.foo();
 ```
+
+
+You are actualy listening on localhost only. To be reachable from outside replace the following line in your package.json file:
+
+"start": "webpack-dev-server --inline --content-base ."
+by :
+
+"start": "webpack-dev-server --host 0.0.0.0 --inline --content-base ."

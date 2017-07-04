@@ -13,6 +13,7 @@ services:
       - ./app:/usr/src/app
     ports:
       - "8000:8000"
+      - "8080:8080"
       - "5858:5858"
     links:
       - mongodb

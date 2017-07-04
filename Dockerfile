@@ -4,14 +4,12 @@ FROM node:boron
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
-RUN npm install -g nodemon
-
 # Install app dependencies
-COPY package.json /usr/src/app/
+COPY ./app/package.json /usr/src/app/
 RUN npm install
 
 # Bundle app source
-COPY . /usr/src/app
+COPY ./app /usr/src/app
 
 EXPOSE 8000
 CMD [ "npm", "start" ]

@@ -6,7 +6,7 @@ const app = express();
 app.use(express.static('static'));
 app.use(bodyParser.json());
 
-const port_number = 8000;;
+
 
 const issues = [{
         id: 1,
@@ -96,11 +96,17 @@ app.post('/api/issues', (req, res) => {
     res.json(newIssue);
 });
 
+
+const server_port = 8000;
+var url = 'mongodb://mongodb:27017/issuetracker';
+
+
 let db;
-MongoClient.connect('mongodb://localhost/issuetracker').then(connection => {
+MongoClient.connect(url).then(connection => {
+    console.log('monogdb connected')
     db = connection;
-    app.listen(port_number, () => {
-        console.log('App started on port ' + port_number);
+    app.listen(server_port, () => {
+        console.log('App started on port ' + server_port);
     });
 }).catch(error => {
     console.log('ERROR:', error);

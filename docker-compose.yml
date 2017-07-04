@@ -1,18 +1,25 @@
-version: "2"
+version: "3"
 
 services:
   myapp:
     container_name: node-app
     image: michael/node-app
     build: .
-    # command: nodemon --debug=5858
-    command: npm start && run watch
+    environment:
+      - NODE_ENV=development
+      - FOO=bar
+    command: npm start
     volumes:
-      - .:/usr/src/app
+      - ./app:/usr/src/app
     ports:
       - "8000:8000"
       - "5858:5858"
-  db:
+    links:
+      - mongodb
+    depends_on:
+      - mongodb
+      
+  mongodb:
     image: mongo:latest
     container_name: "mongodb"
     environment:

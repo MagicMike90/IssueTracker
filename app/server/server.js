@@ -55,7 +55,7 @@ app.post('/api/issues', (req, res) => {
 });
 
 
-const server_port = 8000;
+const server_port = 8080;
 const url = 'mongodb://mongodb:27017/issuetracker';
 let db;
 

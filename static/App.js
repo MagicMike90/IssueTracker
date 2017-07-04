@@ -118,16 +118,24 @@ var IssueList = function (_React$Component3) {
             var _this4 = this;
 
             fetch('/api/issues').then(function (response) {
-                return response.json();
-            }).then(function (data) {
-                console.log("Total count of records:", data._metadata.total_count);
-                data.records.forEach(function (issue) {
-                    issue.created = new Date(issue.created);
-                    if (issue.completionDate) issue.completionDate = new Date(issue.completionDate);
-                });
-                _this4.setState({ issues: data.records });
+                if (response.ok) {
+                    response.json().then(function (data) {
+                        console.log("Total count of records:", data._metadata.total_count);
+                        data.records.forEach(function (issue) {
+                            issue.created = new Date(issue.created);
+                            if (issue.completionDate) issue.completionDate = new Date(issue.completionDate);
+                        });
+                        _this4.setState({
+                            issues: data.records
+                        });
+                    });
+                } else {
+                    response.json().then(function (error) {
+                        alert("Failed to fetch issues:" + error.message);
+                    });
+                }
             }).catch(function (err) {
-                console.log(err);
+                alert("Error in fetching data from server:", err);
             });
         }
     }, {
@@ -140,12 +148,20 @@ var IssueList = function (_React$Component3) {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(newIssue)
             }).then(function (response) {
-                return response.json();
-            }).then(function (updatedIssue) {
-                updatedIssue.created = new Date(updatedIssue.created);
-                if (updatedIssue.completionDate) updatedIssue.completionDate = new Date(updatedIssue.completionDate);
-                var newIssues = _this5.state.issues.concat(updatedIssue);
-                _this5.setState({ issues: newIssues });
+                if (response.ok) {
+                    response.json().then(function (updatedIssue) {
+                        updatedIssue.created = new Date(updatedIssue.created);
+                        if (updatedIssue.completionDate) updatedIssue.completionDate = new Date(updatedIssue.completionDate);
+                        var newIssues = _this5.state.issues.concat(updatedIssue);
+                        _this5.setState({
+                            issues: newIssues
+                        });
+                    });
+                } else {
+                    response.json().then(function (error) {
+                        alert("Failed to add issue: " + error.message);
+                    });
+                }
             }).catch(function (err) {
                 alert("Error in sending data to server: " + err.message);
             });
@@ -192,7 +208,7 @@ var IssueRow = function (_React$Component4) {
                 React.createElement(
                     'td',
                     null,
-                    issue.id
+                    issue._id
                 ),
                 React.createElement(
                     'td',
@@ -245,7 +261,7 @@ var IssueTable = function (_React$Component5) {
         value: function render() {
             var borderedStyle = { border: "1px solid silver", padding: 6 };
             var issueRows = this.props.issues.map(function (issue) {
-                return React.createElement(IssueRow, { key: issue.id, issue: issue });
+                return React.createElement(IssueRow, { key: issue._id, issue: issue });
             });
             return React.createElement(
                 'table',

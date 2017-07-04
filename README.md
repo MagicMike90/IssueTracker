@@ -55,3 +55,31 @@ Test
 
 # Run project
 - Open two terminals, one is for `npm run watch` to auto transform ES2015, another is for `npm start` to start node server.
+
+
+# Export a module 
+```javascript
+//module
+function foo() {}
+module.exports = foo
+
+//include module
+const foo = require('./foo.js');).
+
+//then use function directly
+foo();
+
+```
+```javascript
+//module
+function foo() {}
+module.exports = module.exports = {
+    foo: foo
+};
+
+//include module
+const myfoo = require('./foo.js');).
+
+//use function of part of the object
+myfoo.foo();
+```

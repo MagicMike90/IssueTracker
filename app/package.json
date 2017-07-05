@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "nodemon -w server server/server.js & npm run watch",
+    "start": "nodemon --legacy-watch -w server server/server.js & npm run watch",
     "compile": "webpack",
     "watch": "webpack-dev-server --host 0.0.0.0 --hot --inline",
     "test": "echo \"Error: no test specified\" && exit 1"

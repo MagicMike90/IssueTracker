@@ -1,16 +1,19 @@
-import IssueAdd from './IssueAdd.jsx'
-import IssueFilter from './IssueFilter.jsx'
 
 import React from 'react';
 import 'whatwg-fetch';
+import { Link } from 'react-router-dom';
+
+import IssueAdd from './IssueAdd.jsx'
+import IssueFilter from './IssueFilter.jsx'
 
 class IssueRow extends React.Component {
     render() {
         const issue = this.props.issue;
         return (
             <tr>
-                <td>{issue._id}</td>
-                <td>{issue.status}</td>  
+                <td><Link to={`/issues/${issue._id}`}>
+                    {issue._id.substr(-4)}</Link></td>
+                <td>{issue.status}</td>
                 <td>{issue.owner}</td>
                 <td>{issue.created.toDateString()}</td>
                 <td>{issue.effort}</td>
@@ -71,9 +74,9 @@ export default class IssueList extends React.Component {
                     alert("Failed to fetch issues:" + error.message)
                 });
             }
-            }).catch(err => {
-                alert("Error in fetching data from server:", err);
-            });
+        }).catch(err => {
+            alert("Error in fetching data from server:", err);
+        });
     }
     createIssue(newIssue) {
         fetch('/api/issues', {
@@ -96,9 +99,9 @@ export default class IssueList extends React.Component {
                     alert("Failed to add issue: " + error.message)
                 });
             }
-            }).catch(err => {
-                alert("Error in sending data to server: " + err.message);
-            });
+        }).catch(err => {
+            alert("Error in sending data to server: " + err.message);
+        });
     }
     render() {
         return (

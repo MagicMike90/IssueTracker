@@ -51,18 +51,21 @@ export default class IssueList extends React.Component {
         super();
         this.state = { issues: [] };
         this.createIssue = this.createIssue.bind(this);
+        this.setFilter = this.setFilter.bind(this);
     }
     componentDidMount() {
         this.loadData();
     }
-    // componentDidUpdate(prevProps) {
-    //     const oldQuery = prevProps.location.query;
-    //     const newQuery = this.props.location.query;
-    //     if (oldQuery.status === newQuery.status) {
-    //         return;
-    //     }
-    //     this.loadData();
-    // }
+    componentDidUpdate(prevProps) {
+        console.log('prevProps',prevProps);
+          console.log('newQuery',this.props);
+        const oldQuery = prevProps.location.query;
+        const newQuery = this.props.location.query;
+        if (oldQuery.status === newQuery.status) {
+            return;
+        }
+        this.loadData();
+    }
     loadData() {
         fetch(`/api/issues${this.props.location.search}`).then(response => {
             if (response.ok) {
@@ -85,6 +88,9 @@ export default class IssueList extends React.Component {
         }).catch(err => {
             alert("Error in fetching data from server:", err);
         });
+    }
+    setFilter(query) {
+        this.props.router.push({ pathname: this.props.location.pathname, query });
     }
     createIssue(newIssue) {
         fetch('/api/issues', {
@@ -114,8 +120,7 @@ export default class IssueList extends React.Component {
     render() {
         return (
             <div>
-                <h1>Issue Tracker</h1>
-                <IssueFilter />
+                <IssueFilter setFilter={this.setFilter} />
                 <hr />
                 <IssueTable issues={this.state.issues} />
                 <hr />
@@ -126,4 +131,5 @@ export default class IssueList extends React.Component {
 }
 IssueList.propTypes = {
     location: React.PropTypes.object.isRequired,
+    router: React.PropTypes.object
 };

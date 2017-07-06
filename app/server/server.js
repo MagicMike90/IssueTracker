@@ -20,13 +20,15 @@ if (process.env.NODE_ENV !== 'production') {
     config.entry.app.push('webpack-hot-middleware/client', 'webpack/hot/only-dev-server');
     config.plugins.push(new webpack.HotModuleReplacementPlugin());
 
-    const bundler = webpack(config);
-    app.use(webpackDevMiddleware(bundler, {
+    const compiler = webpack(config);
+    app.use(webpackDevMiddleware(compiler, {
         noInfo: true
     }));
-    app.use(webpackHotMiddleware(bundler, {
+    app.use(webpackHotMiddleware(compiler, {
         log: console.log
     }));
+
+    console.log('Enable webpackDevMiddleware and webpackHotMiddleware');
 }
 
 app.get('/api/issues', (req, res) => {

@@ -21,7 +21,9 @@ module.exports = {
       minChunks: Infinity,
       // (with more entries, this ensures that no other module
       //  goes into the vendor chunk)
-    })
+    }),
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.NoEmitOnErrorsPlugin()
   ],
   module: {
     loaders: [{

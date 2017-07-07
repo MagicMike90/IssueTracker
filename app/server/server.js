@@ -34,11 +34,15 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 app.get('/api/issues', (req, res) => {
-    const filters = {};
-    if (req.query.status) filters.status = req.query.status;
 
+    const filter = {};
+    if (req.query.status) filter.status = req.query.status;
+    if (req.query.effort_lte || req.query.effort_gte) filter.effort = {};
+    if (req.query.effort_lte) filter.effort.$lte = parseInt(req.query.effort_lte, 10);
+    if (req.query.effort_gte) filter.effort.$gte = parseInt(req.query.effort_gte, 10);
+    console.log('filter', filter);
 
-    db.collection('issues').find().toArray().then(issues => {
+    db.collection('issues').find(filter).toArray().then(issues => {
         const metadata = {
             total_count: issues.length
         };
@@ -54,7 +58,25 @@ app.get('/api/issues', (req, res) => {
         });
     });
 });
-
+app.get('/api/issues/:id', (req, res) => {
+    let issueId;
+    try {
+        issueId = new ObjectId(req.params.id);
+    } catch (error) {
+        res.status(422).json({ message: `Invalid issue ID format: ${error}` });
+        return;
+    }
+    db.collection('issues').find({ _id: issueId }).limit(1)
+        .next()
+        .then(issue => {
+            if (!issue) res.status(404).json({ message: `No such issue: ${issueId}` });
+            else res.json(issue);
+        })
+        .catch(error => {
+            console.log(error);
+            res.status(500).json({ message: `Internal Server Error: ${error}` });
+        });
+});
 app.post('/api/issues', (req, res) => {
 
     const newIssue = req.body;
@@ -85,9 +107,9 @@ app.post('/api/issues', (req, res) => {
 });
 
 // It has to be placed at the end of all routes
-// app.get('*', (req, res) => {
-//     res.sendFile(path.resolve('static/index.html'));
-// });
+app.get('*', (req, res) => {
+    res.sendFile(path.resolve('static/index.html'));
+});
 
 const server_port = 8080;
 const url = 'mongodb://mongodb:27017/issuetracker';

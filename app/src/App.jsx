@@ -13,45 +13,37 @@ import IssueEdit from './IssueEdit.jsx';
 const contentNode = document.getElementById('contents');
 const NoMatch = () => <p>Page Not Found</p>;
 
-// withRouter IssueList can use this.props.router to access the router object.
+// withRouter IssueList can use this.props.router to access the router object.(this.props.location)
 
-// const App = (props) => (
-//     <div>
-//         <div className="header">
-//             <h1>Issue Tracker</h1>
-//         </div>
-//         <div className="contents">
-//             {/*{props.children}*/}
-//             {/*<Route path="/issues" component={withRouter(IssueList)} />
-//             <Route path="/issue/:id" component={IssueEdit} />
-//             <Route component={NoMatch} />*/}
-
-//             <Redirect from="/" to="/issues" />
-//             <Switch>
-//                 <Route path="/issues" component={withRouter(IssueList)} />
-//                 <Route path="/issue/:id" component={IssueEdit} />
-//                 <Route component={NoMatch} />
-//             </Switch>
-//         </div>
-//         <div className="footer">
-//             Full source code available at this <a href="https://github.com/vasansr/pro-mern-stack">GitHub repository</a>.
-//         </div>
-//     </div>
-// );
-// App.propTypes = {
-//     children: React.PropTypes.object.isRequired,
-// };
+const App = (props) => (
+    <div>
+        <div className="header">
+            <h1>Issue Tracker</h1>
+        </div>
+        <div className="contents">
+            {props.children}
+        </div>
+        <div className="footer">
+            Full source code available at this <a href="https://github.com/vasansr/pro-mern-stack">GitHub repository</a>.
+        </div>
+    </div>
+);
+App.propTypes = {
+    children: React.PropTypes.object.isRequired,
+};
 
 // exact let routes match exaclty /issues not /issues/:id
 const RoutedApp = () => (
     <Router>
         <div>
             <Redirect from="/" to="/issues" />
-            <Switch>
-                <Route exact path="/issues" component={withRouter(IssueList)} />
-                <Route path="/issues/:id" component={IssueEdit} />
-                <Route component={NoMatch} />
-            </Switch>
+            <App>
+                <Switch>
+                    <Route exact path="/issues" component={withRouter(IssueList)} />
+                    <Route path="/issues/:id" component={IssueEdit} />
+                    <Route component={NoMatch} />
+                </Switch>
+            </App>
         </div>
     </Router>
 );

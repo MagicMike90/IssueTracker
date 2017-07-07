@@ -2,6 +2,7 @@
 import React from 'react';
 import 'whatwg-fetch';
 import { Link } from 'react-router-dom';
+import queryString from 'query-string';
 
 import IssueAdd from './IssueAdd.jsx'
 import IssueFilter from './IssueFilter.jsx'
@@ -54,26 +55,28 @@ export default class IssueList extends React.Component {
         this.setFilter = this.setFilter.bind(this);
     }
     componentDidMount() {
-        console.log('componentDidMount');
         this.loadData();
     }
     componentDidUpdate(prevProps) {
-        const oldQuery = prevProps.location.query;
-        const newQuery = this.props.location.query;
-                // console.log('oldQuery',prevProps.location);
+        const oldQuery = queryString.parse(prevProps.location.search);
+        const newQuery = queryString.parse(this.props.location.search);
+        console.log('newQuery', newQuery);
         //   console.log('newQuery', this.props.location);
-        if(newQuery === undefined) return;
+        if (newQuery === undefined) return;
 
-        if (oldQuery.status === newQuery.status) {
+        if (oldQuery.status === newQuery.status
+            && oldQuery.effort_gte === newQuery.effort_gte
+            && oldQuery.effort_lte === newQuery.effort_lte) {
             return;
         }
+        console.log('componentDidUpdate', 'loadData');
         this.loadData();
     }
     loadData() {
-        console.log('this.props.location',this.props.location);
+        console.log('this.props.location', this.props.location);
         fetch(`/api/issues${this.props.location.search}`).then(response => {
-        // fetch('/api/issues').then(response => {
-            console.log('response',response);
+            // fetch('/api/issues').then(response => {
+            console.log('response', response);
             if (response.ok) {
                 response.json().then(data => {
                     console.log("Total count of records:", data._metadata.total_count);
@@ -97,7 +100,8 @@ export default class IssueList extends React.Component {
     }
     setFilter(query) {
         // console.log('setFilter',this.props);
-        this.props.history.push({pathname: this.props.location.pathname, search:query})
+        let qs = queryString.stringify(query);
+        this.props.history.push({ pathname: this.props.location.pathname, search: qs })
         // this.props.router.push({ pathname: this.props.location.pathname, query });
     }
     createIssue(newIssue) {
@@ -126,9 +130,10 @@ export default class IssueList extends React.Component {
         });
     }
     render() {
+        let initFilter = queryString.parse(this.props.location.search);
         return (
             <div>
-                <IssueFilter setFilter={this.setFilter} />
+                <IssueFilter setFilter={this.setFilter} initFilter={initFilter}/>
                 <hr />
                 <IssueTable issues={this.state.issues} />
                 <hr />
@@ -138,6 +143,5 @@ export default class IssueList extends React.Component {
     }
 }
 IssueList.propTypes = {
-    location: React.PropTypes.object.isRequired,
-    router: React.PropTypes.object.isRequired
+    location: React.PropTypes.object.isRequired
 };

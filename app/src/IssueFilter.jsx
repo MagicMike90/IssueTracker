@@ -10,11 +10,13 @@ export default class IssueFilter extends React.Component {
     }
     setFilterOpen(e) {
         e.preventDefault();
-        this.props.setFilter({ status: 'Open' });
+        // this.props.setFilter({ status: 'Open' });
+        this.props.setFilter('?status=Open');
     }
     setFilterAssigned(e) {
         e.preventDefault();
-        this.props.setFilter({ status: 'Assigned' });
+        // this.props.setFilter({ status: 'Assigned' });
+        this.props.setFilter('?status=Assigned');
     }
     clearFilter(e) {
         e.preventDefault();

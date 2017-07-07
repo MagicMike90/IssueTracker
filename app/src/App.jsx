@@ -1,10 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom'
-import { Router, Route, Switch, Redirect, withRouter } from 'react-router';
+// import { Router, Route, Switch, Redirect, withRouter } from 'react-router';
+import { BrowserRouter as Router, Switch, Route, Redirect, withRouter } from 'react-router-dom';
 // import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 import createBrowserHistory from 'history/createBrowserHistory'
 
-const history = createBrowserHistory()
+// const history = createBrowserHistory()
 
 import IssueList from './IssueList.jsx'
 import IssueEdit from './IssueEdit.jsx';
@@ -14,34 +15,43 @@ const NoMatch = () => <p>Page Not Found</p>;
 
 // withRouter IssueList can use this.props.router to access the router object.
 
-const App = (props) => (
-    <div>
-        <div className="header">
-            <h1>Issue Tracker</h1>
-        </div>
-        <div className="contents">
-            {props.children}
-        </div>
-        <div className="footer">
-            Full source code available at this <a href="https://github.com/vasansr/pro-mern-stack">GitHub repository</a>.
-        </div>
+// const App = (props) => (
+//     <div>
+//         <div className="header">
+//             <h1>Issue Tracker</h1>
+//         </div>
+//         <div className="contents">
+//             {/*{props.children}*/}
+//             {/*<Route path="/issues" component={withRouter(IssueList)} />
+//             <Route path="/issue/:id" component={IssueEdit} />
+//             <Route component={NoMatch} />*/}
 
-        <Route path="/issues" component={withRouter(IssueList)} />
-        <Route path="/issue/:id" component={IssueEdit} />
-        <Route component={NoMatch} />
-    </div>
-);
-App.propTypes = {
-    children: React.PropTypes.object.isRequired,
-};
+//             <Redirect from="/" to="/issues" />
+//             <Switch>
+//                 <Route path="/issues" component={withRouter(IssueList)} />
+//                 <Route path="/issue/:id" component={IssueEdit} />
+//                 <Route component={NoMatch} />
+//             </Switch>
+//         </div>
+//         <div className="footer">
+//             Full source code available at this <a href="https://github.com/vasansr/pro-mern-stack">GitHub repository</a>.
+//         </div>
+//     </div>
+// );
+// App.propTypes = {
+//     children: React.PropTypes.object.isRequired,
+// };
 
+// exact let routes match exaclty /issues not /issues/:id
 const RoutedApp = () => (
-    <Router history={history}>
+    <Router>
         <div>
             <Redirect from="/" to="/issues" />
-            <Route path="/" component={App} >
-  
-            </Route>
+            <Switch>
+                <Route exact path="/issues" component={withRouter(IssueList)} />
+                <Route path="/issues/:id" component={IssueEdit} />
+                <Route component={NoMatch} />
+            </Switch>
         </div>
     </Router>
 );

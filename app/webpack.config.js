@@ -35,13 +35,13 @@ module.exports = {
     }, ]
   },
   devServer: {
+    hot: true,
     port: 8000,
     contentBase: 'static',
     proxy: {
-      '/api/*': {
-        target: 'http://localhost:8080'
-      }
-    }
+      '/api': 'http://localhost:8080'
+    },
+    historyApiFallback: true
   },
   devtool: 'source-map',
   watchOptions: {

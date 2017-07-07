@@ -54,20 +54,26 @@ export default class IssueList extends React.Component {
         this.setFilter = this.setFilter.bind(this);
     }
     componentDidMount() {
+        console.log('componentDidMount');
         this.loadData();
     }
     componentDidUpdate(prevProps) {
-        console.log('prevProps',prevProps);
-          console.log('newQuery',this.props);
         const oldQuery = prevProps.location.query;
         const newQuery = this.props.location.query;
+                // console.log('oldQuery',prevProps.location);
+        //   console.log('newQuery', this.props.location);
+        if(newQuery === undefined) return;
+
         if (oldQuery.status === newQuery.status) {
             return;
         }
         this.loadData();
     }
     loadData() {
+        console.log('this.props.location',this.props.location);
         fetch(`/api/issues${this.props.location.search}`).then(response => {
+        // fetch('/api/issues').then(response => {
+            console.log('response',response);
             if (response.ok) {
                 response.json().then(data => {
                     console.log("Total count of records:", data._metadata.total_count);
@@ -90,7 +96,9 @@ export default class IssueList extends React.Component {
         });
     }
     setFilter(query) {
-        this.props.router.push({ pathname: this.props.location.pathname, query });
+        // console.log('setFilter',this.props);
+        this.props.history.push({pathname: this.props.location.pathname, search:query})
+        // this.props.router.push({ pathname: this.props.location.pathname, query });
     }
     createIssue(newIssue) {
         fetch('/api/issues', {
@@ -131,5 +139,5 @@ export default class IssueList extends React.Component {
 }
 IssueList.propTypes = {
     location: React.PropTypes.object.isRequired,
-    router: React.PropTypes.object
+    router: React.PropTypes.object.isRequired
 };

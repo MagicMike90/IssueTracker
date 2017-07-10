@@ -5,7 +5,7 @@ export default class DateInput extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            value: this.editFormat(props.value), focused: false, 
+            value: this.editFormat(props.value), focused: false,
             valid: true
         };
         this.onFocus = this.onFocus.bind(this);
@@ -45,11 +45,13 @@ export default class DateInput extends React.Component {
         return isNaN(val.getTime()) ? null : val;
     }
     render() {
-        const className = (!this.state.valid && !this.state.focused) ?'invalid' : null;
+        // const className = (!this.state.valid && !this.state.focused) ?'invalid' : null;
         const value = (this.state.focused || !this.state.valid) ? this.state.value : this.displayFormat(this.props.value);
+        const childProps = Object.assign({}, this.props);
+        delete childProps.onValidityChange;
         return (
             <input
-                type="text" size={20} name={this.props.name} className={className}
+                type="text" {...childProps} value={value}
                 value={value}
                 placeholder={this.state.focused ? 'yyyy-mm-dd' : null}
                 onFocus={this.onFocus} onBlur={this.onBlur} onChange={this.onChange}

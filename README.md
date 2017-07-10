@@ -91,3 +91,10 @@ You are actualy listening on localhost only. To be reachable from outside replac
 by :
 
 "start": "webpack-dev-server --host 0.0.0.0 --inline --content-base ."
+
+
+keep a link to the Bootstrap distribution under the `static` directory, and include the CSS just as you would use other static files such as `index.html`
+itself.
+```
+ln -s ../node_modules/bootstrap/dist static/bootstrap
+```

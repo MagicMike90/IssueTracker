@@ -25,7 +25,7 @@ export default class NumInput extends React.Component {
         }
     }
     format(num) {
-        return num != null ? num.toString() : '';
+        return num != null ? num.toString() : 0;
     }
     unformat(str) {
         const val = parseInt(str, 10);
@@ -42,6 +42,6 @@ export default class NumInput extends React.Component {
     }
 }
 NumInput.propTypes = {
-    value: React.PropTypes.number,
+    // value: React.PropTypes.number,
     onChange: React.PropTypes.func.isRequired,
 };

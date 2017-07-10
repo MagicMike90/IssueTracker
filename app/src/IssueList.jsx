@@ -7,52 +7,62 @@ import queryString from 'query-string';
 import IssueAdd from './IssueAdd.jsx'
 import IssueFilter from './IssueFilter.jsx'
 
-class IssueRow extends React.Component {
-    render() {
-        const issue = this.props.issue;
-        return (
-            <tr>
-                <td><Link to={`/issues/${issue._id}`}>
-                    {issue._id.substr(-4)}</Link></td>
-                <td>{issue.status}</td>
-                <td>{issue.owner}</td>
-                <td>{issue.created.toDateString()}</td>
-                <td>{issue.effort}</td>
-                <td>{issue.completionDate ?
-                    issue.completionDate.toDateString() : ''}</td>
-                <td>{issue.title}</td>
-            </tr>
-        )
+const IssueRow = (props) => {
+    function onDeleteClick() {
+        props.deleteIssue(props.issue._id);
     }
+    const issue = props.issue;
+    return (
+        <tr>
+            <td><Link to={`/issues/${issue._id}`}>
+                {issue._id.substr(-4)}</Link></td>
+            <td>{issue.status}</td>
+            <td>{issue.owner}</td>
+            <td>{issue.created.toDateString()}</td>
+            <td>{issue.effort}</td>
+            <td>{issue.completionDate ?
+                issue.completionDate.toDateString() : ''}</td>
+            <td>{issue.title}</td>
+            <td><button onClick={onDeleteClick}>Delete</button></td>
+        </tr>
+    )
 }
-class IssueTable extends React.Component {
-    render() {
-        const borderedStyle = { border: "1px solid silver", padding: 6 };
-        const issueRows = this.props.issues.map(issue => <IssueRow key={issue._id} issue={issue} />)
-        return (
-            <table className="bordered-table">
-                <thead>
-                    <tr>
-                        <th>Id</th>
-                        <th>Status</th>
-                        <th>Owner</th>
-                        <th>Created</th>
-                        <th>Effort</th>
-                        <th>Completion Date</th>
-                        <th>Title</th>
-                    </tr>
-                </thead>
-                <tbody>{issueRows}</tbody>
-            </table>
-        )
-    }
+IssueRow.propTypes = {
+    issue: React.PropTypes.object.isRequired,
+    deleteIssue: React.PropTypes.func.isRequired,
+};
+function IssueTable(props) {
+    const borderedStyle = { border: "1px solid silver", padding: 6 };
+    const issueRows = props.issues.map(issue => <IssueRow key={issue._id} issue={issue} deleteIssue={props.deleteIssue} />)
+    return (
+        <table className="bordered-table">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Status</th>
+                    <th>Owner</th>
+                    <th>Created</th>
+                    <th>Effort</th>
+                    <th>Completion Date</th>
+                    <th>Title</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>{issueRows}</tbody>
+        </table>
+    )
 }
+IssueTable.propTypes = {
+    issues: React.PropTypes.array.isRequired,
+    deleteIssue: React.PropTypes.func.isRequired,
+};
 export default class IssueList extends React.Component {
     constructor() {
         super();
         this.state = { issues: [] };
         this.createIssue = this.createIssue.bind(this);
         this.setFilter = this.setFilter.bind(this);
+        this.deleteIssue = this.deleteIssue.bind(this);
     }
     componentDidMount() {
         this.loadData();
@@ -63,6 +73,11 @@ export default class IssueList extends React.Component {
 
         if (newQuery === undefined) return;
 
+        // When loading data, we asynchronously updated the state,
+        // and React has no way of knowing that it was done as part
+        // of the lifecycle method. Even if we had used the method
+        // ComponentWillReceiveProps, we would have had to compare
+        // the old and new.
         if (oldQuery.status === newQuery.status
             && oldQuery.effort_gte === newQuery.effort_gte
             && oldQuery.effort_lte === newQuery.effort_lte) {
@@ -70,6 +85,13 @@ export default class IssueList extends React.Component {
         }
         console.log('componentDidUpdate', 'loadData');
         this.loadData();
+    }
+
+    setFilter(query) {
+        // console.log('setFilter',this.props);
+        let qs = queryString.stringify(query);
+        this.props.history.push({ pathname: this.props.location.pathname, search: qs })
+        // this.props.router.push({ pathname: this.props.location.pathname, query });
     }
     loadData() {
         console.log('this.props.location', this.props.location);
@@ -94,12 +116,6 @@ export default class IssueList extends React.Component {
         }).catch(err => {
             alert("Error in fetching data from server:", err);
         });
-    }
-    setFilter(query) {
-        // console.log('setFilter',this.props);
-        let qs = queryString.stringify(query);
-        this.props.history.push({ pathname: this.props.location.pathname, search: qs })
-        // this.props.router.push({ pathname: this.props.location.pathname, query });
     }
     createIssue(newIssue) {
         fetch('/api/issues', {
@@ -126,13 +142,19 @@ export default class IssueList extends React.Component {
             alert("Error in sending data to server: " + err.message);
         });
     }
+    deleteIssue(id) {
+        fetch(`/api/issues/${id}`, { method: 'DELETE' }).then(response => {
+            if (!response.ok) alert('Failed to delete issue');
+            else this.loadData();
+        });
+    }
     render() {
         let initFilter = queryString.parse(this.props.location.search);
         return (
             <div>
-                <IssueFilter setFilter={this.setFilter} initFilter={initFilter}/>
+                <IssueFilter setFilter={this.setFilter} initFilter={initFilter} />
                 <hr />
-                <IssueTable issues={this.state.issues} />
+                <IssueTable issues={this.state.issues} deleteIssue={this.deleteIssue} />
                 <hr />
                 <IssueAdd createIssue={this.createIssue} />
             </div>

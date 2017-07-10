@@ -17,6 +17,12 @@ const issueFieldType = {
     title: 'required',
 }
 
+function convertIssue(issue) {
+    if (issue.created) issue.created = new Date(issue.created);
+    if (issue.completionDate) issue.completionDate = new Date(issue.completionDate);
+    return cleanupIssue(issue);
+}
+
 function cleanupIssue(issue) {
     const cleanedUpIssue = {};
     // The Object.keys() method returns an array of a given object's own enumerable properties
@@ -33,7 +39,7 @@ function validateIssue(issue) {
             errors.push(`Missing mandatory field: ${field}`);
         }
     });
-    
+
     if (!validIssueStatus[issue.status]) {
         // template string ES2015 new feature
         errors.push(`${issue.status} is not a valid status.`);
@@ -43,4 +49,5 @@ function validateIssue(issue) {
 export default {
     validateIssue,
     cleanupIssue,
+    convertIssue
 };

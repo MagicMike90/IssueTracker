@@ -134,31 +134,6 @@ export default class IssueList extends React.Component {
             this.showError("Error in fetching data from server:", err);
         });
     }
-    // createIssue(newIssue) {
-    //     fetch('/api/issues', {
-    //         method: 'POST',
-    //         headers: { 'Content-Type': 'application/json' },
-    //         body: JSON.stringify(newIssue),
-    //     }).then(response => {
-    //         if (response.ok) {
-    //             response.json().then(updatedIssue => {
-    //                 updatedIssue.created = new Date(updatedIssue.created);
-    //                 if (updatedIssue.completionDate)
-    //                     updatedIssue.completionDate = new Date(updatedIssue.completionDate);
-    //                 const newIssues = this.state.issues.concat(updatedIssue);
-    //                 this.setState({
-    //                     issues: newIssues
-    //                 });
-    //             });
-    //         } else {
-    //             response.json().then(error => {
-    //                 this.showError("Failed to add issue: " + error.message)
-    //             });
-    //         }
-    //     }).catch(err => {
-    //         this.showError("Error in sending data to server: " + err.message);
-    //     });
-    // }
     deleteIssue(id) {
         fetch(`/api/issues/${id}`, { method: 'DELETE' }).then(response => {
             if (!response.ok) this.showError('Failed to delete issue');

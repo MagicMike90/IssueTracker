@@ -7,6 +7,8 @@ import { LinkContainer } from 'react-router-bootstrap';
 
 import IssueList from './IssueList.jsx'
 import IssueEdit from './IssueEdit.jsx';
+import IssueReport from './IssueReport.jsx';
+
 import IssueAddNavItem from './IssueAddNavItem.jsx';
 
 
@@ -58,7 +60,8 @@ const RoutedApp = () => (
             <App>
                 <Switch>
                     <Route exact path="/issues" component={withRouter(IssueList)} />
-                    <Route path="/issues/:id" component={IssueEdit} />
+                    <Route exact path="/issues/:id" component={IssueEdit} />
+                    <Route exact path="/reports" component={withRouter(IssueReport)} />
                     <Route component={NoMatch} />
                 </Switch>
             </App>

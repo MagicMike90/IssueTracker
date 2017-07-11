@@ -97,18 +97,45 @@ app.post('/api/issues', (req, res) => {
         });
         return;
     }
-    db.collection('issues').insertOne(Issue.cleanupIssue(newIssue)).then(result =>
-        db.collection('issues').find({
-            _id: result.insertedId
-        }).limit(1).next()
-    ).then(newIssue => {
-        res.json(newIssue);
-    }).catch(error => {
-        console.log(error);
-        res.status(500).json({
-            message: `Internal Server Error: ${error}`
+    if (req.query._summary === undefined) {
+        let limit = req.query.limit ? parseInt(req.query._limit, 10) : 20;
+        if (limit > 50) limit = 50;
+        db.collection('issues').insertOne(Issue.cleanupIssue(newIssue)).then(result =>
+            db.collection('issues').find({
+                _id: result.insertedId
+            }).limit(1).next()
+        ).then(newIssue => {
+            res.json(newIssue);
+        }).catch(error => {
+            console.log(error);
+            res.status(500).json({
+                message: `Internal Server Error: ${error}`
+            });
         });
-    });
+    } else {
+        db.collection('issues').aggregate([
+            { $match: filter },
+            {
+                $group: {
+                    _id: { owner: '$owner', status: '$status' }, count: {
+                        $sum: 1
+                    }
+                }
+            },
+        ]).toArray()
+            .then(results => {
+                const stats = {};
+                results.forEach(result => {
+                    if (!stats[result._id.owner]) stats[result._id.owner] = {};
+                    stats[result._id.owner][result._id.status] = result.count;
+                });
+                res.json(stats);
+            })
+            .catch(error => {
+                console.log(error);
+                res.status(500).json({ message: `Internal Server Error: ${error}` });
+            });
+    }
 });
 
 // Add routes for handling PATCH request

@@ -20,19 +20,18 @@ StatRow.propTypes = {
 
 export default class IssueReport extends React.Component {
   static dataFetcher({ urlBase, location }) {
-    const search = location.search ? `${location.search}&_summary` : '?_summary';
+    const search = location.query ? `${location.query}&_summary` : '?_summary';
     return fetch(`${urlBase || ''}/api/issues${search}`).then(response => {
-      if (!response.ok) return response.json().then(error => Promise.
-        reject(error));
+      if (!response.ok) return response.json().then(error => Promise.reject(error));
       return response.json().then(data => ({ IssueReport: data }));
     });
   }
   constructor(props, context) {
     super(props, context);
 
-    const stats = context.initialState.IssueReport ? context.initialState.IssueReport : {};
+    // const stats = context.initialState.IssueReport ? context.initialState.IssueReport : {};
     this.state = {
-      stats,
+      stats: {},
       toastVisible: false, toastMessage: '', toastType: 'success',
     };
     this.setFilter = this.setFilter.bind(this);
@@ -64,7 +63,7 @@ export default class IssueReport extends React.Component {
       toastVisible: true, toastMessage: message,
       toastType: 'danger'
     });
-  } 
+  }
   dismissToast() {
     this.setState({ toastVisible: false });
   }
@@ -81,7 +80,7 @@ export default class IssueReport extends React.Component {
       <div>
         <Panel collapsible header="Filter">
           < IssueFilter setFilter={this.setFilter}
-            initFilter={this.props.location.query} />
+            initFilter={queryString.parse(this.props.location.search)} />
         </Panel>
         <Table bordered condensed hover responsive>
           <thead>

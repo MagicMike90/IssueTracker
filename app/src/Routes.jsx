@@ -9,7 +9,7 @@ const NoMatch = () => <p>Page Not Found</p>;
 
 export default (
   <div>
-    <Redirect from="/" to="/issues" />
+    <Redirect exact from="/" to="/issues" />
     <Switch>
       <Route exact path="/issues" component={withRouter(IssueList)} />
       <Route exact path="/issues/:id" component={IssueEdit} />

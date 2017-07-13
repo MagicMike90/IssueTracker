@@ -15,12 +15,8 @@ module.exports = {
     new webpack.optimize.CommonsChunkPlugin({
       name: "vendor",
       filename: "vendor.bundle.js",
-      // filename: "vendor.js"
-      // (Give the chunk a different name)
-
-      minChunks: Infinity,
-      // (with more entries, this ensures that no other module
-      //  goes into the vendor chunk)
+      minChunks: Infinity
+      // (with more entries, this ensures that no other module goes into the vendor chunk)
     }),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin()

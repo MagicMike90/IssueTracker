@@ -1,5 +1,8 @@
 # MERN-Stack
 
+## A project built with MongoDB, ExpressJS, ReactJS , NodeJS and Webpack, the development environment is set up by using Docker. 
+
+
 ## Steps to create a dockerized node project
 1. Create a `dockerfile`
 ```docker
@@ -110,3 +113,7 @@ because it exposes any vulnerabilities in the application or the underlying plat
 hackers. It’s always safer to use a reverse proxy such as apache or nginx to terminate the
 requests coming in via the Internet, and run the actual Node.js process as a non-root user.
 This way, even if a hacker gains access to the server via unknown security vulnerabilities in your code or Node.js, the maximum they can get is a regular user access. This is not so damaging as access as a root user, who gains complete control over the server.
+
+
+# Execute a JavaScript file
+mongo localhost:27017/test myjsfile.js

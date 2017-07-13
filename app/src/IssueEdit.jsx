@@ -7,9 +7,18 @@ import { LinkContainer } from 'react-router-bootstrap';
 
 import NumInput from './NumInput.jsx';
 import DateInput from './DateInput.jsx';
-import Toast from './Toast.jsx';
+import withToast from './withToast.jsx';
 
-export default class IssueEdit extends React.Component {
+class IssueEdit extends React.Component {
+	static dataFetcher({ params, urlBase }) {
+		return fetch(`${urlBase || ''}/api/issues/${params.id}`).then(response => {
+			if (!response.ok) return response.json().then(error => Promise.reject(error));
+			return response.json().then(data => ({ IssueEdit: data }));
+		});
+	}
+
+
+
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -19,16 +28,13 @@ export default class IssueEdit extends React.Component {
 			},
 			invalidFields: {},
 			showingValidation: false,
-			toastVisible: false,
 			toastMessage: '',
 			toastType: 'success'
 		};
 		this.onChange = this.onChange.bind(this);
 		this.onValidityChange = this.onValidityChange.bind(this);
 		this.onSubmit = this.onSubmit.bind(this);
-		this.showSuccess = this.showSuccess.bind(this);
-		this.showError = this.showError.bind(this);
-		this.dismissToast = this.dismissToast.bind(this);
+
 		this.dismissValidation = this.dismissValidation.bind(this);
 		this.showValidation = this.showValidation.bind(this);
 	}
@@ -63,21 +69,7 @@ export default class IssueEdit extends React.Component {
 	dismissValidation() {
 		this.setState({ showingValidation: false });
 	}
-	showSuccess(message) {
-		this.setState({
-			toastVisible: true, toastMessage: message,
-			toastType: 'success'
-		})
-	}
-	showError(message) {
-		this.setState({
-			toastVisible: true, toastMessage: message,
-			toastType: 'danger'
-		});
-	}
-	dismissToast() {
-		this.setState({ toastVisible: false });
-	}
+
 	onSubmit(event) {
 		event.preventDefault();
 		this.showValidation();
@@ -98,35 +90,28 @@ export default class IssueEdit extends React.Component {
 						updatedIssue.completionDate = new Date(updatedIssue.completionDate);
 					}
 					this.setState({ issue: updatedIssue });
-					this.showSuccess('Updated issue successfully.');
+					this.props.showSuccess('Updated issue successfully.');
 				});
 			} else {
 				response.json().then(error => {
-					this.showError(`Failed to update issue: ${error.message}`);
+					this.props.showError(`Failed to update issue: ${error.message}`);
 				});
 			}
 		}).catch(err => {
-			this.showError(`Error in sending data to server: ${err.message}`);
+			this.props.showError(`Error in sending data to server: ${err.message}`);
 		});
 	}
 	loadData() {
-		fetch(`/api/issues/${this.props.match.params.id}`).then(response => {
-			if (response.ok) {
-				response.json().then(issue => {
-					issue.created = new Date(issue.created);
-					issue.completionDate = issue.completionDate != null ?
-						new Date(issue.completionDate) : null;
-					issue.effort = issue.effort != null ? issue.effort.toString() : '';
-					this.setState({ issue });
-				});
-			} else {
-				response.json().then(error => {
-					this.showError(`Failed to fetch issue: ${error.message}`);
-				});
-			}
-		}).catch(err => {
-			this.showError(`Error in fetching data from server: ${err.message}`);
-		});
+		IssueEdit.dataFetcher({ params: this.props.match.params })
+			.then(data => {
+				const issue = data.IssueEdit;
+				issue.created = new Date(issue.created);
+				issue.completionDate = issue.completionDate != null ?
+					new Date(issue.completionDate) : null;
+				this.setState({ issue });
+			}).catch(err => {
+				this.props.showError(`Error in fetching data from server: ${err.message}`);
+			});
 	}
 	render() {
 		const issue = this.state.issue;
@@ -217,15 +202,17 @@ export default class IssueEdit extends React.Component {
 						<Col smOffset={3} sm={9}>{validationMessage}</Col>
 					</FormGroup>
 				</Form>
-				<Toast
-					showing={this.state.toastVisible}
-					message={this.state.toastMessage}
-					onDismiss={this.dismissToast} bsStyle={this.state.toastType}
-				/>
 			</Panel>
 		);
 	}
 }
 IssueEdit.propTypes = {
 	match: React.PropTypes.object.isRequired,
+	showSuccess: React.PropTypes.func.isRequired,
+	showError: React.PropTypes.func.isRequired,
 };
+const IssueEditWithToast = withToast(IssueEdit);
+// any static functions that you used in the original
+// component are no longer available in the wrapped component
+IssueEditWithToast.dataFetcher = IssueEdit.dataFetcher;
+export default IssueEditWithToast;

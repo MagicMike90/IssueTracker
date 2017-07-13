@@ -7,7 +7,6 @@ import { Button, Glyphicon, Table, Panel, Pagination } from 'react-bootstrap';
 
 // import IssueAdd from './IssueAdd.jsx'
 import IssueFilter from './IssueFilter.jsx'
-import Toast from './Toast.jsx';
 import withToast from './withToast.jsx';
 
 
@@ -88,14 +87,11 @@ class IssueList extends React.Component {
 
         this.state = {
             issues: [],
-            toastVisible: false, toastMessage: '', toastType: 'success',
             totalCount: 0,
         };
         // this.createIssue = this.createIssue.bind(this);
         this.setFilter = this.setFilter.bind(this);
         this.deleteIssue = this.deleteIssue.bind(this);
-        this.showError = this.showError.bind(this);
-        this.dismissToast = this.dismissToast.bind(this);
         this.selectPage = this.selectPage.bind(this);
     }
     componentDidMount() {
@@ -131,15 +127,7 @@ class IssueList extends React.Component {
         this.props.history.push({ pathname: this.props.location.pathname, search: qs })
         // this.props.router.push({ pathname: this.props.location.pathname, query });
     }
-    showError(message) {
-        this.setState({
-            toastVisible: true, toastMessage: message, toastType:
-            'danger'
-        });
-    }
-    dismissToast() {
-        this.setState({ toastVisible: false });
-    }
+
     loadData() {
         IssueList.dataFetcher({ location: this.props.location })
             .then(data => {
@@ -158,7 +146,7 @@ class IssueList extends React.Component {
     }
     deleteIssue(id) {
         fetch(`/api/issues/${id}`, { method: 'DELETE' }).then(response => {
-            if (!response.ok) this.showError('Failed to delete issue');
+            if (!response.ok) this.props.showError('Failed to delete issue');
             else this.loadData();
         });
     }
@@ -184,11 +172,6 @@ class IssueList extends React.Component {
                 />
                 <IssueTable issues={this.state.issues} deleteIssue={this.deleteIssue} />
                 {/*<IssueAdd createIssue={this.createIssue} />*/}
-                <Toast
-                    showing={this.state.toastVisible}
-                    message={this.state.toastMessage}
-                    onDismiss={this.dismissToast} bsStyle={this.state.toastType}
-                />
             </div>
         );
     }

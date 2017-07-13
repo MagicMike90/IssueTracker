@@ -11,6 +11,8 @@ import IssueReport from './IssueReport.jsx';
 
 import IssueAddNavItem from './IssueAddNavItem.jsx';
 
+import withToast from './withToast.jsx';
+
 
 const Header = () => (
     <Navbar fluid>

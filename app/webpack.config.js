@@ -3,7 +3,7 @@ const path = require('path');
 
 module.exports = {
   entry: {
-    app: ['./src/App.jsx'],
+    app: ['./src/index.jsx'],
     vendor: ['react', 'react-dom', 'whatwg-fetch', 'react-router-dom', 'react-bootstrap', 'react-router-bootstrap'],
   },
   output: {
@@ -23,12 +23,15 @@ module.exports = {
   ],
   module: {
     loaders: [{
-      test: /\.jsx$/,
+      test: /\.jsx?$/,
       loader: 'babel-loader',
       query: {
         presets: ['react', 'es2015']
       }
     }, ]
+  },
+  resolve: {
+    modules: [path.resolve(__dirname, "src"), "node_modules"]
   },
   devServer: {
     hot: true,

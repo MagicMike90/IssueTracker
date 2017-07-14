@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types'
 import { Panel, Table } from 'react-bootstrap';
 import queryString from 'query-string';
 
@@ -14,8 +15,8 @@ const StatRow = (props) => (
   </tr>
 );
 StatRow.propTypes = {
-  owner: React.PropTypes.string.isRequired,
-  counts: React.PropTypes.object.isRequired,
+  owner: PropTypes.string.isRequired,
+  counts: PropTypes.object.isRequired,
 };
 
 class IssueReport extends React.Component {
@@ -90,9 +91,9 @@ class IssueReport extends React.Component {
   }
 }
 IssueReport.propTypes = {
-  location: React.PropTypes.object.isRequired,
-  router: React.PropTypes.object,
-  showError: React.PropTypes.func.isRequired
+  location: PropTypes.object.isRequired,
+  router: PropTypes.object,
+  showError: PropTypes.func.isRequired
 };
 const IssueReportWithToast = withToast(IssueReport);
 IssueReportWithToast.dataFetcher = IssueReport.dataFetcher;

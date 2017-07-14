@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types'
 import {
 	FormGroup, FormControl, ControlLabel, ButtonToolbar, Button,
 	Panel, Form, Col, Alert
@@ -207,9 +208,9 @@ class IssueEdit extends React.Component {
 	}
 }
 IssueEdit.propTypes = {
-	match: React.PropTypes.object.isRequired,
-	showSuccess: React.PropTypes.func.isRequired,
-	showError: React.PropTypes.func.isRequired,
+	match: PropTypes.object.isRequired,
+	showSuccess: PropTypes.func.isRequired,
+	showError: PropTypes.func.isRequired,
 };
 const IssueEditWithToast = withToast(IssueEdit);
 // any static functions that you used in the original

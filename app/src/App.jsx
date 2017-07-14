@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom'
+import PropTypes from 'prop-types'
 
 import { BrowserRouter as Router, Switch, Route, Redirect, withRouter } from 'react-router-dom';
 import { Navbar, Nav, NavItem, NavDropdown, MenuItem, Glyphicon } from 'react-bootstrap';
@@ -49,7 +50,7 @@ const App = (props) => (
     </div>
 );
 App.propTypes = {
-    children: React.PropTypes.object.isRequired,
+    children: PropTypes.object.isRequired,
 };
 
 

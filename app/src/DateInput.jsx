@@ -1,5 +1,5 @@
 import React from 'react';
-
+import PropTypes from 'prop-types'
 
 export default class DateInput extends React.Component {
     constructor(props) {
@@ -60,8 +60,8 @@ export default class DateInput extends React.Component {
     }
 }
 DateInput.propTypes = {
-    value: React.PropTypes.object,
-    onChange: React.PropTypes.func.isRequired,
-    onValidityChange: React.PropTypes.func,
-    name: React.PropTypes.string.isRequired,
+    value: PropTypes.object,
+    onChange: PropTypes.func.isRequired,
+    onValidityChange: PropTypes.func,
+    name: PropTypes.string.isRequired,
 };

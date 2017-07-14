@@ -23,6 +23,7 @@
     "bootstrap": "^3.3.7",
     "express": "^4.15.3",
     "mongodb": "^2.2.29",
+    "prop-types": "^15.5.10",
     "query-string": "^4.3.4",
     "source-map-support": "^0.4.15"
   },

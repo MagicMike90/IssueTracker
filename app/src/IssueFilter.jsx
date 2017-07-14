@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom';
 import {
     Col, Row, FormGroup, FormControl, ControlLabel, InputGroup,
@@ -121,6 +122,6 @@ export default class IssueFilter extends React.Component {
     }
 }
 IssueFilter.propTypes = {
-    setFilter: React.PropTypes.func.isRequired,
-    initFilter: React.PropTypes.object.isRequired,
+    setFilter: PropTypes.func.isRequired,
+    initFilter: PropTypes.object.isRequired,
 };

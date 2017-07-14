@@ -1,5 +1,6 @@
 
 import React from 'react';
+import PropTypes from 'prop-types'
 import 'whatwg-fetch';
 import { Link } from 'react-router-dom';
 import queryString from 'query-string';
@@ -33,8 +34,8 @@ const IssueRow = (props) => {
     )
 }
 IssueRow.propTypes = {
-    issue: React.PropTypes.object.isRequired,
-    deleteIssue: React.PropTypes.func.isRequired,
+    issue: PropTypes.object.isRequired,
+    deleteIssue: PropTypes.func.isRequired,
 };
 function IssueTable(props) {
     const borderedStyle = { border: "1px solid silver", padding: 6 };
@@ -58,8 +59,8 @@ function IssueTable(props) {
     )
 }
 IssueTable.propTypes = {
-    issues: React.PropTypes.array.isRequired,
-    deleteIssue: React.PropTypes.func.isRequired,
+    issues: PropTypes.array.isRequired,
+    deleteIssue: PropTypes.func.isRequired,
 };
 
 
@@ -177,7 +178,7 @@ class IssueList extends React.Component {
     }
 }
 IssueList.propTypes = {
-    location: React.PropTypes.object.isRequired
+    location: PropTypes.object.isRequired
 };
 const IssueListWithToast = withToast(IssueList);
 IssueListWithToast.dataFetcher = IssueList.dataFetcher;

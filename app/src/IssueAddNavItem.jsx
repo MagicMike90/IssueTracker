@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom';
 import {
   NavItem, Glyphicon, Modal, Form, FormGroup, FormControl,
@@ -99,6 +100,6 @@ class IssueAddNavItem extends React.Component {
   }
 }
 IssueAddNavItem.propTypes = {
-  router: React.PropTypes.object,
+  router: PropTypes.object,
 };
 export default withRouter(IssueAddNavItem);

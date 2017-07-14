@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types'
 
 export default class NumInput extends React.Component {
     constructor(props) {
@@ -42,6 +43,6 @@ export default class NumInput extends React.Component {
     }
 }
 NumInput.propTypes = {
-    // value: React.PropTypes.number,
-    onChange: React.PropTypes.func.isRequired,
+    // value: PropTypes.number,
+    onChange: PropTypes.func.isRequired,
 };

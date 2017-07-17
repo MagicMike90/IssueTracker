@@ -9,7 +9,7 @@ import IssueReport from './IssueReport.jsx';
 const NoMatch = () => <p>Page Not Found</p>;
 
 const Routes = () => (
-  <App>
+  <div>
     <Switch>
       <Redirect exact from="/" to="/issues" />
       <Route exact path="/issues" component={withRouter(IssueList)} />
@@ -17,6 +17,6 @@ const Routes = () => (
       <Route exact path="/reports" component={withRouter(IssueReport)} />
       <Route component={NoMatch} />
     </Switch>
-  </App>
+  </div>
 )
 export default Routes;

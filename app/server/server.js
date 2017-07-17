@@ -114,18 +114,28 @@ app.get('/api/issues', (req, res) => {
 });
 app.post('/api/issues', (req, res) => {
     const newIssue = req.body;
-    // newIssue.id = issues.length + 1;
     newIssue.created = new Date();
-    if (!newIssue.status)
+    if (!newIssue.status) {
         newIssue.status = 'New';
+    }
 
-    const err = Issue.validateIssue(newIssue)
+    const err = Issue.validateIssue(newIssue);
     if (err) {
-        res.status(422).json({
-            message: `Invalid requrest: ${err}`
-        });
+        res.status(422).json({ message: `Invalid request: ${err}` });
         return;
     }
+
+    db.collection('issues').insertOne(Issue.cleanupIssue(newIssue)).then(result =>
+        db.collection('issues').find({ _id: result.insertedId }).limit(1)
+        .next()
+    )
+    .then(savedIssue => {
+        res.json(savedIssue);
+    })
+    .catch(error => {
+        console.log(error);
+        res.status(500).json({ message: `Internal Server Error: ${error}` });
+    });
 });
 app.get('/api/issues/:id', (req, res) => {
     let issueId;

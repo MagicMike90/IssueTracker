@@ -4,7 +4,7 @@ import { createStore } from 'redux'
 import { Provider } from 'react-redux'
 import { BrowserRouter as Router } from 'react-router-dom';
 
-import Routes from './components/Routes.jsx'
+import App from './components/App.jsx'
 import reducer from './reducers'
 
 const store = createStore(reducer)
@@ -12,7 +12,7 @@ const store = createStore(reducer)
 render(
   <Provider store={store}>
     <Router>
-      <Routes />
+      <App />
     </Router>
   </Provider>,
   document.getElementById('contents')

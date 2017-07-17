@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
 
-import Header from './Header.jsx';
+import Header from '../components/Header.jsx';
 import Routes from './Routes.jsx';
 
 
@@ -16,26 +16,11 @@ export default class App extends React.Component {
             <div>
                 <Header />
                 <div className="container-fluid">
-                    <Routes />
                 </div>
+                <Routes />
             </div>
         );
     }
 }
-
-
-
-// // exact let routes match exaclty /issues not /issues/:id
-// const RoutedApp = () => (
-//     <Router>
-//         <App>
-//             <Routes />
-//         </App>
-//     </Router>
-// );
-// const contentNode = document.getElementById('contents');
-// ReactDOM.render(<RoutedApp />, contentNode);
-
-
 
 

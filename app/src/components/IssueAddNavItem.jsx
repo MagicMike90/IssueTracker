@@ -46,13 +46,11 @@ class IssueAddNavItem extends React.Component {
       owner: form.owner.value, title: form.title.value,
       status: 'New', created: new Date(),
     };
-     console.log('newIssue',newIssue);
     fetch('/api/issues', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(newIssue),
     }).then(response => {
-      console.log('response',response);
       if (response.ok) {
         response.json().then(updatedIssue => {
           this.props.history.push({ pathname: `/issues/${updatedIssue._id}` })

@@ -2,9 +2,10 @@ import React from 'react';
 import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
 
 import App from './App.jsx';
-import IssueList from './IssueList.jsx';
-import IssueEdit from './IssueEdit.jsx';
-import IssueReport from './IssueReport.jsx';
+// import IssueList from './IssueList.jsx';
+import IssuesContainer from './IssuesContainer.jsx';
+import IssueEdit from '../components/IssueEdit.jsx';
+import IssueReport from '../components/IssueReport.jsx';
 
 const NoMatch = () => <p>Page Not Found</p>;
 
@@ -12,7 +13,7 @@ const Routes = () => (
   <div>
     <Switch>
       <Redirect exact from="/" to="/issues" />
-      <Route exact path="/issues" component={withRouter(IssueList)} />
+      <Route exact path="/issues" component={withRouter(IssuesContainer)} />
       <Route exact path="/issues/:id" component={IssueEdit} />
       <Route exact path="/reports" component={withRouter(IssueReport)} />
       <Route component={NoMatch} />

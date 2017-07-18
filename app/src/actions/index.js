@@ -15,7 +15,7 @@ const receiveIssues = issues => ({
   issues: issues
 })
 
-export const getAllIssues = (location, page_size) => dispatch => {
+export const LoadIssues = (location, page_size) => dispatch => {
   const query = Object.assign({}, queryString.parse(location.search));
   const pageStr = query._page;
   if (pageStr) {

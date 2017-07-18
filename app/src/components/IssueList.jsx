@@ -68,7 +68,7 @@ const PAGE_SIZE = 10;
 class IssueList extends React.Component {
     static dataFetcher({ urlBase, location }) {
         // construct query string request issue
-        const query = Object.assign({},queryString.parse(location.search));
+        const query = Object.assign({}, queryString.parse(location.search));
         const pageStr = query._page;
         if (pageStr) {
             delete query._page;
@@ -171,14 +171,15 @@ class IssueList extends React.Component {
                     activePage={parseInt(this.props.location.search._page || '1', 10)}
                     onSelect={this.selectPage} maxButtons={7} next prev boundaryLinks
                 />
-                <IssueTable issues={this.state.issues} deleteIssue={this.deleteIssue} />
+                <IssueTable issues={this.props.issues} deleteIssue={this.deleteIssue} />
                 {/*<IssueAdd createIssue={this.createIssue} />*/}
             </div>
         );
     }
 }
 IssueList.propTypes = {
-    location: PropTypes.object.isRequired
+    location: PropTypes.object.isRequired,
+    issues: PropTypes.array.isRequired
 };
 const IssueListWithToast = withToast(IssueList);
 IssueListWithToast.dataFetcher = IssueList.dataFetcher;

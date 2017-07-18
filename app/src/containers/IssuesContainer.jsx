@@ -8,15 +8,11 @@ import IssueList from '../components/IssueList.jsx'
 
 IssueList.propTypes = {
     location: PropTypes.object.isRequired,
-    issues: PropTypes.array.isRequired,
-    actions: PropTypes.actions.isRequired
+    issues: PropTypes.array.isRequired
 };
 
+const mapStateToProps = (state, ownProps) => {  
+    issues: state.issues
+}
 
-const mapDispatchToProps = (dispatch, ownProps) => ({
-  onSubmit: () => {
-    dispatch(addIssue(ownProps.filter))
-  }
-})
-
-export default connect(mapDispatchToProps)(IssueList);
+export default connect(mapStateToProps)(IssueList);

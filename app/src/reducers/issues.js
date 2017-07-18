@@ -5,12 +5,8 @@ const issues = (state = [], action) => {
       return [
        Object.assign({} ,state, action.issue)
       ]
-    case 'TOGGLE_TODO':
-      return state.map(todo =>
-        (todo.id === action.id) 
-          ? Object.assign({},todo, {completed: !todo.completed})
-          : todo
-      )
+    case 'RECEIVE_ISSUES':
+      return action.issues;
     default:
       return state
   }

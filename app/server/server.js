@@ -17,7 +17,6 @@ const app = express();
 app.use(express.static('static'));
 app.use(bodyParser.json());
 
-console.log('Node Environment: ', process.env.NODE_ENV);
 if (process.env.NODE_ENV !== 'production') {
     const webpack = require('webpack');
     const webpackDevMiddleware = require('webpack-dev-middleware');
@@ -46,23 +45,6 @@ app.get('/api/issues', (req, res) => {
     if (req.query.effort_lte) filter.effort.$lte = parseInt(req.query.effort_lte, 10);
     if (req.query.effort_gte) filter.effort.$gte = parseInt(req.query.effort_gte, 10);
     if (req.query.search) filter.$text = { $search: req.query.search };
-    // console.log('filter', filter);
-
-    // db.collection('issues').find(filter).toArray().then(issues => {
-    //     const metadata = {
-    //         total_count: issues.length
-    //     };
-    //     // throw new Error('Test!');
-    //     res.json({
-    //         _metadata: metadata,
-    //         records: issues
-    //     })
-    // }).catch(error => {
-    //     console.log(error);
-    //     res.status(500).json({
-    //         message: `Internal Server Error: ${error}`
-    //     });
-    // });
 
     if (req.query._summary === undefined) {
         const offset = req.query._offset ? parseInt(req.query._offset, 10) : 0;

@@ -23,3 +23,21 @@ export const getAllIssues = () => dispatch => {
     }));
   });
 }
+
+
+
+const shouldFetchIssues = (state, reddit) => {
+  const issues = state.postsByReddit[reddit]
+  if (!issues) {
+    return true
+  }
+  if (issues.isFetching) {
+    return false
+  }
+  return issues.didInvalidate
+}
+export const fetchIssuesIfNeeded = reddit => (dispatch, getState) => {
+  if (shouldFetchIssues(getState(), reddit)) {
+    return dispatch(fetchPosts(reddit))
+  }
+}

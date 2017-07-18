@@ -1,13 +1,20 @@
 import React from 'react'
 import { render } from 'react-dom'
 import { createStore } from 'redux'
-import { Provider } from 'react-redux'
 import { BrowserRouter as Router } from 'react-router-dom';
+import { createStore, applyMiddleware } from 'redux'
+import thunk from 'redux-thunk'
+import { Provider } from 'react-redux'
 
 import App from './containers/App.jsx'
 import reducer from './reducers'
+import { LoadIssues } from './actions';
 
-const store = createStore(reducer)
+const middleware = [ thunk ];
+const store = createStore(reducer,
+  applyMiddleware(Object.assign({}, middleware)))
+
+store.dispatch(LoadIssues());
 
 render(
   <Provider store={store}>

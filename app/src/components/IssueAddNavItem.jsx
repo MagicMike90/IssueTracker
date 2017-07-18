@@ -6,22 +6,17 @@ import {
   ControlLabel, Button, ButtonToolbar
 } from 'react-bootstrap';
 
-import Toast from './Toast.jsx';
-
-
 
 class IssueAddNavItem extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       showing: false,
-      toastVisible: false, toastMessage: '', toastType: 'success',
+
     };
     this.showModal = this.showModal.bind(this);
     this.hideModal = this.hideModal.bind(this);
     this.submit = this.submit.bind(this);
-    this.showError = this.showError.bind(this);
-    this.dismissToast = this.dismissToast.bind(this);
   }
   showModal() {
     this.setState({ showing: true });
@@ -29,15 +24,7 @@ class IssueAddNavItem extends React.Component {
   hideModal() {
     this.setState({ showing: false });
   }
-  showError(message) {
-    this.setState({
-      toastVisible: true, toastMessage: message,
-      toastType: 'danger'
-    });
-  }
-  dismissToast() {
-    this.setState({ toastVisible: false });
-  }
+
   submit(e) {
     e.preventDefault();
     this.hideModal();
@@ -85,21 +72,22 @@ class IssueAddNavItem extends React.Component {
         </Modal.Body>
         <Modal.Footer>
           <ButtonToolbar>
-            < Button type="button" bsStyle="primary"
-              onClick={this.submit}>Submit</Button>
+            <Button type="button" bsStyle="primary"
+              onClick={e => {
+                e.preventDefault();
+                this.props.onSubmit()
+                }}>Submit</Button>
             <Button bsStyle="link" onClick={this.hideModal}>Cancel</Button>
           </ButtonToolbar>
         </Modal.Footer>
       </Modal>
-        <Toast
-          showing={this.state.toastVisible} message={this.state.toastMessage}
-          onDismiss={this.dismissToast} bsStyle={this.state.toastType}
-        />
       </NavItem>
     );
   }
 }
 IssueAddNavItem.propTypes = {
   router: PropTypes.object,
+  showError: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired
 };
 export default withRouter(IssueAddNavItem);

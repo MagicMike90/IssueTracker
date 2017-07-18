@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux'
-import todos from './todos'
+import issues from './issues'
 
-const todoApp = combineReducers({
-  todos
+const issueTrackerApp = combineReducers({
+  issues
 })
 
-export default todoApp
+export default issueTrackerApp

@@ -1,6 +1,5 @@
 import React from 'react'
 import { render } from 'react-dom'
-import { createStore } from 'redux'
 import { BrowserRouter as Router } from 'react-router-dom';
 import { createStore, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
@@ -11,8 +10,7 @@ import reducer from './reducers'
 import { LoadIssues } from './actions';
 
 const middleware = [ thunk ];
-const store = createStore(reducer,
-  applyMiddleware(Object.assign({}, middleware)))
+const store = createStore(reducer, applyMiddleware(thunk));
 
 store.dispatch(LoadIssues());
 

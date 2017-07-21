@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux';
-import { addIssue } from '../actions'
+import { addIssue } from '../actions/fetch.js'
 
 import IssueList from '../components/IssueList.jsx' 
 

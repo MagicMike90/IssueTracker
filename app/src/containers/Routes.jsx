@@ -4,6 +4,7 @@ import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
 import App from './App.jsx';
 // import IssueList from './IssueList.jsx';
 import IssuesContainer from '../components/Issuelist.jsx';
+// import IssuesContainer from '../containers/IssuesContainer.jsx';
 import IssueEdit from '../components/IssueEdit.jsx';
 import IssueReport from '../components/IssueReport.jsx';
 

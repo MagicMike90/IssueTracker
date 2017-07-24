@@ -1,6 +1,9 @@
 
 import React from 'react';
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux';
+import { fetchIssuesIfNeeded } from '../actions/fetch'
+
 import 'whatwg-fetch';
 import { Link } from 'react-router-dom';
 import queryString from 'query-string';
@@ -10,58 +13,8 @@ import { Button, Glyphicon, Table, Panel, Pagination } from 'react-bootstrap';
 import IssueFilter from './IssueFilter.jsx'
 import withToast from './withToast.jsx';
 
+import IssueTable from './IssueTable.jsx'
 
-const IssueRow = (props) => {
-    function onDeleteClick() {
-        props.deleteIssue(props.issue._id);
-    }
-    const issue = props.issue;
-    return (
-        <tr>
-            <td><Link to={`/issues/${issue._id}`}>
-                {issue._id.substr(-4)}</Link></td>
-            <td>{issue.status}</td>
-            <td>{issue.owner}</td>
-            <td>{issue.created.toDateString()}</td>
-            <td>{issue.effort}</td>
-            <td>{issue.completionDate ?
-                issue.completionDate.toDateString() : ''}</td>
-            <td>{issue.title}</td>
-            <td>
-                <Button bsSize="xsmall" onClick={onDeleteClick}><Glyphicon glyph="trash" /></Button>
-            </td>
-        </tr>
-    )
-}
-IssueRow.propTypes = {
-    issue: PropTypes.object.isRequired,
-    deleteIssue: PropTypes.func.isRequired,
-};
-function IssueTable(props) {
-    const borderedStyle = { border: "1px solid silver", padding: 6 };
-    const issueRows = props.issues.map(issue => <IssueRow key={issue._id} issue={issue} deleteIssue={props.deleteIssue} />)
-    return (
-        <Table bordered condensed hover responsive>
-            <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Status</th>
-                    <th>Owner</th>
-                    <th>Created</th>
-                    <th>Effort</th>
-                    <th>Completion Date</th>
-                    <th>Title</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>{issueRows}</tbody>
-        </Table>
-    )
-}
-IssueTable.propTypes = {
-    issues: PropTypes.array.isRequired,
-    deleteIssue: PropTypes.func.isRequired,
-};
 
 
 const PAGE_SIZE = 10;
@@ -96,10 +49,20 @@ class IssueList extends React.Component {
         this.selectPage = this.selectPage.bind(this);
     }
     componentDidMount() {
-        this.loadData();
+        console.log('componentDidMount');
+        dispatch(fetchIssuesIfNeeded(this.props.location, PAGE_SIZE));
     }
-    componentDidUpdate(prevProps) {
 
+    componentWillReceiveProps(nextProps) {
+        // if (nextProps.selectedReddit !== this.props.selectedReddit) {
+        //     const { dispatch, selectedReddit } = nextProps
+        //     dispatch(fetchIssueIfNeeded(selectedReddit))
+        // }
+        console.log('componentWillReceiveProps');
+    }
+
+    componentDidUpdate(prevProps) {
+     console.log('componentDidUpdate');
         const oldQuery = queryString.parse(prevProps.location.search);
         const newQuery = queryString.parse(this.props.location.search);
 
@@ -118,8 +81,9 @@ class IssueList extends React.Component {
             return;
         }
 
-        console.log('componentDidUpdate', 'loadData');
-        this.loadData();
+
+        // this.loadData();
+        dispatch(fetchIssuesIfNeeded(this.props.location, PAGE_SIZE));
     }
 
     setFilter(query) {
@@ -161,6 +125,7 @@ class IssueList extends React.Component {
     }
     render() {
         let initFilter = queryString.parse(this.props.location.search);
+                console.log('this.props.issues',this.props.issues);
         return (
             <div>
                 <Panel collapsible header="Filter">
@@ -179,9 +144,20 @@ class IssueList extends React.Component {
 }
 IssueList.propTypes = {
     location: PropTypes.object.isRequired,
-    issues: PropTypes.array.isRequired
+    issues: PropTypes.array.isRequired,
+    isFetching: PropTypes.bool.isRequired,
+    lastUpdated: PropTypes.number,
+    dispatch: PropTypes.func.isRequired,
 };
 const IssueListWithToast = withToast(IssueList);
 IssueListWithToast.dataFetcher = IssueList.dataFetcher;
 
-export default IssueListWithToast;
+// Map store state to props
+const mapStateToProps = (state, ownProps) => ({
+    issues: state.issues,
+    isFetching: state.isFetching,
+    lastUpdated: state.lastUpdated
+});
+
+export default connect(mapStateToProps)(IssueList);
+

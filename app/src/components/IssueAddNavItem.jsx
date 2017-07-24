@@ -72,11 +72,7 @@ class IssueAddNavItem extends React.Component {
         </Modal.Body>
         <Modal.Footer>
           <ButtonToolbar>
-            <Button type="button" bsStyle="primary"
-              onClick={e => {
-                e.preventDefault();
-                this.props.onSubmit()
-                }}>Submit</Button>
+            <Button type="button" bsStyle="primary" onClick={this.submit}>Submit</Button>
             <Button bsStyle="link" onClick={this.hideModal}>Cancel</Button>
           </ButtonToolbar>
         </Modal.Footer>
@@ -88,6 +84,5 @@ class IssueAddNavItem extends React.Component {
 IssueAddNavItem.propTypes = {
   router: PropTypes.object,
   showError: PropTypes.func.isRequired,
-  onSubmit: PropTypes.func.isRequired
 };
 export default withRouter(IssueAddNavItem);

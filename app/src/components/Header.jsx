@@ -5,8 +5,8 @@ import { Navbar, Nav, NavItem, Col, NavDropdown, MenuItem, Glyphicon } from 'rea
 import { LinkContainer } from 'react-router-bootstrap';
 import { withRouter } from 'react-router-dom';
 
-// import IssueAddNavItem from './IssueAddNavItem.jsx';
-import IssueAddNavItem from '../containers/IssueAddContainer.jsx';
+import IssueAddNavItem from './IssueAddNavItem.jsx';
+// import IssueAddNavItem from '../containers/IssueAddContainer.jsx';
 
 import withToast from './withToast.jsx';
 

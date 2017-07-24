@@ -1,4 +1,4 @@
-import * as types from '../constants/ActionTypes'
+import * as types from './actionTypes'
 import qs from 'qs'
 
 
@@ -14,14 +14,22 @@ export const requestIssuesError = error => ({
   receivedAt: Date.now()
 });
 
+// export const requestIssuesSuccess = issues => ({
+//   type: types.REQUEST_ISSUES_SUCCESS,
+//   issues: issues,
+//   receivedAt: Date.now()
+// });
+
 export const requestIssuesSuccess = issues => ({
   type: types.REQUEST_ISSUES_SUCCESS,
-  issues: issues,
-  receivedAt: Date.now()
+  issues
 });
 
 
-export const LoadIssues = (location, page_size) => dispatch => {
+
+
+export const fetchIssues = (location, page_size) => dispatch => {
+  console.log('fetchIssues', location);
   let query = {};
   if (location !== undefined) {
     query = Object.assign({}, qs.parse(location.search));
@@ -36,6 +44,35 @@ export const LoadIssues = (location, page_size) => dispatch => {
   const search = Object.keys(query).map(k => `${k}=${query[k]}`).join('&');
   return fetch(`/api/issues?${search}`).then(response => {
     if (!response.ok) return response.json().then(error => Promise.reject(error));
-    return response.json().then(data => dispatch(requestIssuesSuccess)).catch(error => dispatch(requestIssuesError(error)));
+    return response.json().then(data => {
+      console.log('finish',data);
+dispatch(requestIssuesSuccess(data))
+    } ).catch(error => dispatch(requestIssuesError(error)));
   });
 };
+const shouldFetchIssues = (state, location) => {
+  const oldQuery = qs.parse(prevProps.location.search);
+  const newQuery = qs.parse(location.search);
+
+  if (newQuery === undefined) return false;
+
+  // When loading data, we asynchronously updated the state,
+  // and React has no way of knowing that it was done as part
+  // of the lifecycle method. Even if we had used the method
+  // ComponentWillReceiveProps, we would have had to compare
+  // the old and new.
+  if (oldQuery.status === newQuery.status &&
+    oldQuery.effort_gte === newQuery.effort_gte &&
+    oldQuery.effort_lte === newQuery.effort_lte &&
+    oldQuery._page === newQuery._page) {
+    return false;
+  }
+
+  return true;
+}
+export const fetchIssuesIfNeeded = (location, page_size) => (dispatch, getState) => {
+  console.log('fetchIssuesIfNeeded');
+  // if (shouldFetchIssues(getState(), location)) {
+  return dispatch(fetchIssues(location, page_size));
+  // }
+}

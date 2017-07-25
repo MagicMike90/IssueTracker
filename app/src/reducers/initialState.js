@@ -1,3 +1,4 @@
 export default {
-  issues: []
+  issues: [],
+  isFetching: false
 }

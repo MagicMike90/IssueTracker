@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux'
-import issues from './issues'
+import issuesReducer from './issues'
 
 const issueTrackerApp = combineReducers({
-  issues
+  issuesReducer
 })
 
 export default issueTrackerApp

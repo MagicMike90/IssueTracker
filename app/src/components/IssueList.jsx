@@ -12,7 +12,6 @@ import { Button, Glyphicon, Table, Panel, Pagination } from 'react-bootstrap';
 // import IssueAdd from './IssueAdd.jsx'
 import IssueFilter from './IssueFilter.jsx'
 import withToast from './withToast.jsx';
-
 import IssueTable from './IssueTable.jsx'
 
 
@@ -36,8 +35,9 @@ class IssueList extends React.Component {
         });
     }
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
+        		console.log('props',props);
 
         this.state = {
             issues: [],
@@ -50,7 +50,7 @@ class IssueList extends React.Component {
     }
     componentDidMount() {
         console.log('componentDidMount');
-        dispatch(fetchIssuesIfNeeded(this.props.location, PAGE_SIZE));
+        this.props.dispatch(fetchIssuesIfNeeded(this.props.location, PAGE_SIZE));
     }
 
     componentWillReceiveProps(nextProps) {
@@ -83,7 +83,7 @@ class IssueList extends React.Component {
 
 
         // this.loadData();
-        dispatch(fetchIssuesIfNeeded(this.props.location, PAGE_SIZE));
+       this.props.dispatch(fetchIssuesIfNeeded(this.props.location, PAGE_SIZE));
     }
 
     setFilter(query) {
@@ -125,7 +125,7 @@ class IssueList extends React.Component {
     }
     render() {
         let initFilter = queryString.parse(this.props.location.search);
-                console.log('this.props.issues',this.props.issues);
+                console.log('this.props.issues',this.props);
         return (
             <div>
                 <Panel collapsible header="Filter">
@@ -154,9 +154,9 @@ IssueListWithToast.dataFetcher = IssueList.dataFetcher;
 
 // Map store state to props
 const mapStateToProps = (state, ownProps) => ({
-    issues: state.issues,
-    isFetching: state.isFetching,
-    lastUpdated: state.lastUpdated
+    issues: state.issuesReducer.issues,
+    isFetching: state.issuesReducer.isFetching,
+    lastUpdated: state.issuesReducer.lastUpdated
 });
 
 export default connect(mapStateToProps)(IssueList);

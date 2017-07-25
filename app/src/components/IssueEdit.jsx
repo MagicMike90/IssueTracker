@@ -6,8 +6,8 @@ import {
 } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 
-import NumInput from './NumInput.jsx';
-import DateInput from './DateInput.jsx';
+import NumInput from './input/NumInput.jsx';
+import DateInput from './input/DateInput.jsx';
 import withToast from './withToast.jsx';
 
 class IssueEdit extends React.Component {
@@ -17,9 +17,6 @@ class IssueEdit extends React.Component {
 			return response.json().then(data => ({ IssueEdit: data }));
 		});
 	}
-
-
-
 	constructor(props) {
 		super(props);
 		this.state = {

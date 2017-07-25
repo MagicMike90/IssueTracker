@@ -37,7 +37,6 @@ class IssueList extends React.Component {
 
     constructor(props) {
         super(props);
-        		console.log('props',props);
 
         this.state = {
             issues: [],
@@ -49,20 +48,11 @@ class IssueList extends React.Component {
         this.selectPage = this.selectPage.bind(this);
     }
     componentDidMount() {
-        console.log('componentDidMount');
         this.props.dispatch(fetchIssuesIfNeeded(this.props.location, PAGE_SIZE));
     }
 
-    componentWillReceiveProps(nextProps) {
-        // if (nextProps.selectedReddit !== this.props.selectedReddit) {
-        //     const { dispatch, selectedReddit } = nextProps
-        //     dispatch(fetchIssueIfNeeded(selectedReddit))
-        // }
-        console.log('componentWillReceiveProps');
-    }
-
     componentDidUpdate(prevProps) {
-     console.log('componentDidUpdate');
+        console.log('componentDidUpdate');
         const oldQuery = queryString.parse(prevProps.location.search);
         const newQuery = queryString.parse(this.props.location.search);
 
@@ -83,7 +73,7 @@ class IssueList extends React.Component {
 
 
         // this.loadData();
-       this.props.dispatch(fetchIssuesIfNeeded(this.props.location, PAGE_SIZE));
+        this.props.dispatch(fetchIssuesIfNeeded(this.props.location, PAGE_SIZE));
     }
 
     setFilter(query) {
@@ -125,7 +115,7 @@ class IssueList extends React.Component {
     }
     render() {
         let initFilter = queryString.parse(this.props.location.search);
-                console.log('this.props.issues',this.props);
+        console.log('this.props.issues', this.props);
         return (
             <div>
                 <Panel collapsible header="Filter">
@@ -145,6 +135,7 @@ class IssueList extends React.Component {
 IssueList.propTypes = {
     location: PropTypes.object.isRequired,
     issues: PropTypes.array.isRequired,
+    totalCount: PropTypes.number.isRequired,
     isFetching: PropTypes.bool.isRequired,
     lastUpdated: PropTypes.number,
     dispatch: PropTypes.func.isRequired,
@@ -152,11 +143,33 @@ IssueList.propTypes = {
 const IssueListWithToast = withToast(IssueList);
 IssueListWithToast.dataFetcher = IssueList.dataFetcher;
 
+
+const issuesDataTransform = data => {
+    console.log('data', data);
+    const issues = data.records;
+    issues.forEach(issue => {
+        issue.created = new Date(issue.created);
+        if (issue.completionDate) {
+            issue.completionDate = new Date(issue.completionDate);
+        }
+    });
+    return { issues, totalCount: data.metadata.totalCount };
+}
 // Map store state to props
+// const mapStateToProps = (state, ownProps) => {
+//     const { issues ,totalCount } = issuesDataTransform(state.issuesReducer);
+//     return {
+//         issues: issues,
+//         totalCount: totalCount,
+//         isFetching: state.issuesReducer.isFetching,
+//         lastUpdated: state.issuesReducer.lastUpdated
+//     }
+// };
 const mapStateToProps = (state, ownProps) => ({
-    issues: state.issuesReducer.issues,
+    issues: state.issuesReducer.data.issues,
+    totalCount: state.issuesReducer.data.totalCount,
     isFetching: state.issuesReducer.isFetching,
-    lastUpdated: state.issuesReducer.lastUpdated
+    lastUpdated: state.issuesReducer.lastUpdated  
 });
 
 export default connect(mapStateToProps)(IssueList);

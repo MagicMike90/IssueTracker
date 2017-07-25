@@ -1,4 +1,7 @@
 export default {
-  issues: [],
+  records: {
+    records: [],
+    totalCount: 0
+  },
   isFetching: false
 }

@@ -20,34 +20,54 @@ export const requestIssuesError = error => ({
 //   receivedAt: Date.now()
 // });
 
-export const requestIssuesSuccess = issues => ({
-  type: types.REQUEST_ISSUES_SUCCESS,
-  issues
-});
+export const requestIssuesSuccess = data => {
+  console.log('data', data);
+  const issues = data.records;
+  issues.forEach(issue => {
+    issue.created = new Date(issue.created);
+    if (issue.completionDate) {
+      issue.completionDate = new Date(issue.completionDate);
+    }
+  });
+  const post_data = {
+    issues,
+    totalCount: data.metadata.totalCount
+  };
 
-
+  return {
+    type: types.REQUEST_ISSUES_SUCCESS,
+    post_data
+  }
+};
 
 
 export const fetchIssues = (location, page_size) => dispatch => {
-  console.log('fetchIssues', location);
-  let query = {};
-  if (location !== undefined) {
-    query = Object.assign({}, qs.parse(location.search));
-    const pageStr = query._page;
-    if (pageStr) {
-      delete query._page;
-      query._offset = (parseInt(pageStr, 10) - 1) * page_size;
-    }
-    query._limit = page_size;
+  const query = Object.assign({}, qs.parse(location.search));
+  const pageStr = query._page;
+  if (pageStr) {
+    delete query._page;
+    query._offset = (parseInt(pageStr, 10) - 1) * page_size;
   }
+  query._limit = page_size;
 
   const search = Object.keys(query).map(k => `${k}=${query[k]}`).join('&');
+  console.log('search', search);
   return fetch(`/api/issues?${search}`).then(response => {
     if (!response.ok) return response.json().then(error => Promise.reject(error));
     return response.json().then(data => {
-      console.log('finish',data);
-dispatch(requestIssuesSuccess(data))
-    } ).catch(error => dispatch(requestIssuesError(error)));
+      const issues = data.records;
+      issues.forEach(issue => {
+        issue.created = new Date(issue.created);
+        if (issue.completionDate) {
+          issue.completionDate = new Date(issue.completionDate);
+        }
+      });
+      var post_data = {
+        issues,
+        totalCount: data.metadata.totalCount
+      };
+      dispatch(requestIssuesSuccess(post_data))
+    }).catch(error => dispatch(requestIssuesError(error)));
   });
 };
 const shouldFetchIssues = (state, location) => {

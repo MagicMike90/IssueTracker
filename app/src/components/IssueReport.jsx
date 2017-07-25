@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types'
 import { Panel, Table } from 'react-bootstrap';
-import queryString from 'query-string';
+import qs from 'qs';
 
 import IssueFilter from './IssueFilter.jsx';
 import withToast from './withToast.jsx';
@@ -40,8 +40,8 @@ class IssueReport extends React.Component {
     this.loadData();
   }
   componentDidUpdate(prevProps) {
-    const oldQuery = queryString.parse(prevProps.location.search);
-    const newQuery = queryString.parse(this.props.location.search);
+    const oldQuery = qs.parse(prevProps.location.search);
+    const newQuery = qs.parse(this.props.location.search);
 
     if (newQuery === undefined) return;
 
@@ -53,7 +53,7 @@ class IssueReport extends React.Component {
     this.loadData();
   }
   setFilter(query) {
-    let qs = queryString.stringify(query);
+    let qs = qs.stringify(query);
     this.props.history.push({ pathname: this.props.location.pathname, search: qs })
   }
 
@@ -70,7 +70,7 @@ class IssueReport extends React.Component {
       <div>
         <Panel collapsible header="Filter">
           < IssueFilter setFilter={this.setFilter}
-            initFilter={queryString.parse(this.props.location.search)} />
+            initFilter={qs.parse(this.props.location.search)} />
         </Panel>
         <Table bordered condensed hover responsive>
           <thead>

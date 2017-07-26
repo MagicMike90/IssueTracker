@@ -1,5 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux';
+import { createIssue } from '../actions/issueActions'
+
 import { withRouter } from 'react-router-dom';
 import {
   NavItem, Glyphicon, Modal, Form, FormGroup, FormControl,
@@ -10,6 +13,7 @@ import {
 class IssueAddNavItem extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
       showing: false,
 
@@ -18,6 +22,12 @@ class IssueAddNavItem extends React.Component {
     this.hideModal = this.hideModal.bind(this);
     this.submit = this.submit.bind(this);
   }
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   console.log('nextProps', nextProps);
+  //   console.log('nextState', nextState);
+
+  //   if(newxProps.updatedIssue)this.props.history.push({ pathname: `/issues/${newxProps.updatedIssue._id}` })
+  // }
   showModal() {
     this.setState({ showing: true });
   }
@@ -30,28 +40,34 @@ class IssueAddNavItem extends React.Component {
     this.hideModal();
     const form = document.forms.issueAdd;
     const newIssue = {
-      owner: form.owner.value, title: form.title.value,
-      status: 'New', created: new Date(),
+      owner: form.owner.value,
+      title: form.title.value,
+      status: 'New',
+      created: new Date(),
     };
-    fetch('/api/issues', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(newIssue),
-    }).then(response => {
-      if (response.ok) {
-        response.json().then(updatedIssue => {
-          this.props.history.push({ pathname: `/issues/${updatedIssue._id}` })
-          // this.props.router.push(`/issues/${updatedIssue._id}`);
-        });
-      } else {
-        response.json().then(error => {
-          this.showError(`Failed to add issue: ${error.message}`);
-        });
-      }
-    }).catch(err => {
-      this.showError(`Error in sending data to server: ${err.message}`);
-    });
+
+    this.props.dispatch(createIssue(newIssue, this.props.history));
+
+    // fetch('/api/issues', {
+    //   method: 'POST',
+    //   headers: { 'Content-Type': 'application/json' },
+    //   body: JSON.stringify(newIssue),
+    // }).then(response => {
+    //   if (response.ok) {
+    //     response.json().then(updatedIssue => {
+    //       this.props.history.push({ pathname: `/issues/${updatedIssue._id}` })
+    //       // this.props.router.push(`/issues/${updatedIssue._id}`);
+    //     });
+    //   } else {
+    //     response.json().then(error => {
+    //       this.showError(`Failed to add issue: ${error.message}`);
+    //     });
+    //   }
+    // }).catch(err => {
+    //   this.showError(`Error in sending data to server: ${err.message}`);
+    // });
   }
+
   render() {
     return (
       <NavItem onClick={this.showModal}><Glyphicon glyph="plus" /> Create Issue<Modal keyboard show={this.state.showing} onHide={this.hideModal}>
@@ -82,7 +98,19 @@ class IssueAddNavItem extends React.Component {
   }
 }
 IssueAddNavItem.propTypes = {
-  router: PropTypes.object,
+  updatedIssue: PropTypes.object.isRequired,
+  match: PropTypes.object.isRequired,
+  location: PropTypes.object.isRequired,
+  history: PropTypes.object.isRequired,
   showError: PropTypes.func.isRequired,
+  dispatch: PropTypes.func.isRequired
 };
-export default withRouter(IssueAddNavItem);
+
+const mapStateToProps = (state, ownProps) => {
+  const issuesReducer = state.issuesReducer;
+  return {
+    updatedIssue: issuesReducer.updatedIssue,
+  }
+};
+
+export default withRouter(connect(mapStateToProps)(IssueAddNavItem));

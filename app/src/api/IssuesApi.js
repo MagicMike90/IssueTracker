@@ -8,7 +8,8 @@ class IssuesApi {
   static getAllIssues(search) {
     const headers = this.requestHeaders();
     const request = new Request(`/api/Issues?${search}`, {
-      method: 'GET'
+      method: 'GET',
+      headers: headers
     });
 
     return fetch(request).then(response => {
@@ -35,14 +36,13 @@ class IssuesApi {
     });
   }
 
-  static createIssue(Issue) {
+  static createIssue(newIssue) {
     const headers = Object.assign({ 'Content-Type': 'application/json' }, this.requestHeaders());
-    const request = new Request(`${process.env.HOST}/api/issues`, {
+    const request = new Request(`/api/issues`, {
       method: 'POST',
       headers: headers,
-      body: JSON.stringify({ Issue: Issue })
+      body: JSON.stringify(newIssue)
     });
-
 
     return fetch(request).then(response => {
       return response.json();

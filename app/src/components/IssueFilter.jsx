@@ -38,16 +38,6 @@ export default class IssueFilter extends React.Component {
             changed: false,
         });
     }
-    // setFilterOpen(e) {
-    //     e.preventDefault();
-    //     this.props.setFilter({ status: 'Open' });
-    //     // this.props.setFilter('?status=Open');
-    // }
-    // setFilterAssigned(e) {
-    //     e.preventDefault();
-    //     this.props.setFilter({ status: 'Assigned' });
-    //     // this.props.setFilter('?status=Assigned');
-    // }
     applyFilter() {
         const newFilter = {};
         if (this.state.status) newFilter.status = this.state.status;
@@ -56,7 +46,6 @@ export default class IssueFilter extends React.Component {
         this.props.setFilter(newFilter);
     }
     clearFilter(e) {
-        // e.preventDefault();
         this.props.setFilter({});
     }
     onChangeStatus(e) {

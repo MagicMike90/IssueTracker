@@ -4,26 +4,34 @@ import initialState from './initialState';
 const issues = (state = initialState, action) => {
 
   switch (action.type) {
-    case types.REQUEST_ISSUES_ERROR:
-      console.log('REQUEST_ISSUES_ERROR');
+    case types.REQUEST_SERVER_ERROR:
+      console.log('REQUEST_SERVER_ERROR');
       return Object.assign({}, state, {
         error: action.error,
         receivedAt: action.receivedAt,
-        failed: true
       });
-    case types.REQUEST_ISSUES_LOADING:
-      console.log('REQUEST_ISSUES_LOADING');
-      return Object.assign({}, state, {
-        isFetching: true,
-        failed: false
+
+    case types.LOAD_ISSUES_SUCCESS:
+      const issues = action.data.records;
+      issues.forEach(issue => {
+        issue.created = new Date(issue.created);
+        if (issue.completionDate) {
+          issue.completionDate = new Date(issue.completionDate);
+        }
       });
-    case types.REQUEST_ISSUES_SUCCESS:
-      console.log('REQUEST_ISSUES_SUCCESS');
+
       return Object.assign({}, state, {
-        issues: action.issues,
-        totalCount: action.totalCount,
-        isFetching: true,
-        failed: false,
+        issues: issues,
+        totalCount: action.data.metadata.totalCount,
+        isFetching: false,
+        receivedAt: action.receivedAt
+      });
+
+    case types.CREATE_ISSUE_SUCCESS:
+      const updatedIssue = action.issue;
+      action.history.push({ pathname: `/issues/${updatedIssue._id}` })
+      return Object.assign({}, state, {
+        updatedIssue: updatedIssue,
         receivedAt: action.receivedAt
       });
     default:

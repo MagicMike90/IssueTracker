@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux';
-import { fetchIssuesIfNeeded } from '../actions/fetch'
+import { fetchIssuesIfNeeded } from '../actions/issueActions'
 
 import 'whatwg-fetch';
 import { Link } from 'react-router-dom';

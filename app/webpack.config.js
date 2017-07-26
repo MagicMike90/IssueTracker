@@ -18,6 +18,19 @@ module.exports = {
       minChunks: Infinity
       // (with more entries, this ensures that no other module goes into the vendor chunk)
     }),
+    new webpack.optimize.UglifyJsPlugin({
+      minimize: true,
+      compress: {
+        warnings: false
+      }
+    }),
+    // compile time plugins
+    new webpack.DefinePlugin({
+      'process.env': {
+        'NODE_ENV': JSON.stringify("production"),
+        // 'HOST': JSON.stringify("http://localhost:8080")
+      }
+    }),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin()
   ],
@@ -28,7 +41,7 @@ module.exports = {
       query: {
         presets: ['react', 'es2015']
       }
-    }, ]
+    },]
   },
   resolve: {
     modules: [path.resolve(__dirname, "src"), "node_modules"]

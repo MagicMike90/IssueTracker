@@ -1,4 +1,5 @@
 import * as types from './actionTypes'
+import issueApi from '../api/IssuesApi';
 import qs from 'qs'
 
 
@@ -43,12 +44,11 @@ export const fetchIssues = (location, page_size) => dispatch => {
   query._limit = page_size;
 
   const search = Object.keys(query).map(k => `${k}=${query[k]}`).join('&');
-  return fetch(`/api/issues?${search}`).then(response => {
-    if (!response.ok) return response.json().then(error => Promise.reject(error));
-    return response.json().then(data => {
-      dispatch(requestIssuesSuccess(data))
-    }).catch(error => dispatch(requestIssuesError(error)));
-  });
+  return issueApi.getAllIssues(search).then(issues => {
+    console.log('issues',issues);
+    dispatch(requestIssuesSuccess(issues));
+  }).catch(error => dispatch(requestIssuesError(error)));
+
 };
 
 const shouldFetchIssues = (state) => {
@@ -59,7 +59,7 @@ const shouldFetchIssues = (state) => {
   if (issuesReducer.isFetching) {
     return false
   }
-  return issuesReducer.failed;  
+  return issuesReducer.failed;
 }
 export const fetchIssuesIfNeeded = (location, page_size) => (dispatch, getState) => {
   if (shouldFetchIssues(getState())) {

@@ -31,9 +31,15 @@ export const fetchIssues = (location, page_size) => dispatch => {
   query._limit = page_size;
 
   const search = Object.keys(query).map(k => `${k}=${query[k]}`).join('&');
+
+  console.log('search',search);
   return issueApi.getAllIssues(search).then(issues => {
+      console.log('fetchIssues',issues);
     dispatch(requestIssuesSuccess(issues));
-  }).catch(error => dispatch(requestIssuesError(error)));
+  }).catch(error => {
+      console.log('fetchIssues error',error);
+    dispatch(requestIssuesError(error))
+  });
 };
 
 const shouldFetchIssues = (state) => {
@@ -42,21 +48,33 @@ const shouldFetchIssues = (state) => {
     return true
   }
   if (issuesReducer.isFetching) {
-    return false
+    return false;
   }
   return issuesReducer.failed;
 }
 export const fetchIssuesIfNeeded = (location, page_size) => (dispatch, getState) => {
+
   if (shouldFetchIssues(getState())) {
+    console.log('fetchIssuesIfNeeded',location,page_size);
     return dispatch(fetchIssues(location, page_size));
   }
 }
 
 export const createIssue = (issue, history) => {
   // make async call to api, handle promise, dispatch action when promise is resolved
+  // return dispatch => {
+  //   issueApi.createIssue(issue).then(updatedIssue => {
+  //     dispatch(createIssueSuccess(updatedIssue, history));
+  //   }).catch(error => {
+  //     console.log('createIssue',error);
+  //     dispatch(requestIssuesError(error))
+  //   });
+  // }
   return dispatch => {
     issueApi.createIssue(issue).then(updatedIssue => {
       dispatch(createIssueSuccess(updatedIssue, history));
-    }).catch(error => dispatch(requestIssuesError(error)));
+    }).catch(error => {
+      dispatch(requestIssuesError(error))
+    });
   }
 }

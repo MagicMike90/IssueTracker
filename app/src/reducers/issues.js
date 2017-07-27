@@ -2,7 +2,6 @@ import * as types from '../actions/actionTypes';
 import initialState from './initialState';
 
 const issues = (state = initialState, action) => {
-
   switch (action.type) {
     case types.REQUEST_SERVER_ERROR:
       console.log('REQUEST_SERVER_ERROR');
@@ -12,6 +11,7 @@ const issues = (state = initialState, action) => {
       });
 
     case types.LOAD_ISSUES_SUCCESS:
+      console.log('LOAD_ISSUES_SUCCESS');
       const issues = action.data.records;
       issues.forEach(issue => {
         issue.created = new Date(issue.created);
@@ -28,6 +28,7 @@ const issues = (state = initialState, action) => {
       });
 
     case types.CREATE_ISSUE_SUCCESS:
+      console.log('CREATE_ISSUE_SUCCESS');
       const updatedIssue = action.issue;
       action.history.push({ pathname: `/issues/${updatedIssue._id}` })
       return Object.assign({}, state, {

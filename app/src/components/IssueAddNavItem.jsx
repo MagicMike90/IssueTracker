@@ -47,25 +47,6 @@ class IssueAddNavItem extends React.Component {
     };
 
     this.props.dispatch(createIssue(newIssue, this.props.history));
-
-    // fetch('/api/issues', {
-    //   method: 'POST',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify(newIssue),
-    // }).then(response => {
-    //   if (response.ok) {
-    //     response.json().then(updatedIssue => {
-    //       this.props.history.push({ pathname: `/issues/${updatedIssue._id}` })
-    //       // this.props.router.push(`/issues/${updatedIssue._id}`);
-    //     });
-    //   } else {
-    //     response.json().then(error => {
-    //       this.showError(`Failed to add issue: ${error.message}`);
-    //     });
-    //   }
-    // }).catch(err => {
-    //   this.showError(`Error in sending data to server: ${err.message}`);
-    // });
   }
 
   render() {

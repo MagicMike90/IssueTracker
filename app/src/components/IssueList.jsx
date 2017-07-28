@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux';
-import { fetchIssuesIfNeeded } from '../actions/issueActions'
+import { fetchIssuesIfNeeded, fetchIssues, deleteIssue } from '../actions/issueActions'
 
 import 'whatwg-fetch';
 import { Link } from 'react-router-dom';
@@ -31,7 +31,7 @@ class IssueList extends React.Component {
     }
     componentDidMount() {
         console.log('componentDidMount');
-        this.props.dispatch(fetchIssuesIfNeeded(this.props.location, PAGE_SIZE));
+        this.props.dispatch(fetchIssues(this.props.location, PAGE_SIZE));
     }
 
     componentDidUpdate(prevProps) {
@@ -65,11 +65,9 @@ class IssueList extends React.Component {
         this.props.history.push({ pathname: this.props.location.pathname, search: query_string })
     }
 
-    deleteIssue(id) {
-        fetch(`/api/issues/${id}`, { method: 'DELETE' }).then(response => {
-            if (!response.ok) this.props.showError('Failed to delete issue');
-            else this.props.dispatch(fetchIssuesIfNeeded(this.props.location, PAGE_SIZE));
-        });
+    deleteIssue(issue) {
+        console.log('deleteIssue', issue);
+        this.props.dispatch(deleteIssue(issue,this.props.location));
     }
     selectPage(eventKey) {
         // console.log('location', this.props.location.search);
@@ -114,7 +112,8 @@ const mapStateToProps = (state, ownProps) => {
         issues: issuesReducer.issues,
         totalCount: issuesReducer.totalCount,
         isFetching: issuesReducer.isFetching,
-        lastUpdated: issuesReducer.lastUpdated
+        lastUpdated: issuesReducer.lastUpdated,
+        updatedIssue: issuesReducer.updatedIssue,
     }
 };
 

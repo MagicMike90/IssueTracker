@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types'
-
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Button, Glyphicon, Table, Panel, Pagination } from 'react-bootstrap';
 
 
 const IssueRow = (props) => {
     function onDeleteClick() {
-        props.deleteIssue(props.issue._id);
+        props.deleteIssue(props.issue);
     }
     const issue = props.issue;
     return (
@@ -29,8 +29,9 @@ const IssueRow = (props) => {
 }
 IssueRow.propTypes = {
     issue: PropTypes.object.isRequired,
-    deleteIssue: PropTypes.func.isRequired,
+    deleteIssue: PropTypes.func.isRequired
 };
+
 
 const IssueTable = (props) =>{
     const borderedStyle = { border: "1px solid silver", padding: 6 };

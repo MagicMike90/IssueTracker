@@ -12,66 +12,47 @@ class IssuesApi {
       headers: headers
     });
 
-    return fetch(request).then(response => {
-      if (!response.ok) return response.json().then(error => {
-        const errorMsg = `Failed to fetch issues: ${error}`;
-        return Promise.reject(errorMsg);
-      });
-      return response.json();
-    }).catch(error => {
-      const errorMsg = `Error in fetching data from server: ${error}`;
-      return Promise.reject(errorMsg);
-    });
+    return fetch(request);
   }
   static createIssue(newIssue) {
-    const headers = Object.assign({ 'Content-Type': 'application/json' }, this.requestHeaders());
+    const headers = Object.assign({
+      'Content-Type': 'application/json'
+    }, this.requestHeaders());
     const request = new Request(`/api/issues`, {
       method: 'POST',
       headers: headers,
       body: JSON.stringify(newIssue)
     });
 
-    return fetch(request).then(response => {
-      if (!response.ok) return response.json().then(error => {
-        const errorMsg = `Failed to add issue: ${error.message}`;
-        return Promise.reject(errorMsg);
-      });
-      return response.json();
-    }).catch(error => {
-      const errorMsg = `Error in sending data to server: ${error}`;
-      return Promise.reject(errorMsg);
-    });
+    return fetch(request);
   }
 
   static updateIssue(issue) {
-    const headers = Object.assign({ 'Content-Type': 'application/json' }, this.requestHeaders());
-    const request = new Request(`${process.env.HOST}/api/issues/${Issue.id}`, {
+    const headers = Object.assign({
+      'Content-Type': 'application/json'
+    }, this.requestHeaders());
+    const request = new Request(`/api/issues/${Issue.id}`, {
       method: 'PUT',
       headers: headers,
-      body: JSON.stringify({ Issue: Issue })
+      body: JSON.stringify({
+        Issue: Issue
+      })
     });
 
-    return fetch(request).then(response => {
-      return response.json();
-    }).catch(error => {
-      const errorMsg = `Error in fetching data from server: ${error}`;
-      Promise.reject(errorMsg);
-    });
+    return fetch(request);
   }
 
 
   static deleteIssue(Issue) {
-    const headers = Object.assign({ 'Content-Type': 'application/json' }, this.requestHeaders());
-    const request = new Request(`${process.env.HOST}/api/issues/${Issue.id}`, {
+    const headers = Object.assign({
+      'Content-Type': 'application/json'
+    }, this.requestHeaders());
+    const request = new Request(`/api/issues/${Issue._id}`, {
       method: 'DELETE',
       headers: headers
     });
 
-    return fetch(request).then(response => {
-      return response.json();
-    }).catch(error => {
-      return error;
-    });
+    return fetch(request);
   }
 }
 

@@ -31,6 +31,10 @@ module.exports = {
         // 'HOST': JSON.stringify("http://localhost:8080")
       }
     }),
+    new webpack.SourceMapDevToolPlugin({
+      filename: '[name].js.map',
+      exclude: ['vendor.bundle.js']
+    }),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin()
   ],
@@ -41,7 +45,7 @@ module.exports = {
       query: {
         presets: ['react', 'es2015']
       }
-    },]
+    }, ]
   },
   resolve: {
     modules: [path.resolve(__dirname, "src"), "node_modules"]

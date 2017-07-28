@@ -20,6 +20,13 @@ export const createIssueSuccess = (issue, history) => ({
   issue,
   history
 });
+export const deleteIssueSuccess = (issue, history) => ({
+  type: types.DELETE_ISSUE_SUCCESS,
+  issue,
+  history
+});
+
+
 
 export const fetchIssues = (location, page_size) => dispatch => {
   const query = Object.assign({}, qs.parse(location.search));
@@ -32,13 +39,25 @@ export const fetchIssues = (location, page_size) => dispatch => {
 
   const search = Object.keys(query).map(k => `${k}=${query[k]}`).join('&');
 
-  console.log('search',search);
-  return issueApi.getAllIssues(search).then(issues => {
-      console.log('fetchIssues',issues);
-    dispatch(requestIssuesSuccess(issues));
-  }).catch(error => {
-      console.log('fetchIssues error',error);
-    dispatch(requestIssuesError(error))
+
+  return issueApi.getAllIssues(search).then(response => {
+    if (!response.ok) return response.json().then(error => Promise.reject(error));
+    response.json().then(data => {
+      const issues = data.records;
+      issues.forEach(issue => {
+        issue.created = new Date(issue.created);
+        if (issue.completionDate) {
+          issue.completionDate = new Date(issue.completionDate);
+        }
+      });
+      dispatch(requestIssuesSuccess({
+        issues,
+        totalCount: data.metadata.totalCount
+      }));
+    });
+  }).catch(err => {
+    const errorMsg = `Error in fetching data from server: ${err}`;
+    dispatch(requestIssuesError(errorMsg))
   });
 };
 
@@ -55,26 +74,43 @@ const shouldFetchIssues = (state) => {
 export const fetchIssuesIfNeeded = (location, page_size) => (dispatch, getState) => {
 
   if (shouldFetchIssues(getState())) {
-    console.log('fetchIssuesIfNeeded',location,page_size);
     return dispatch(fetchIssues(location, page_size));
   }
 }
 
 export const createIssue = (issue, history) => {
-  // make async call to api, handle promise, dispatch action when promise is resolved
-  // return dispatch => {
-  //   issueApi.createIssue(issue).then(updatedIssue => {
-  //     dispatch(createIssueSuccess(updatedIssue, history));
-  //   }).catch(error => {
-  //     console.log('createIssue',error);
-  //     dispatch(requestIssuesError(error))
-  //   });
-  // }
   return dispatch => {
-    issueApi.createIssue(issue).then(updatedIssue => {
-      dispatch(createIssueSuccess(updatedIssue, history));
+    issueApi.createIssue(issue).then(response => {
+      if (!response.ok) {
+        return response.json().then(error => {
+          const errorMsg = `Failed to add issue: ${error.message}`;
+          dispatch(requestIssuesError(errorMsg))
+        });
+      }
+      response.json().then(updatedIssue => {
+        dispatch(createIssueSuccess(updatedIssue, history));
+      })
     }).catch(error => {
-      dispatch(requestIssuesError(error))
+      const errorMsg = `Error in sending data to server: ${error.message}`;
+      dispatch(requestIssuesError(errorMsg))
+    });
+  }
+}
+export const deleteIssue = (issue, history) => {
+  return dispatch => {
+    issueApi.deleteIssue(issue).then(response => {
+      if (!response.ok) {
+        return response.json().then(error => {
+          const errorMsg = `Failed to delete issue`;
+          dispatch(requestIssuesError(errorMsg))
+        });
+      }
+      response.json().then(updatedIssue => {
+        dispatch(deleteIssueSuccess(updatedIssue, history));
+      })
+    }).catch(error => {
+      const errorMsg = `Error in sending data to server: ${error.message}`;
+      dispatch(requestIssuesError(errorMsg))
     });
   }
 }

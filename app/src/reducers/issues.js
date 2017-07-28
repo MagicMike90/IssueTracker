@@ -34,6 +34,8 @@ const issues = (state = initialState, action) => {
       console.log('DELETE_ISSUE_SUCCESS');
 
       const newIssues = state.issues.filter(issue => issue._id != action.issue._id);
+
+      console.log('newIssues',newIssues);
       return Object.assign({}, state, {
         issues: newIssues,
         receivedAt: action.receivedAt

@@ -105,9 +105,7 @@ export const deleteIssue = (issue, history) => {
           dispatch(requestIssuesError(errorMsg))
         });
       }
-      response.json().then(updatedIssue => {
-        dispatch(deleteIssueSuccess(updatedIssue, history));
-      })
+      return dispatch(deleteIssueSuccess(issue, history));
     }).catch(error => {
       const errorMsg = `Error in sending data to server: ${error.message}`;
       dispatch(requestIssuesError(errorMsg))

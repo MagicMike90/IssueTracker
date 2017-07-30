@@ -43,15 +43,15 @@ export const fetchIssues = (location, page_size) => dispatch => {
   return issueApi.getAllIssues(search).then(response => {
     if (!response.ok) return response.json().then(error => Promise.reject(error));
     response.json().then(data => {
-      const issues = data.records;
-      issues.forEach(issue => {
-        issue.created = new Date(issue.created);
-        if (issue.completionDate) {
-          issue.completionDate = new Date(issue.completionDate);
-        }
-      });
+      // const issues = data.records;
+      // issues.forEach(issue => {
+      //   issue.created = new Date(issue.created);
+      //   if (issue.completionDate) {
+      //     issue.completionDate = new Date(issue.completionDate);
+      //   }
+      // });
       dispatch(requestIssuesSuccess({
-        issues,
+        issues: data.records,
         totalCount: data.metadata.totalCount
       }));
     });

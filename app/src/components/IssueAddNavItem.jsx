@@ -21,6 +21,10 @@ import Dialog, {
 import TextField from 'material-ui/TextField';
 import FormControl from 'material-ui/Form/FormControl';
 
+
+
+import AddIssueForm from './forms/AddIssueForm.jsx';
+
 const styleSheet = createStyleSheet(theme => ({
   button: {
     margin: theme.spacing.unit,
@@ -54,18 +58,20 @@ class IssueAddNavItem extends React.Component {
     this.setState({ open: false });
   }
 
-  submit(e) {
-    e.preventDefault();
+  submit(values) {
+    // e.preventDefault();
+    console.log(values)
+
     this.hideModal();
-    const form = document.forms.issueAdd;
+
     const newIssue = {
-      owner: form.owner.value,
-      title: form.title.value,
+      owner: values.title,
+      title: values.owner,
       status: 'New',
       created: new Date(),
     };
 
-    this.props.dispatch(createIssue(newIssue, this.props.history));
+    // this.props.dispatch(createIssue(newIssue, this.props.history));
   }
 
   render() {
@@ -78,15 +84,15 @@ class IssueAddNavItem extends React.Component {
             {"Create Issue"}
           </DialogTitle>
           <DialogContent>
+            <AddIssueForm onSubmit={this.submit} />
 
-            <form name="issueAdd">
+            {/* <form name="issueAdd">
               <FormControl className={classes.formControl}>
                 <TextField
                   id="title"
                   name="title"
                   label="Title"
                   className={classes.textField}
-                  fullWidth={true}
                 />
               </FormControl>
 
@@ -96,7 +102,6 @@ class IssueAddNavItem extends React.Component {
                   name="owner"
                   label="Owner"
                   className={classes.textField}
-                  fullWidth={true}
                 />
               </FormControl>
 
@@ -104,7 +109,7 @@ class IssueAddNavItem extends React.Component {
                 <Button onClick={this.hideModal} color="primary">Cancel</Button>
                 <Button type='submit' onClick={this.submit} color="primary">Submit</Button>
               </DialogActions>
-            </form>
+            </form> */}
 
           </DialogContent>
         </Dialog>

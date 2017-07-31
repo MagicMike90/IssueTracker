@@ -18,18 +18,9 @@ module.exports = {
       minChunks: Infinity
       // (with more entries, this ensures that no other module goes into the vendor chunk)
     }),
-    new webpack.optimize.UglifyJsPlugin({
-      minimize: true,
-      compress: {
-        warnings: false
-      }
-    }),
     // compile time plugins
     new webpack.DefinePlugin({
-      'process.env': {
-        'NODE_ENV': JSON.stringify("production"),
-        // 'HOST': JSON.stringify("http://localhost:8080")
-      }
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development')
     }),
     new webpack.SourceMapDevToolPlugin({
       filename: '[name].js.map',

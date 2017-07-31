@@ -12,12 +12,28 @@ import { withRouter } from 'react-router-dom';
 import { withStyles, createStyleSheet } from 'material-ui/styles';
 import Button from 'material-ui/Button';
 import ModeEditIcon from 'material-ui-icons/ModeEdit';
+import Dialog, {
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+} from 'material-ui/Dialog';
+import TextField from 'material-ui/TextField';
+import FormControl from 'material-ui/Form/FormControl';
 
 const styleSheet = createStyleSheet(theme => ({
   button: {
     margin: theme.spacing.unit,
   },
+  textField: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+  },
+  formControl: {
+    margin: theme.spacing.unit,
+  },
 }));
+
 
 class IssueAddNavItem extends React.Component {
   constructor(props) {
@@ -32,10 +48,10 @@ class IssueAddNavItem extends React.Component {
     this.submit = this.submit.bind(this);
   }
   showModal() {
-    this.setState({ showing: true });
+    this.setState({ open: true });
   }
   hideModal() {
-    this.setState({ showing: false });
+    this.setState({ open: false });
   }
 
   submit(e) {
@@ -52,41 +68,47 @@ class IssueAddNavItem extends React.Component {
     this.props.dispatch(createIssue(newIssue, this.props.history));
   }
 
-  // render() {
-  //   return (
-  //     <NavItem onClick={this.showModal}><Glyphicon glyph="plus" /> Create Issue<Modal keyboard show={this.state.showing} onHide={this.hideModal}>
-  //       <Modal.Header closeButton>
-  //         <Modal.Title>Create Issue</Modal.Title>
-  //       </Modal.Header>
-  //       <Modal.Body>
-  //         <Form name="issueAdd">
-  //           <FormGroup>
-  //             <ControlLabel>Title</ControlLabel>
-  //             <FormControl name="title" autoFocus />
-  //           </FormGroup>
-  //           <FormGroup>
-  //             <ControlLabel>Owner</ControlLabel>
-  //             <FormControl name="owner" />
-  //           </FormGroup>
-  //         </Form>
-  //       </Modal.Body>
-  //       <Modal.Footer>
-  //         <ButtonToolbar>
-  //           <Button type="button" bsStyle="primary" onClick={this.submit}>Submit</Button>
-  //           <Button bsStyle="link" onClick={this.hideModal}>Cancel</Button>
-  //         </ButtonToolbar>
-  //       </Modal.Footer>
-  //     </Modal>
-  //     </NavItem>
-  //   );
-  // }
   render() {
     const classes = this.props.classes;
     return (
-      // <Button fab color="accent" className={classes.button}>
-      //   <ModeEditIcon />
-      // </Button>
-      <Button color="contrast" onClick={this.showModal}>Create Issue</Button>
+      <div>
+        <Button color="contrast" onClick={this.showModal}>Create Issue</Button>
+        <Dialog open={this.state.open} onRequestClose={this.handleRequestClose}>
+          <DialogTitle>
+            {"Create Issue"}
+          </DialogTitle>
+          <DialogContent>
+
+            <form name="issueAdd">
+              <FormControl className={classes.formControl}>
+                <TextField
+                  id="title"
+                  name="title"
+                  label="Title"
+                  className={classes.textField}
+                  fullWidth={true}
+                />
+              </FormControl>
+
+              <FormControl className={classes.formControl}>
+                <TextField
+                  id="owner"
+                  name="owner"
+                  label="Owner"
+                  className={classes.textField}
+                  fullWidth={true}
+                />
+              </FormControl>
+
+              <DialogActions>
+                <Button onClick={this.hideModal} color="primary">Cancel</Button>
+                <Button type='submit' onClick={this.submit} color="primary">Submit</Button>
+              </DialogActions>
+            </form>
+
+          </DialogContent>
+        </Dialog>
+      </div>
     )
   }
 }

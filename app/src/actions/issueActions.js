@@ -27,7 +27,13 @@ export const deleteIssueSuccess = (issue, history) => ({
 });
 
 
-
+const convertedIssue = issue => {
+  issue.created = new Date(issue.created);
+  if (issue.completionDate) {
+    issue.completionDate = new Date(issue.completionDate);
+  }
+  return issue;
+}
 export const fetchIssues = (location, page_size) => dispatch => {
   const query = Object.assign({}, qs.parse(location.search));
   const pageStr = query._page;
@@ -43,15 +49,10 @@ export const fetchIssues = (location, page_size) => dispatch => {
   return issueApi.getAllIssues(search).then(response => {
     if (!response.ok) return response.json().then(error => Promise.reject(error));
     response.json().then(data => {
-      // const issues = data.records;
-      // issues.forEach(issue => {
-      //   issue.created = new Date(issue.created);
-      //   if (issue.completionDate) {
-      //     issue.completionDate = new Date(issue.completionDate);
-      //   }
-      // });
+      const issues = data.records;
+      issues.forEach(issue => convertedIssue(issue));
       dispatch(requestIssuesSuccess({
-        issues: data.records,
+        issues,
         totalCount: data.metadata.totalCount
       }));
     });
@@ -88,6 +89,7 @@ export const createIssue = (issue, history) => {
         });
       }
       response.json().then(updatedIssue => {
+        updatedIssue = convertedIssue(updatedIssue);
         dispatch(createIssueSuccess(updatedIssue, history));
       })
     }).catch(error => {

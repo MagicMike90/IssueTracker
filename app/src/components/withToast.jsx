@@ -27,6 +27,11 @@ export default function withToast(OriginalComponent) {
     }
 
     render() {
+      // const { error } = this.props;
+      // if (error) {
+      //   console.log('withToast', error);
+      //   this.showError(error);
+      // }
       return (
         <div>
           <OriginalComponent

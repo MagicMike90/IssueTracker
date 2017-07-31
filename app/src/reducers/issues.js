@@ -2,13 +2,12 @@ import * as types from '../actions/actionTypes';
 import initialState from './initialState';
 
 
-const convertedIssue = issue => {
-  issue.created = new Date(issue.created);
-  if (issue.completionDate) {
-    issue.completionDate = new Date(issue.completionDate);
-  }
-  return issue;
-}
+/* 
+Things you should never do inside a reducer:
+Mutate its arguments;
+Perform side effects like API calls and routing transitions;
+Call non-pure functions, e.g. Date.now() or Math.random().
+*/
 
 const issues = (state = initialState, action) => {
   switch (action.type) {
@@ -21,11 +20,9 @@ const issues = (state = initialState, action) => {
 
     case types.LOAD_ISSUES_SUCCESS:
       console.log('LOAD_ISSUES_SUCCESS');
-      const issues = action.data.issues;
-      issues.forEach(issue => convertedIssue(issue));
 
       return Object.assign({}, state, {
-        issues: issues,
+        issues: action.data.issues,
         totalCount: action.data.totalCount,
         isFetching: false,
         receivedAt: action.receivedAt
@@ -39,7 +36,7 @@ const issues = (state = initialState, action) => {
       })
 
       return Object.assign({}, state, {
-        issues: state.issues.concat(convertedIssue(updatedIssue)),
+        issues: state.issues.concat(updatedIssue),
         receivedAt: action.receivedAt
       });
 

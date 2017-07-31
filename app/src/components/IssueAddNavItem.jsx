@@ -22,16 +22,7 @@ class IssueAddNavItem extends React.Component {
     this.hideModal = this.hideModal.bind(this);
     this.submit = this.submit.bind(this);
   }
-  componentWillReceiveProps(nextProps) {
-    console.log('nextProps', nextProps);
-    // console.log('nextState', nextState);
 
-    // if(newxProps.updatedIssue)this.props.history.push({ pathname: `/issues/${newxProps.updatedIssue._id}` })
-  }
-  componentWillUpdate(nextProps, nextState) {
-      console.log('nextProps', nextProps);
-    console.log('nextState', nextState);
-  }
   showModal() {
     this.setState({ showing: true });
   }
@@ -95,6 +86,7 @@ const mapStateToProps = (state, ownProps) => {
   const issuesReducer = state.issuesReducer;
   return {
     updatedIssue: issuesReducer.updatedIssue,
+    error: issuesReducer.error,
   }
 };
 

@@ -13,7 +13,7 @@ import { Button, Glyphicon, Table, Panel, Pagination } from 'react-bootstrap';
 import IssueFilter from './IssueFilter.jsx'
 import withToast from './withToast.jsx';
 import IssueTable from './IssueTable.jsx'
-
+import IssueAddNavItem from './IssueAddNavItem.jsx';
 
 const PAGE_SIZE = 10;
 class IssueList extends React.Component {
@@ -91,6 +91,7 @@ class IssueList extends React.Component {
                 />
                 <IssueTable issues={this.props.issues} deleteIssue={this.deleteIssue} />
                 {/*<IssueAdd createIssue={this.createIssue} />*/}
+                {/* <IssueAddNavItem /> */}
             </div>
         );
     }

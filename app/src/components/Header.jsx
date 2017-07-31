@@ -37,6 +37,7 @@ function Header(props) {
           </Typography>
           <Button color="contrast" onClick={() => props.history.push('/issues')}>Issues</Button>
           <Button color="contrast" onClick={() => props.history.push('/reports')}>Reports</Button>
+          <IssueAddNavItem />
         </Toolbar>
       </AppBar>
     </div>

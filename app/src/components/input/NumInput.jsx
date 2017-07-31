@@ -26,13 +26,14 @@ export default class NumInput extends React.Component {
         }
     }
     format(num) {
-        return num != null ? num.toString() : '0';
+        return num != null ? num.toString() : 0;
     }
     unformat(str) {
         const val = parseInt(str, 10);
         return isNaN(val) ? null : val;
     }
     render() {
+        console.log(this.props);
         return (
             <input
                 type="text" {...this.props} value={this.state.value}
@@ -42,6 +43,6 @@ export default class NumInput extends React.Component {
     }
 }
 NumInput.propTypes = {
-    value: PropTypes.number.isRequired,
+    // value: PropTypes.number,
     onChange: PropTypes.func.isRequired,
 };

@@ -30,11 +30,33 @@ class IssueList extends React.Component {
         this.selectPage = this.selectPage.bind(this);
     }
     componentDidMount() {
+        console.log('componentDidMount');
         this.props.dispatch(fetchIssues(this.props.location, PAGE_SIZE));
     }
 
     componentDidUpdate(prevProps) {
-        if (prevProps.location.search == this.props.location.search) return;
+        console.log('componentDidUpdate');
+        // console.log('prevProps.location.search',prevProps.location.search);
+        // console.log(' this.props.location.search', this.props.location.search);
+        // if(prevProps.location.search == this.props.location.search) return;
+        const oldQuery = qs.parse(prevProps.location.search);
+        const newQuery = qs.parse(this.props.location.search);
+
+        if (newQuery === undefined) return;
+
+        // When loading data, we asynchronously updated the state,
+        // and React has no way of knowing that it was done as part
+        // of the lifecycle method. Even if we had used the method
+        // ComponentWillReceiveProps, we would have had to compare
+        // the old and new.
+        if (oldQuery.status === newQuery.status
+            && oldQuery.effort_gte === newQuery.effort_gte
+            && oldQuery.effort_lte === newQuery.effort_lte
+            && oldQuery._page === newQuery._page) {
+            return;
+        }
+
+
         this.props.dispatch(fetchIssuesIfNeeded(this.props.location, PAGE_SIZE));
     }
 
@@ -44,7 +66,8 @@ class IssueList extends React.Component {
     }
 
     deleteIssue(issue) {
-        this.props.dispatch(deleteIssue(issue, this.props.location));
+        console.log('deleteIssue', issue);
+        this.props.dispatch(deleteIssue(issue,this.props.location));
     }
     selectPage(eventKey) {
         // console.log('location', this.props.location.search);
@@ -54,26 +77,8 @@ class IssueList extends React.Component {
         // console.log('qs', qs);
         this.props.history.push({ pathname: this.props.location.pathname, search: query_string })
     }
-    renderErrorMessage() {
-        const { errorMessage } = this.props
-        if (!errorMessage) {
-            return null
-        }
-
-        return (
-            <p style={{ backgroundColor: '#e99', padding: 10 }}>
-                <b>{errorMessage}</b>
-                {' '}
-                <button onClick={this.handleDismissClick}>
-                    Dismiss
-        </button>
-            </p>
-        )
-    }
-
     render() {
         let initFilter = qs.parse(this.props.location.search);
-        { this.renderErrorMessage() }
         return (
             <div>
                 <Panel collapsible header="Filter">
@@ -96,8 +101,6 @@ IssueList.propTypes = {
     totalCount: PropTypes.number.isRequired,
     isFetching: PropTypes.bool.isRequired,
     lastUpdated: PropTypes.number,
-    showError: PropTypes.func.isRequired,
-    showSuccess: PropTypes.func.isRequired,
     dispatch: PropTypes.func.isRequired,
 };
 const IssueListWithToast = withToast(IssueList);
@@ -110,9 +113,9 @@ const mapStateToProps = (state, ownProps) => {
         totalCount: issuesReducer.totalCount,
         isFetching: issuesReducer.isFetching,
         lastUpdated: issuesReducer.lastUpdated,
-        error: issuesReducer.error
+        updatedIssue: issuesReducer.updatedIssue,
     }
 };
 
-export default connect(mapStateToProps)(IssueListWithToast);
+export default connect(mapStateToProps)(IssueList);
 

@@ -20,7 +20,6 @@ const issues = (state = initialState, action) => {
 
     case types.LOAD_ISSUES_SUCCESS:
       console.log('LOAD_ISSUES_SUCCESS');
-
       return Object.assign({}, state, {
         issues: action.data.issues,
         totalCount: action.data.totalCount,
@@ -34,7 +33,6 @@ const issues = (state = initialState, action) => {
       action.history.push({
         pathname: `/issues/${updatedIssue._id}`
       })
-
       return Object.assign({}, state, {
         issues: state.issues.concat(updatedIssue),
         receivedAt: action.receivedAt
@@ -42,9 +40,12 @@ const issues = (state = initialState, action) => {
 
     case types.DELETE_ISSUE_SUCCESS:
       console.log('DELETE_ISSUE_SUCCESS');
-      // const newIssues = state.issues.filter(issue => issue._id != action.issue._id);
+
+      const newIssues = state.issues.filter(issue => issue._id != action.issue._id);
+
+      console.log('newIssues',newIssues);
       return Object.assign({}, state, {
-        issues: state.issues.filter(issue => issue._id != action.issue._id),
+        issues: newIssues,
         receivedAt: action.receivedAt
       });
     default:

@@ -39,10 +39,11 @@ module.exports = {
     new webpack.NoEmitOnErrorsPlugin()
   ],
   module: {
-    loaders: [{
+    rules: [{
       test: /\.jsx?$/,
+      exclude: /(node_modules|bower_components)/,
       loader: 'babel-loader',
-      query: {
+      options: {
         presets: ['react', 'es2015']
       }
     }, ]

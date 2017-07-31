@@ -22,7 +22,6 @@ class IssueAddNavItem extends React.Component {
     this.hideModal = this.hideModal.bind(this);
     this.submit = this.submit.bind(this);
   }
-
   showModal() {
     this.setState({ showing: true });
   }

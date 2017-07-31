@@ -50,7 +50,12 @@ export const fetchIssues = (location, page_size) => dispatch => {
     if (!response.ok) return response.json().then(error => Promise.reject(error));
     response.json().then(data => {
       const issues = data.records;
-      issues.forEach(issue => convertedIssue(issue));
+      issues.forEach(issue => {
+        issue.created = new Date(issue.created);
+        if (issue.completionDate) {
+          issue.completionDate = new Date(issue.completionDate);
+        }
+      });
       dispatch(requestIssuesSuccess({
         issues,
         totalCount: data.metadata.totalCount

@@ -2,8 +2,18 @@ import React from 'react';
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { Button, Glyphicon, Table, Panel, Pagination } from 'react-bootstrap';
+import { Button, Glyphicon } from 'react-bootstrap';
+import { withStyles, createStyleSheet } from 'material-ui/styles';
+import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
+import Paper from 'material-ui/Paper';
 
+const styleSheet = createStyleSheet(theme => ({
+    paper: {
+        width: '100%',
+        marginTop: theme.spacing.unit * 3,
+        overflowX: 'auto',
+    },
+}));
 
 const IssueRow = (props) => {
     function onDeleteClick() {
@@ -11,20 +21,20 @@ const IssueRow = (props) => {
     }
     const issue = props.issue;
     return (
-        <tr>
-            <td><Link to={`/issues/${issue._id}`}>
-                {issue._id.substr(-4)}</Link></td>
-            <td>{issue.status}</td>
-            <td>{issue.owner}</td>
-            <td>{issue.created.toDateString()}</td>
-            <td>{issue.effort}</td>
-            <td>{issue.completionDate ?
-                issue.completionDate.toDateString() : ''}</td>
-            <td>{issue.title}</td>
-            <td>
+        <TableRow>
+            <TableCell><Link to={`/issues/${issue._id}`}>
+                {issue._id.substr(-4)}</Link></TableCell>
+            <TableCell>{issue.status}</TableCell>
+            <TableCell>{issue.owner}</TableCell>
+            <TableCell>{issue.created.toDateString()}</TableCell>
+            <TableCell>{issue.effort}</TableCell>
+            <TableCell>{issue.completionDate ?
+                issue.completionDate.toDateString() : ''}</TableCell>
+            <TableCell>{issue.title}</TableCell>
+            <TableCell>
                 <Button bsSize="xsmall" onClick={onDeleteClick}><Glyphicon glyph="trash" /></Button>
-            </td>
-        </tr>
+            </TableCell>
+        </TableRow>
     )
 }
 IssueRow.propTypes = {
@@ -33,29 +43,34 @@ IssueRow.propTypes = {
 };
 
 
-const IssueTable = (props) =>{
+const IssueTable = (props) => {
     const borderedStyle = { border: "1px solid silver", padding: 6 };
     const issueRows = props.issues.map(issue => <IssueRow key={issue._id} issue={issue} deleteIssue={props.deleteIssue} />)
+    const classes = props.classes;
+
     return (
-        <Table bordered condensed hover responsive>
-            <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Status</th>
-                    <th>Owner</th>
-                    <th>Created</th>
-                    <th>Effort</th>
-                    <th>Completion Date</th>
-                    <th>Title</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>{issueRows}</tbody>
-        </Table>
+        <Paper className={classes.paper}>
+            <Table>
+                <TableHead>
+                    <TableRow>
+                        <TableCell>Id</TableCell>
+                        <TableCell>Status</TableCell>
+                        <TableCell>Owner</TableCell>
+                        <TableCell>Created</TableCell>
+                        <TableCell>Effort</TableCell>
+                        <TableCell>Completion Date</TableCell>
+                        <TableCell>Title</TableCell>
+                        <TableCell></TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>{issueRows}</TableBody>
+            </Table>
+        </Paper>
     )
 }
 IssueTable.propTypes = {
     issues: PropTypes.array.isRequired,
     deleteIssue: PropTypes.func.isRequired,
+    classes: PropTypes.object.isRequired
 };
-export default IssueTable;
+export default withStyles(styleSheet)(IssueTable);

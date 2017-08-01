@@ -19,6 +19,7 @@ import Typography from 'material-ui/Typography';
 import CloseIcon from 'material-ui-icons/Close';
 import Slide from 'material-ui/transitions/Slide';
 
+
 import EditIssueForm from './forms/EditIssueForm.jsx';
 
 
@@ -27,12 +28,13 @@ const styleSheet = createStyleSheet(theme => ({
 	appBar: {
 		position: 'relative',
 	},
-	formTitle: {
-		margin: theme.spacing.unit,
+	formSession: {
+		justifyContent: 'center',
+		padding: theme.spacing.unit * 2,
 	},
 	flex: {
 		flex: 1,
-	},
+	}
 }));
 
 class IssueEdit extends React.Component {
@@ -250,25 +252,16 @@ class IssueEdit extends React.Component {
 								<CloseIcon />
 							</IconButton>
 							<Typography type="title" color="inherit" className={classes.flex}>
-								Edit Issue {this.props.match.params.id}
+								Edit Issue
 							</Typography>
 							<Button color="contrast" onClick={this.hideModal}>
 								save
               </Button>
 						</Toolbar>
 					</AppBar>
-					<div className={classes.formTitle}>
-						<Typography type="title" color="secondary" className={classes.flex}>
-							Created
-						</Typography>
-						<Typography type="title" color="secondary" className={classes.flex}>
-							{issue.created ? issue.created.toDateString() : ''}
-						</Typography>
+					<div className={classes.formSession}>
+						<EditIssueForm issue={issue}/>
 					</div>
-					<div>
-						<EditIssueForm />
-					</div>
-
 				</Dialog>
 			</div>
 		);

@@ -26,6 +26,7 @@ const styleSheet = createStyleSheet(theme => ({
   formTitle: {
     margin: theme.spacing.unit,
     paddingTop: theme.spacing.unit * 2,
+    paddingBottom: theme.spacing.unit * 2,
     maxWidth: 400,
   },
   title: {
@@ -39,64 +40,102 @@ const styleSheet = createStyleSheet(theme => ({
   }),
 }));
 
-const renderTextField = ({ input, label, meta: { touched, error }, ...custom }) => {
-  console.log('input', input);
-  console.log('custom', custom);
+const renderTextField = ({ input, label, meta: { touched, error }, ...custom }) => (
+  <TextField
+    label={label}
+    helperText={touched && error}
+    {...input}
+    {...custom}
+  />
+)
 
-  return (
-    <TextField
-      label={label}
-      helperText={touched && error}
-      {...input}
-      {...custom}
-    />
-  )
-}
+// const formatDate = (date, name) => {
 
+//   if (date == 'Invalid Date') {
+//     console.log('return');
+//     return date;
+//   }
+//   var d = new Date(date),
+//     month = '' + (d.getMonth() + 1),
+//     day = '' + d.getDate(),
+//     year = d.getFullYear();
+
+
+//   if (month.length < 2) month = '0' + month;
+//   if (day.length < 2) day = '0' + day;
+
+//   return [year, month, day].join('-');
+// }
+// const parseDate = (date, name) => {
+//   console.log('date', date);
+//   return new Date(date);
+// }
 
 let EditIssueForm = props => {
-  const { handleSubmit, issue } = props;
+  const { handleSubmit, issue, initialValues } = props;
   const classes = props.classes;
 
-  console.log('issue', issue);
   return (
-    <Paper className={classes.root} elevation={4}>
-      <div className={classes.formTitle}>
-        <Typography type="title" color="secondary" className={classes.title} gutterBottom={true}>
-          ID: {issue._id}
-        </Typography>
+    <div>
+      <form onSubmit={handleSubmit}>
+        <div className={classes.formTitle}>
+          <Typography type="title" color="secondary" className={classes.title} gutterBottom={true}>
+            ID: {issue._id}
+          </Typography>
 
-        <Typography type="title" color="secondary" className={classes.title} gutterBottom={true}>
-          Created At: {issue.created ? issue.created.toDateString() : ''}
-        </Typography>
-      </div>
-      <div>
-        <form onSubmit={handleSubmit}>
-          <FormGroup className={classes.FormGroup} row={true}>
-            {/* <Field name="owner" label="Owner" component={renderTextField} defaultValue={issue.owner} className={classes.textField} fullWidth={true} /> */}
-            <TextField
-              label="owner"
-              value={issue.owner}
-              className={classes.textField}
-              fullWidth={true}
-            />
-          </FormGroup>
-          <FormGroup className={classes.FormGroup} row={true}>
-            <Field name="effort" label="Effort" component={renderTextField} defaultValue={issue.effort} className={classes.textField} fullWidth={true} />
-          </FormGroup>
+          <Typography type="title" color="secondary" className={classes.title} gutterBottom={true}>
+            Created At: {issue.created ? issue.created.toDateString() : ''}
+          </Typography>
+        </div>
+        <FormGroup className={classes.FormGroup} row={true}>
+          <Field name="title" label="Title" component={renderTextField} className={classes.textField} fullWidth={true} />
+        </FormGroup>
 
-          <FormGroup className={classes.FormGroup} row={true}>
-            <Button type="submit" className={classes.button} color="primary" raised>Create</Button>
-          </FormGroup>
-        </form>
-      </div>
-    </Paper>
+        <FormGroup className={classes.FormGroup} row={true}>
+          <Field name="owner" label="Owner" component={renderTextField} className={classes.textField} fullWidth={true} />
+        </FormGroup>
+
+        <Grid container gutter={24}>
+          <Grid item xs={6}>
+            <FormGroup className={classes.FormGroup} row={true}>
+              <Field name="effort" label="Effort" component={renderTextField} className={classes.textField} fullWidth={true} />
+            </FormGroup>
+          </Grid>
+          <Grid item xs={6}>
+            <FormGroup className={classes.FormGroup} row={true}>
+              <Field type="date" name="completionDate" label="Completion Date" component={renderTextField} className={classes.textField} fullWidth={true} InputLabelProps={{
+                shrink: true,
+              }} />
+            </FormGroup>
+          </Grid>
+        </Grid>
+
+        <FormGroup className={classes.FormGroup} row={true}>
+          <label className={classes.textField}>Status</label>
+          <div className={classes.textField}>
+            <Field name="status" component="select">
+              <option value="New">New</option>
+              <option value="Open">Open</option>
+              <option value="Assigned">Assigned</option>
+              <option value="Fixed">Fixed</option>
+              <option value="Verified">Verified</option>
+              <option value="Closed">Closed</option>
+            </Field>
+          </div>
+        </FormGroup>
+        <FormGroup className={classes.FormGroup} row={true}>
+          <Button type="submit" className={classes.button} color="primary" raised>Create</Button>
+        </FormGroup>
+      </form>
+    </div>
   )
 }
+
 const componentWithStyles = withStyles(styleSheet)(EditIssueForm);
 EditIssueForm = reduxForm({
   // a unique name for the form
-  form: 'editIssueForm'
+  form: 'editIssueForm',
+  enableReinitialize: true
 })(componentWithStyles)
 
 export default EditIssueForm;

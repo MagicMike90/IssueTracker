@@ -70,6 +70,7 @@ class IssueAddNavItem extends React.Component {
     const newIssue = {
       owner: values.title,
       title: values.owner,
+      effort: 0,
       status: 'New',
       created: new Date(),
     };

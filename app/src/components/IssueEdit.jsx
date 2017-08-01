@@ -99,36 +99,52 @@ class IssueEdit extends React.Component {
 		this.setState({ showingValidation: false });
 	}
 
-	onSubmit(event) {
-		event.preventDefault();
-		this.showValidation();
+	onSubmit(values) {
+		const issue = Object.assign({}, values);
+		const completionDate = new Date(values.completionDate);
+		issue.completionDate = completionDate;
 
-		if (Object.keys(this.state.invalidFields).length !== 0) {
-			return;
-		}
+		console.log('onSubmit',issue);
+		// event.preventDefault();
+		// this.showValidation();
+
+		// if (Object.keys(this.state.invalidFields).length !== 0) {
+		// 	return;
+		// }
 		fetch(`/api/issues/${this.props.match.params.id}`, {
 			method: 'PUT',
 			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify(this.state.issue),
+			body: JSON.stringify(issue),
 		}).then(response => {
 			if (response.ok) {
 				response.json().then(updatedIssue => {
 					// convert to MongoDB Date object type
 					updatedIssue.created = new Date(updatedIssue.created);
 					if (updatedIssue.completionDate) {
-						updatedIssue.completionDate = new Date(updatedIssue.completionDate);
+						updatedIssue.completionDate = this.formatDate(updatedIssue.completionDate);
 					}
 					this.setState({ issue: updatedIssue });
-					this.props.showSuccess('Updated issue successfully.');
+					// this.props.showSuccess('Updated issue successfully.');
 				});
 			} else {
 				response.json().then(error => {
-					this.props.showError(`Failed to update issue: ${error.message}`);
+					// this.props.showError(`Failed to update issue: ${error.message}`);
 				});
 			}
 		}).catch(err => {
 			this.props.showError(`Error in sending data to server: ${err.message}`);
 		});
+	}
+	formatDate(date) {
+		var d = new Date(date),
+			month = '' + (d.getMonth() + 1),
+			day = '' + d.getDate(),
+			year = d.getFullYear();
+
+		if (month.length < 2) month = '0' + month;
+		if (day.length < 2) day = '0' + day;
+
+		return [year, month, day].join('-');
 	}
 	loadData() {
 		this.setState({ isFetching: true });
@@ -136,8 +152,10 @@ class IssueEdit extends React.Component {
 			.then(data => {
 				const issue = data.IssueEdit;
 				issue.created = new Date(issue.created);
-				issue.completionDate = issue.completionDate != null ?
-					new Date(issue.completionDate) : null;
+				issue.completionDate = issue.completionDate != null ? this.formatDate(issue.completionDate) : null;
+				console.log('issue.completionDate',issue.completionDate);
+
+
 				this.setState({ issue });
 				this.setState({ isFetching: false });
 			}).catch(err => {
@@ -159,90 +177,7 @@ class IssueEdit extends React.Component {
 				</Alert>
 			);
 		}
-		// return (
-		// 	<Panel header="Edit Issue">
-		// 		<Form horizontal onSubmit={this.onSubmit}>
-		// 			<FormGroup>
-		// 				<Col componentClass={ControlLabel} sm={3}>ID</Col>
-		// 				<Col sm={9}>
-		// 					<FormControl.Static>{issue._id}</FormControl.Static>
-		// 				</Col>
-		// 			</FormGroup>
-		// 			<FormGroup>
-		// 				<Col componentClass={ControlLabel} sm={3}>Created</Col>
-		// 				<Col sm={9}>
-		// 					<FormControl.Static>
-		// 						{issue.created ? issue.created.toDateString() : ''}
-		// 					</FormControl.Static>
-		// 				</Col>
-		// 			</FormGroup>
-		// 			<FormGroup>
-		// 				<Col componentClass={ControlLabel} sm={3}>Status</Col>
-		// 				<Col sm={9}>
-		// 					<FormControl
-		// 						componentClass="select" name="status" value={issue.status}
-		// 						onChange={this.onChange}>
-		// 						<option value="New">New</option>
-		// 						<option value="Open">Open</option>
-		// 						<option value="Assigned">Assigned</option>
-		// 						<option value="Fixed">Fixed</option>
-		// 						<option value="Verified">Verified</option>
-		// 						<option value="Closed">Closed</option>
-		// 					</FormControl>
-		// 				</Col>
-		// 			</FormGroup>
-		// 			<FormGroup>
-		// 				<Col componentClass={ControlLabel} sm={3}>Owner</Col>
-		// 				<Col sm={9}>
-		// 					< FormControl name="owner" value={issue.owner}
-		// 						onChange={this.onChange} />
-		// 				</Col>
-		// 			</FormGroup>
-		// 			<FormGroup>
-		// 				<Col componentClass={ControlLabel} sm={3}>Effort</Col>
-		// 				<Col sm={9}>
-		// 					<FormControl componentClass={NumInput} name="effort"
-		// 						value={issue.effort} onChange={this.onChange}
-		// 					/>
-		// 				</Col>
-		// 			</FormGroup>
-		// 			<FormGroup validationState={this.state.invalidFields.completionDate ? 'error' : null}>
-		// 				<Col componentClass={ControlLabel} sm={3}>Completion Date</Col>
-		// 				<Col sm={9}>
-		// 					<FormControl
-		// 						componentClass={DateInput} name="completionDate"
-		// 						value={issue.completionDate} onChange={this.onChange}
-		// 						onValidityChange={this.onValidityChange}
-		// 					/>
-		// 					<FormControl.Feedback />
-		// 				</Col>
-		// 			</FormGroup>
-		// 			<FormGroup>
-		// 				<Col componentClass={ControlLabel} sm={3}>Title</Col>
-		// 				<Col sm={9}>
-		// 					< FormControl name="title" value={issue.title}
-		// 						onChange={this.onChange} />
-		// 				</Col>
-		// 			</FormGroup>
-		// 			<FormGroup>
-		// 				<Col smOffset={3} sm={6}>
-		// 					<ButtonToolbar>
-		// 						<Button bsStyle="primary" type="submit">Submit</Button>
-		// 						<LinkContainer to="/issues">
-		// 							<Button bsStyle="link">Back</Button>
-		// 						</LinkContainer>
-		// 					</ButtonToolbar>
-		// 				</Col>
-		// 			</FormGroup>
-		// 			<FormGroup>
-		// 				<Col smOffset={3} sm={9}>{validationMessage}</Col>
-		// 			</FormGroup>
-		// 		</Form>
-		// 	</Panel>
-		// );
-		if(this.state.isFetching) {
-			return (<div>Fetching.....</div>);
-		}
+
 		const { classes } = this.props;
 		return (
 			<div>
@@ -262,11 +197,11 @@ class IssueEdit extends React.Component {
 							</Typography>
 							<Button color="contrast" onClick={this.hideModal}>
 								save
-              </Button>
+              				</Button>
 						</Toolbar>
 					</AppBar>
 					<div className={classes.formSession}>
-						<EditIssueForm issue={issue} />
+						<EditIssueForm issue={issue} initialValues={issue} onSubmit={this.onSubmit} />
 					</div>
 				</Dialog>
 			</div>

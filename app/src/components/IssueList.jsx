@@ -90,8 +90,6 @@ class IssueList extends React.Component {
                     onSelect={this.selectPage} maxButtons={7} next prev boundaryLinks
                 />
                 <IssueTable issues={this.props.issues} deleteIssue={this.deleteIssue} />
-                {/*<IssueAdd createIssue={this.createIssue} />*/}
-                {/* <IssueAddNavItem /> */}
             </div>
         );
     }

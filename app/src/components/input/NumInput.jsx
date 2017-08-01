@@ -33,7 +33,6 @@ export default class NumInput extends React.Component {
         return isNaN(val) ? null : val;
     }
     render() {
-        console.log(this.props);
         return (
             <input
                 type="text" {...this.props} value={this.state.value}

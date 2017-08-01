@@ -6,6 +6,7 @@ import { Button, Glyphicon } from 'react-bootstrap';
 import { withStyles, createStyleSheet } from 'material-ui/styles';
 import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
 import Paper from 'material-ui/Paper';
+import DeleteForever from 'material-ui-icons/DeleteForever';
 
 const styleSheet = createStyleSheet(theme => ({
     paper: {
@@ -32,7 +33,7 @@ const IssueRow = (props) => {
                 issue.completionDate.toDateString() : ''}</TableCell>
             <TableCell>{issue.title}</TableCell>
             <TableCell>
-                <Button bsSize="xsmall" onClick={onDeleteClick}><Glyphicon glyph="trash" /></Button>
+                <Button bsSize="xsmall" onClick={onDeleteClick}><DeleteForever/></Button>
             </TableCell>
         </TableRow>
     )

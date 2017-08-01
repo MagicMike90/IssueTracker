@@ -36,6 +36,9 @@ const styleSheet = createStyleSheet(theme => ({
   formControl: {
     margin: theme.spacing.unit,
   },
+  dialog: {
+    width: "100%"
+  }
 }));
 
 
@@ -71,7 +74,7 @@ class IssueAddNavItem extends React.Component {
       created: new Date(),
     };
 
-    // this.props.dispatch(createIssue(newIssue, this.props.history));
+    this.props.dispatch(createIssue(newIssue, this.props.history));
   }
 
   render() {
@@ -79,38 +82,12 @@ class IssueAddNavItem extends React.Component {
     return (
       <div>
         <Button color="contrast" onClick={this.showModal}>Create Issue</Button>
-        <Dialog open={this.state.open} onRequestClose={this.handleRequestClose}>
+        <Dialog open={this.state.open} classes={{paper: classes.dialog}} onRequestClose={this.handleRequestClose}>
           <DialogTitle>
             {"Create Issue"}
           </DialogTitle>
           <DialogContent>
             <AddIssueForm onSubmit={this.submit} />
-
-            {/* <form name="issueAdd">
-              <FormControl className={classes.formControl}>
-                <TextField
-                  id="title"
-                  name="title"
-                  label="Title"
-                  className={classes.textField}
-                />
-              </FormControl>
-
-              <FormControl className={classes.formControl}>
-                <TextField
-                  id="owner"
-                  name="owner"
-                  label="Owner"
-                  className={classes.textField}
-                />
-              </FormControl>
-
-              <DialogActions>
-                <Button onClick={this.hideModal} color="primary">Cancel</Button>
-                <Button type='submit' onClick={this.submit} color="primary">Submit</Button>
-              </DialogActions>
-            </form> */}
-
           </DialogContent>
         </Dialog>
       </div>

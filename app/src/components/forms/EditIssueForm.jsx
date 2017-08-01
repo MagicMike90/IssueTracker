@@ -40,10 +40,9 @@ const styleSheet = createStyleSheet(theme => ({
 }));
 
 const renderTextField = ({ input, label, meta: { touched, error }, ...custom }) => {
-  let errMsg = "";
-  if (error) errMsg = touched && error;
+  console.log('input', input);
+  console.log('custom', custom);
 
-   console.log( custom);
   return (
     <TextField
       label={label}
@@ -59,7 +58,7 @@ let EditIssueForm = props => {
   const { handleSubmit, issue } = props;
   const classes = props.classes;
 
-  console.log('issue',issue);
+  console.log('issue', issue);
   return (
     <Paper className={classes.root} elevation={4}>
       <div className={classes.formTitle}>
@@ -74,10 +73,16 @@ let EditIssueForm = props => {
       <div>
         <form onSubmit={handleSubmit}>
           <FormGroup className={classes.FormGroup} row={true}>
-            <Field name="owner" label="Owner" component={renderTextField} defaultValue={issue.owner} className={classes.textField} fullWidth={true} />
+            {/* <Field name="owner" label="Owner" component={renderTextField} defaultValue={issue.owner} className={classes.textField} fullWidth={true} /> */}
+            <TextField
+              label="owner"
+              value={issue.owner}
+              className={classes.textField}
+              fullWidth={true}
+            />
           </FormGroup>
           <FormGroup className={classes.FormGroup} row={true}>
-            <Field name="effort" label="Effort" component={renderTextField} defaultValue={issue.effort} className={classes.textField} fullWidth={true}  />
+            <Field name="effort" label="Effort" component={renderTextField} defaultValue={issue.effort} className={classes.textField} fullWidth={true} />
           </FormGroup>
 
           <FormGroup className={classes.FormGroup} row={true}>

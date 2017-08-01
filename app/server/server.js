@@ -193,7 +193,8 @@ app.get('*', (req, res) => {
 });
 
 const server_port = 8080;
-const url = 'mongodb://mongodb:27017/issuetracker';
+// const url = 'mongodb://mongodb:27017/issuetracker';
+const url = 'mongodb://localhost:27018/issuetracker';
 let db;
 
 MongoClient.connect(url).then(connection => {

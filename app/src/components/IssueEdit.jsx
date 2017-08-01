@@ -55,7 +55,8 @@ class IssueEdit extends React.Component {
 			showingValidation: false,
 			toastMessage: '',
 			toastType: 'success',
-			open: true
+			open: true,
+			isFetching: false
 		};
 		this.onChange = this.onChange.bind(this);
 		this.onValidityChange = this.onValidityChange.bind(this);
@@ -130,6 +131,7 @@ class IssueEdit extends React.Component {
 		});
 	}
 	loadData() {
+		this.setState({ isFetching: true });
 		IssueEdit.dataFetcher({ params: this.props.match.params })
 			.then(data => {
 				const issue = data.IssueEdit;
@@ -137,6 +139,7 @@ class IssueEdit extends React.Component {
 				issue.completionDate = issue.completionDate != null ?
 					new Date(issue.completionDate) : null;
 				this.setState({ issue });
+				this.setState({ isFetching: false });
 			}).catch(err => {
 				this.props.showError(`Error in fetching data from server: ${err.message}`);
 			});
@@ -237,6 +240,9 @@ class IssueEdit extends React.Component {
 		// 		</Form>
 		// 	</Panel>
 		// );
+		if(this.state.isFetching) {
+			return (<div>Fetching.....</div>);
+		}
 		const { classes } = this.props;
 		return (
 			<div>
@@ -260,7 +266,7 @@ class IssueEdit extends React.Component {
 						</Toolbar>
 					</AppBar>
 					<div className={classes.formSession}>
-						<EditIssueForm issue={issue}/>
+						<EditIssueForm issue={issue} />
 					</div>
 				</Dialog>
 			</div>

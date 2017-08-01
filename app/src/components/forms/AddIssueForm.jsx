@@ -17,6 +17,10 @@ const styleSheet = createStyleSheet(theme => ({
     FormGroup: {
         margin: theme.spacing.unit,
     },
+    BtnFormGroup: {
+        margin: theme.spacing.unit,
+        float: "right"
+    },
     input: {
         margin: theme.spacing.unit,
     }
@@ -43,15 +47,17 @@ let ContactForm = props => {
 
     return (
         <form onSubmit={handleSubmit}>
-            <FormGroup className={classes.FormGroup} row>
+            <FormGroup className={classes.FormGroup} row={true}>
                 <Field name="title" label="Title" component={renderTextField} className={classes.textField} fullWidth={true} type="text" />
             </FormGroup>
-            <FormGroup className={classes.FormGroup} row>
+            <FormGroup className={classes.FormGroup} row={true}>
                 <Field name="owner" label="Owner" component={renderTextField} className={classes.textField} fullWidth={true} type="text" />
             </FormGroup>
-            <FormGroup className={classes.FormGroup} row>
+            <FormGroup className={classes.BtnFormGroup} row={true}>
+                <Button onClick={props.handleCancel} color="primary">Cancel</Button>
                 <Button type="submit" className={classes.button} color="primary" raised>Create</Button>
             </FormGroup>
+
         </form>
     )
 }

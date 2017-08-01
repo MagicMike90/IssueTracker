@@ -82,12 +82,12 @@ class IssueAddNavItem extends React.Component {
     return (
       <div>
         <Button color="contrast" onClick={this.showModal}>Create Issue</Button>
-        <Dialog open={this.state.open} classes={{paper: classes.dialog}} onRequestClose={this.handleRequestClose}>
+        <Dialog open={this.state.open} classes={{ paper: classes.dialog }} onRequestClose={this.handleRequestClose}>
           <DialogTitle>
             {"Create Issue"}
           </DialogTitle>
           <DialogContent>
-            <AddIssueForm onSubmit={this.submit} />
+            <AddIssueForm handleCancel={this.hideModal} onSubmit={this.submit} />
           </DialogContent>
         </Dialog>
       </div>

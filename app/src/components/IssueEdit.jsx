@@ -1,14 +1,39 @@
 import React from 'react';
 import PropTypes from 'prop-types'
-import {
-	FormGroup, FormControl, ControlLabel, ButtonToolbar, Button,
-	Panel, Form, Col, Alert
-} from 'react-bootstrap';
-import { LinkContainer } from 'react-router-bootstrap';
+// import {
+// 	FormGroup, FormControl, ControlLabel, ButtonToolbar, Button,
+// 	Panel, Form, Col, Alert
+// } from 'react-bootstrap';
+// import { LinkContainer } from 'react-router-bootstrap';
 
-import NumInput from './input/NumInput.jsx';
-import DateInput from './input/DateInput.jsx';
-import withToast from './withToast.jsx';
+
+import { withStyles, createStyleSheet } from 'material-ui/styles';
+import Button from 'material-ui/Button';
+import Dialog from 'material-ui/Dialog';
+import List, { ListItem, ListItemText } from 'material-ui/List';
+import Divider from 'material-ui/Divider';
+import AppBar from 'material-ui/AppBar';
+import Toolbar from 'material-ui/Toolbar';
+import IconButton from 'material-ui/IconButton';
+import Typography from 'material-ui/Typography';
+import CloseIcon from 'material-ui-icons/Close';
+import Slide from 'material-ui/transitions/Slide';
+
+import EditIssueForm from './forms/EditIssueForm.jsx';
+
+
+
+const styleSheet = createStyleSheet(theme => ({
+	appBar: {
+		position: 'relative',
+	},
+	formTitle: {
+		margin: theme.spacing.unit,
+	},
+	flex: {
+		flex: 1,
+	},
+}));
 
 class IssueEdit extends React.Component {
 	static dataFetcher({ params, urlBase }) {
@@ -27,7 +52,8 @@ class IssueEdit extends React.Component {
 			invalidFields: {},
 			showingValidation: false,
 			toastMessage: '',
-			toastType: 'success'
+			toastType: 'success',
+			open: true
 		};
 		this.onChange = this.onChange.bind(this);
 		this.onValidityChange = this.onValidityChange.bind(this);
@@ -35,6 +61,8 @@ class IssueEdit extends React.Component {
 
 		this.dismissValidation = this.dismissValidation.bind(this);
 		this.showValidation = this.showValidation.bind(this);
+
+		this.hideModal = this.hideModal.bind(this);
 	}
 	componentDidMount() {
 		this.loadData();
@@ -111,6 +139,11 @@ class IssueEdit extends React.Component {
 				this.props.showError(`Error in fetching data from server: ${err.message}`);
 			});
 	}
+	hideModal() {
+		this.setState({ open: false });
+		this.props.history.push('/issues')
+	};
+
 	render() {
 		const issue = this.state.issue;
 		let validationMessage = null;
@@ -121,96 +154,130 @@ class IssueEdit extends React.Component {
 				</Alert>
 			);
 		}
+		// return (
+		// 	<Panel header="Edit Issue">
+		// 		<Form horizontal onSubmit={this.onSubmit}>
+		// 			<FormGroup>
+		// 				<Col componentClass={ControlLabel} sm={3}>ID</Col>
+		// 				<Col sm={9}>
+		// 					<FormControl.Static>{issue._id}</FormControl.Static>
+		// 				</Col>
+		// 			</FormGroup>
+		// 			<FormGroup>
+		// 				<Col componentClass={ControlLabel} sm={3}>Created</Col>
+		// 				<Col sm={9}>
+		// 					<FormControl.Static>
+		// 						{issue.created ? issue.created.toDateString() : ''}
+		// 					</FormControl.Static>
+		// 				</Col>
+		// 			</FormGroup>
+		// 			<FormGroup>
+		// 				<Col componentClass={ControlLabel} sm={3}>Status</Col>
+		// 				<Col sm={9}>
+		// 					<FormControl
+		// 						componentClass="select" name="status" value={issue.status}
+		// 						onChange={this.onChange}>
+		// 						<option value="New">New</option>
+		// 						<option value="Open">Open</option>
+		// 						<option value="Assigned">Assigned</option>
+		// 						<option value="Fixed">Fixed</option>
+		// 						<option value="Verified">Verified</option>
+		// 						<option value="Closed">Closed</option>
+		// 					</FormControl>
+		// 				</Col>
+		// 			</FormGroup>
+		// 			<FormGroup>
+		// 				<Col componentClass={ControlLabel} sm={3}>Owner</Col>
+		// 				<Col sm={9}>
+		// 					< FormControl name="owner" value={issue.owner}
+		// 						onChange={this.onChange} />
+		// 				</Col>
+		// 			</FormGroup>
+		// 			<FormGroup>
+		// 				<Col componentClass={ControlLabel} sm={3}>Effort</Col>
+		// 				<Col sm={9}>
+		// 					<FormControl componentClass={NumInput} name="effort"
+		// 						value={issue.effort} onChange={this.onChange}
+		// 					/>
+		// 				</Col>
+		// 			</FormGroup>
+		// 			<FormGroup validationState={this.state.invalidFields.completionDate ? 'error' : null}>
+		// 				<Col componentClass={ControlLabel} sm={3}>Completion Date</Col>
+		// 				<Col sm={9}>
+		// 					<FormControl
+		// 						componentClass={DateInput} name="completionDate"
+		// 						value={issue.completionDate} onChange={this.onChange}
+		// 						onValidityChange={this.onValidityChange}
+		// 					/>
+		// 					<FormControl.Feedback />
+		// 				</Col>
+		// 			</FormGroup>
+		// 			<FormGroup>
+		// 				<Col componentClass={ControlLabel} sm={3}>Title</Col>
+		// 				<Col sm={9}>
+		// 					< FormControl name="title" value={issue.title}
+		// 						onChange={this.onChange} />
+		// 				</Col>
+		// 			</FormGroup>
+		// 			<FormGroup>
+		// 				<Col smOffset={3} sm={6}>
+		// 					<ButtonToolbar>
+		// 						<Button bsStyle="primary" type="submit">Submit</Button>
+		// 						<LinkContainer to="/issues">
+		// 							<Button bsStyle="link">Back</Button>
+		// 						</LinkContainer>
+		// 					</ButtonToolbar>
+		// 				</Col>
+		// 			</FormGroup>
+		// 			<FormGroup>
+		// 				<Col smOffset={3} sm={9}>{validationMessage}</Col>
+		// 			</FormGroup>
+		// 		</Form>
+		// 	</Panel>
+		// );
+		const { classes } = this.props;
 		return (
-			<Panel header="Edit Issue">
-				<Form horizontal onSubmit={this.onSubmit}>
-					<FormGroup>
-						<Col componentClass={ControlLabel} sm={3}>ID</Col>
-						<Col sm={9}>
-							<FormControl.Static>{issue._id}</FormControl.Static>
-						</Col>
-					</FormGroup>
-					<FormGroup>
-						<Col componentClass={ControlLabel} sm={3}>Created</Col>
-						<Col sm={9}>
-							<FormControl.Static>
-								{issue.created ? issue.created.toDateString() : ''}
-							</FormControl.Static>
-						</Col>
-					</FormGroup>
-					<FormGroup>
-						<Col componentClass={ControlLabel} sm={3}>Status</Col>
-						<Col sm={9}>
-							<FormControl
-								componentClass="select" name="status" value={issue.status}
-								onChange={this.onChange}>
-								<option value="New">New</option>
-								<option value="Open">Open</option>
-								<option value="Assigned">Assigned</option>
-								<option value="Fixed">Fixed</option>
-								<option value="Verified">Verified</option>
-								<option value="Closed">Closed</option>
-							</FormControl>
-						</Col>
-					</FormGroup>
-					<FormGroup>
-						<Col componentClass={ControlLabel} sm={3}>Owner</Col>
-						<Col sm={9}>
-							< FormControl name="owner" value={issue.owner}
-								onChange={this.onChange} />
-						</Col>
-					</FormGroup>
-					<FormGroup>
-						<Col componentClass={ControlLabel} sm={3}>Effort</Col>
-						<Col sm={9}>
-							<FormControl componentClass={NumInput} name="effort"
-								value={issue.effort} onChange={this.onChange}
-							/>
-						</Col>
-					</FormGroup>
-					<FormGroup validationState={this.state.invalidFields.completionDate ? 'error' : null}>
-						<Col componentClass={ControlLabel} sm={3}>Completion Date</Col>
-						<Col sm={9}>
-							<FormControl
-								componentClass={DateInput} name="completionDate"
-								value={issue.completionDate} onChange={this.onChange}
-								onValidityChange={this.onValidityChange}
-							/>
-							<FormControl.Feedback />
-						</Col>
-					</FormGroup>
-					<FormGroup>
-						<Col componentClass={ControlLabel} sm={3}>Title</Col>
-						<Col sm={9}>
-							< FormControl name="title" value={issue.title}
-								onChange={this.onChange} />
-						</Col>
-					</FormGroup>
-					<FormGroup>
-						<Col smOffset={3} sm={6}>
-							<ButtonToolbar>
-								<Button bsStyle="primary" type="submit">Submit</Button>
-								<LinkContainer to="/issues">
-									<Button bsStyle="link">Back</Button>
-								</LinkContainer>
-							</ButtonToolbar>
-						</Col>
-					</FormGroup>
-					<FormGroup>
-						<Col smOffset={3} sm={9}>{validationMessage}</Col>
-					</FormGroup>
-				</Form>
-			</Panel>
+			<div>
+				<Dialog
+					fullScreen
+					open={this.state.open}
+					onRequestClose={this.hideModal}
+					transition={<Slide direction="up" />}
+				>
+					<AppBar className={classes.appBar}>
+						<Toolbar>
+							<IconButton color="contrast" onClick={this.hideModal} aria-label="Close">
+								<CloseIcon />
+							</IconButton>
+							<Typography type="title" color="inherit" className={classes.flex}>
+								Edit Issue {this.props.match.params.id}
+							</Typography>
+							<Button color="contrast" onClick={this.hideModal}>
+								save
+              </Button>
+						</Toolbar>
+					</AppBar>
+					<div className={classes.formTitle}>
+						<Typography type="title" color="secondary" className={classes.flex}>
+							Created
+						</Typography>
+						<Typography type="title" color="secondary" className={classes.flex}>
+							{issue.created ? issue.created.toDateString() : ''}
+						</Typography>
+					</div>
+					<div>
+						<EditIssueForm />
+					</div>
+
+				</Dialog>
+			</div>
 		);
 	}
 }
 IssueEdit.propTypes = {
-	match: PropTypes.object.isRequired,
-	showSuccess: PropTypes.func.isRequired,
-	showError: PropTypes.func.isRequired,
+	match: PropTypes.object.isRequired
 };
-const IssueEditWithToast = withToast(IssueEdit);
-// any static functions that you used in the original
-// component are no longer available in the wrapped component
-IssueEditWithToast.dataFetcher = IssueEdit.dataFetcher;
-export default IssueEditWithToast;
+
+
+const componentWithStyles = withStyles(styleSheet)(IssueEdit);
+export default componentWithStyles;

@@ -1,7 +1,10 @@
 import * as types from './actionTypes'
-import { addNotification } from './notificationActions'
+import {
+  addNotification
+} from './notificationActions'
 import issueApi from '../api/IssuesApi';
-import qs from 'qs'
+import qs from 'qs';
+import reduxStore from '../store/reduxStore';
 
 
 
@@ -16,15 +19,18 @@ export const requestIssuesSuccess = data => ({
   data,
   receivedAt: Date.now()
 });
-export const createIssueSuccess = (issue, history) => ({
-  type: types.CREATE_ISSUE_SUCCESS,
-  issue,
-  history
-});
+export const createIssueSuccess = (issue, history) => {
+  history.push({
+    pathname: `/issues/${issue._id}`
+  })
+  return {
+    type: types.CREATE_ISSUE_SUCCESS,
+    issue
+  }
+};
 export const deleteIssueSuccess = (issue, history) => ({
   type: types.DELETE_ISSUE_SUCCESS,
-  issue,
-  history
+  issue
 });
 
 
@@ -92,7 +98,8 @@ export const createIssue = (issue, history) => {
       if (!response.ok) {
         return response.json().then(error => {
           const errorMsg = `Failed to add issue: ${error.message}`;
-          dispatch(requestIssuesError(errorMsg))
+          // dispatch(requestIssuesError(errorMsg))
+          dispatch(addNotification(errorMsg, 'error'));;
         });
       }
       response.json().then(updatedIssue => {

@@ -25,8 +25,8 @@ class SimpleSnackbar extends Component {
     this.handleClick = this.handleClick.bind(this);
     this.handleRequestClose = this.handleRequestClose.bind(this);
   }
-  componentWillReceiveProps(props) {
-    this.setState({ open: props.open, message: props.message });
+  componentWillReceiveProps(nextProps,) {
+    this.setState({ open: nextProps.open, message: nextProps.message });
   }
 
   handleClick() {
@@ -42,7 +42,12 @@ class SimpleSnackbar extends Component {
     return (
       <div>
         <Snackbar
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'right',
+          }}
           open={this.state.open}
+          autoHideDuration={6e3}
           onRequestClose={this.handleRequestClose}
           SnackbarContentProps={{
             'aria-describedby': 'message-id',

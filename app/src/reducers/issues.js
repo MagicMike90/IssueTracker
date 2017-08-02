@@ -30,9 +30,6 @@ const issues = (state = initialState, action) => {
     case types.CREATE_ISSUE_SUCCESS:
       console.log('CREATE_ISSUE_SUCCESS');
       const updatedIssue = action.issue;
-      action.history.push({
-        pathname: `/issues/${updatedIssue._id}`
-      })
       return Object.assign({}, state, {
         issues: state.issues.concat(updatedIssue),
         receivedAt: action.receivedAt
@@ -42,8 +39,6 @@ const issues = (state = initialState, action) => {
       console.log('DELETE_ISSUE_SUCCESS');
 
       const newIssues = state.issues.filter(issue => issue._id != action.issue._id);
-
-      console.log('newIssues',newIssues);
       return Object.assign({}, state, {
         issues: newIssues,
         receivedAt: action.receivedAt

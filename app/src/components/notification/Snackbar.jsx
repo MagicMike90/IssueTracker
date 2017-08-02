@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+
 import Button from 'material-ui/Button';
 import Snackbar from 'material-ui/Snackbar';
 import Slide from 'material-ui/transitions/Slide';
@@ -7,7 +9,7 @@ import Slide from 'material-ui/transitions/Slide';
 class DirectionSnackbar extends Component {
   constructor(props) {
     super(props);
-    
+
     this.state = {
       open: false,
       direction: "up",
@@ -24,9 +26,10 @@ class DirectionSnackbar extends Component {
     return (
       <div>
         <Snackbar
-          open={this.state.open}
+          open={this.props.open}
           onRequestClose={this.handleRequestClose}
-          transition={<Slide direction={this.state.direction} />}
+          transition={<Slide direction="up" />}
+          autoHideDuration={1000}
           SnackbarContentProps={{
             'aria-describedby': 'message-id',
           }}
@@ -37,4 +40,4 @@ class DirectionSnackbar extends Component {
   }
 }
 
-export default DirectionSnackbar;
+export default connect()(DirectionSnackbar);

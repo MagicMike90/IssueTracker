@@ -30,32 +30,11 @@ class IssueList extends React.Component {
         this.selectPage = this.selectPage.bind(this);
     }
     componentDidMount() {
-        console.log('componentDidMount');
         this.props.dispatch(fetchIssues(this.props.location, PAGE_SIZE));
     }
 
     componentDidUpdate(prevProps) {
-        console.log('componentDidUpdate');
-        // console.log('prevProps.location.search',prevProps.location.search);
-        // console.log(' this.props.location.search', this.props.location.search);
-        // if(prevProps.location.search == this.props.location.search) return;
-        const oldQuery = qs.parse(prevProps.location.search);
-        const newQuery = qs.parse(this.props.location.search);
-
-        if (newQuery === undefined) return;
-
-        // When loading data, we asynchronously updated the state,
-        // and React has no way of knowing that it was done as part
-        // of the lifecycle method. Even if we had used the method
-        // ComponentWillReceiveProps, we would have had to compare
-        // the old and new.
-        if (oldQuery.status === newQuery.status
-            && oldQuery.effort_gte === newQuery.effort_gte
-            && oldQuery.effort_lte === newQuery.effort_lte
-            && oldQuery._page === newQuery._page) {
-            return;
-        }
-
+        if(prevProps.location.search == this.props.location.search) return;
 
         this.props.dispatch(fetchIssuesIfNeeded(this.props.location, PAGE_SIZE));
     }

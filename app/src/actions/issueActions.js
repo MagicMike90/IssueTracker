@@ -1,5 +1,5 @@
 import * as types from './actionTypes'
-import addNotification from './notificationActions'
+import { addNotification } from './notificationActions'
 import issueApi from '../api/IssuesApi';
 import qs from 'qs'
 
@@ -61,6 +61,7 @@ export const fetchIssues = (location, page_size) => dispatch => {
         issues,
         totalCount: data.metadata.totalCount
       }));
+      dispatch(addNotification('Load issues successfully', 'success'));
     });
   }).catch(err => {
     const errorMsg = `Error in fetching data from server: ${err}`;

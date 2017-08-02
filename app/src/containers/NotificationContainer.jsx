@@ -12,17 +12,25 @@ class NotificationContainer extends Component {
 
   componentDidMount() {
   }
-
+   componentWillReceiveProps(newProps) {
+    const { message, level } = newProps.notification;
+    this.notificationSystem.addNotification({
+      message,
+      level
+    });
+  }
   render() {
     return (
-      <Snackbar />
+      <Snackbar open={this.props.open} message={this.props.message}/>
     );
   }
 }
 
 function mapStateToProps(state) {
+  const { notification } = state;
   return {
-    notification: state.notification
+    open: notification.message ? true : false,
+    message: notification.message
   };
 }
 

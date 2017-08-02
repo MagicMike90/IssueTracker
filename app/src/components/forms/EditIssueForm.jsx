@@ -9,6 +9,7 @@ import Grid from 'material-ui/Grid';
 import Paper from 'material-ui/Paper';
 import Typography from 'material-ui/Typography';
 
+
 const styleSheet = createStyleSheet(theme => ({
   button: {
     margin: theme.spacing.unit,
@@ -75,36 +76,40 @@ let EditIssueForm = props => {
         </FormGroup>
 
         <Grid container gutter={24}>
-          <Grid item xs={6}>
+          <Grid item xs={4}>
             <FormGroup className={classes.FormGroup} row={true}>
-              <Field name="effort" label="Effort" component={renderTextField} className={classes.textField} fullWidth={true} />
+              <Field type="number" name="effort" label="Effort" component={renderTextField} className={classes.textField} fullWidth={true} />
             </FormGroup>
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={4}>
             <FormGroup className={classes.FormGroup} row={true}>
               <Field type="date" name="completionDate" label="Completion Date" component={renderTextField} className={classes.textField} fullWidth={true} InputLabelProps={{
                 shrink: true,
               }} />
             </FormGroup>
           </Grid>
+
+          <Grid item xs={4}>
+            <FormGroup className={classes.FormGroup} row={true}>
+              <label className={classes.textField}>Status</label>
+              <div className={classes.textField}>
+                <Field name="status" component="select">
+                  <option value="New">New</option>
+                  <option value="Open">Open</option>
+                  <option value="Assigned">Assigned</option>
+                  <option value="Fixed">Fixed</option>
+                  <option value="Verified">Verified</option>
+                  <option value="Closed">Closed</option>
+                </Field>
+              </div>
+            </FormGroup>
+          </Grid>
         </Grid>
 
-        <FormGroup className={classes.FormGroup} row={true}>
-          <label className={classes.textField}>Status</label>
-          <div className={classes.textField}>
-            <Field name="status" component="select">
-              <option value="New">New</option>
-              <option value="Open">Open</option>
-              <option value="Assigned">Assigned</option>
-              <option value="Fixed">Fixed</option>
-              <option value="Verified">Verified</option>
-              <option value="Closed">Closed</option>
-            </Field>
-          </div>
-        </FormGroup>
-        <FormGroup className={classes.FormGroup} row={true}>
+
+        {/* <FormGroup className={classes.FormGroup} row={true}>
           <Button type="submit" className={classes.button} color="primary" raised>Submit</Button>
-        </FormGroup>
+        </FormGroup> */}
       </form>
     </div>
   )
@@ -113,7 +118,7 @@ let EditIssueForm = props => {
 const componentWithStyles = withStyles(styleSheet)(EditIssueForm);
 EditIssueForm = reduxForm({
   // a unique name for the form
-  form: 'editIssueForm',
+  form: 'EditIssueForm',
   enableReinitialize: true
 })(componentWithStyles)
 

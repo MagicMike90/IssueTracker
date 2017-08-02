@@ -41,19 +41,19 @@ const renderTextField = ({ input, label, meta: { touched, error }, ...custom }) 
 }
 
 
-let AddIssueForm = props => {
+let EditIssueForm = props => {
     const { handleSubmit } = props;
     const classes = props.classes;
 
     return (
         <form onSubmit={handleSubmit}>
-            <FormGroup className={classes.FormGroup} row={true}>
+            <FormGroup className={classes.FormGroup}>
                 <Field name="title" label="Title" component={renderTextField} className={classes.textField} fullWidth={true} type="text" />
             </FormGroup>
-            <FormGroup className={classes.FormGroup} row={true}>
+            <FormGroup className={classes.FormGroup}>
                 <Field name="owner" label="Owner" component={renderTextField} className={classes.textField} fullWidth={true} type="text" />
             </FormGroup>
-            <FormGroup className={classes.BtnFormGroup} row={true}>
+            <FormGroup className={classes.BtnFormGroup}>
                 <Button onClick={props.handleCancel} color="primary">Cancel</Button>
                 <Button type="submit" className={classes.button} color="primary" raised>Create</Button>
             </FormGroup>
@@ -61,10 +61,10 @@ let AddIssueForm = props => {
         </form>
     )
 }
-const componentWithStyles = withStyles(styleSheet)(AddIssueForm);
-AddIssueForm = reduxForm({
+const componentWithStyles = withStyles(styleSheet)(EditIssueForm);
+ContactForm = reduxForm({
     // a unique name for the form
-    form: 'AddIssueForm'
+    form: 'EditIssueForm'
 })(componentWithStyles)
 
-export default AddIssueForm;
+export default ContactForm;

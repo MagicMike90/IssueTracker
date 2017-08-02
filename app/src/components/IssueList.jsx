@@ -14,6 +14,7 @@ import IssueFilter from './IssueFilter.jsx'
 import withToast from './withToast.jsx';
 import IssueTable from './IssueTable.jsx'
 import IssueAddNavItem from './IssueAddNavItem.jsx';
+import IssueDataTable from './datatable/IssueDataTable.jsx'
 
 const PAGE_SIZE = 10;
 class IssueList extends React.Component {
@@ -68,7 +69,7 @@ class IssueList extends React.Component {
                     activePage={parseInt(this.props.location.search._page || '1', 10)}
                     onSelect={this.selectPage} maxButtons={7} next prev boundaryLinks
                 />
-                <IssueTable issues={this.props.issues} deleteIssue={this.deleteIssue} />
+                <IssueDataTable issues={this.props.issues} />
             </div>
         );
     }

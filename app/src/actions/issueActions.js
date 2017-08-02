@@ -71,7 +71,8 @@ export const fetchIssues = (location, page_size) => dispatch => {
     });
   }).catch(err => {
     const errorMsg = `Error in fetching data from server: ${err}`;
-    dispatch(requestIssuesError(errorMsg))
+    console.log('errorMsg',errorMsg);
+    dispatch(addNotification(errorMsg, 'error'));
   });
 };
 

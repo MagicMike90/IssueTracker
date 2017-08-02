@@ -1,11 +1,8 @@
 import React from 'react';
-import PropTypes from 'prop-types'
-// import {
-// 	FormGroup, FormControl, ControlLabel, ButtonToolbar, Button,
-// 	Panel, Form, Col, Alert
-// } from 'react-bootstrap';
-// import { LinkContainer } from 'react-router-bootstrap';
-
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { submit } from 'redux-form';
+import { addNotification } from '../actions/notificationActions'
 
 import { withStyles, createStyleSheet } from 'material-ui/styles';
 import Button from 'material-ui/Button';
@@ -58,9 +55,11 @@ class IssueEdit extends React.Component {
 			open: true,
 			isFetching: false
 		};
+		console.log('props', props);
 		this.onChange = this.onChange.bind(this);
 		this.onValidityChange = this.onValidityChange.bind(this);
 		this.onSubmit = this.onSubmit.bind(this);
+		this.submitForm = this.submitForm.bind(this);
 
 		this.dismissValidation = this.dismissValidation.bind(this);
 		this.showValidation = this.showValidation.bind(this);
@@ -101,16 +100,11 @@ class IssueEdit extends React.Component {
 
 	onSubmit(values) {
 		const issue = Object.assign({}, values);
-		const completionDate = new Date(values.completionDate);
-		issue.completionDate = completionDate;
+		if (values.completionDate) {
+			const completionDate = new Date(values.completionDate);
+			issue.completionDate = completionDate;
+		}
 
-		console.log('onSubmit',issue);
-		// event.preventDefault();
-		// this.showValidation();
-
-		// if (Object.keys(this.state.invalidFields).length !== 0) {
-		// 	return;
-		// }
 		fetch(`/api/issues/${this.props.match.params.id}`, {
 			method: 'PUT',
 			headers: { 'Content-Type': 'application/json' },
@@ -125,10 +119,12 @@ class IssueEdit extends React.Component {
 					}
 					this.setState({ issue: updatedIssue });
 					// this.props.showSuccess('Updated issue successfully.');
+					this.props.dispatch(addNotification('Updated issue successfully', 'success'));
 				});
 			} else {
 				response.json().then(error => {
 					// this.props.showError(`Failed to update issue: ${error.message}`);
+					this.props.dispatch(addNotification(`Failed to update issue: ${error.message}`, 'error'));
 				});
 			}
 		}).catch(err => {
@@ -153,7 +149,7 @@ class IssueEdit extends React.Component {
 				const issue = data.IssueEdit;
 				issue.created = new Date(issue.created);
 				issue.completionDate = issue.completionDate != null ? this.formatDate(issue.completionDate) : null;
-				console.log('issue.completionDate',issue.completionDate);
+				console.log('issue.completionDate', issue.completionDate);
 
 
 				this.setState({ issue });
@@ -166,7 +162,9 @@ class IssueEdit extends React.Component {
 		this.setState({ open: false });
 		this.props.history.push('/issues')
 	};
-
+	submitForm() {
+		this.props.dispatch(submit('EditIssueForm'));
+	}
 	render() {
 		const issue = this.state.issue;
 		let validationMessage = null;
@@ -185,8 +183,8 @@ class IssueEdit extends React.Component {
 					fullScreen
 					open={this.state.open}
 					onRequestClose={this.hideModal}
-					transition={<Slide direction="up" />}
-				>
+					transition={<Slide direction="up" />}>
+
 					<AppBar className={classes.appBar}>
 						<Toolbar>
 							<IconButton color="contrast" onClick={this.hideModal} aria-label="Close">
@@ -195,7 +193,7 @@ class IssueEdit extends React.Component {
 							<Typography type="title" color="inherit" className={classes.flex}>
 								Edit Issue
 							</Typography>
-							<Button color="contrast" onClick={this.hideModal}>
+							<Button color="contrast" onClick={this.submitForm}>
 								save
               				</Button>
 						</Toolbar>
@@ -212,6 +210,5 @@ IssueEdit.propTypes = {
 	match: PropTypes.object.isRequired
 };
 
-
 const componentWithStyles = withStyles(styleSheet)(IssueEdit);
-export default componentWithStyles;
+export default connect()(componentWithStyles);

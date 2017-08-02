@@ -4,11 +4,25 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Button, Glyphicon } from 'react-bootstrap';
 import { withStyles, createStyleSheet } from 'material-ui/styles';
-import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
+import Table, {
+    TableBody,
+    TableCell,
+    TableHead,
+    TableRow,
+    TableSortLabel
+} from 'material-ui/Table';
+import Toolbar from 'material-ui/Toolbar';
+import Typography from 'material-ui/Typography';
 import Paper from 'material-ui/Paper';
+import Checkbox from 'material-ui/Checkbox';
 import IconButton from 'material-ui/IconButton';
+import DeleteIcon from 'material-ui-icons/Delete';
+import FilterListIcon from 'material-ui-icons/FilterList';
+
+
 import DeleteForever from 'material-ui-icons/DeleteForever';
 
+import EnhancedTableHead from './datatable/EnhancedTableHead.jsx';
 
 const styleSheet = createStyleSheet(theme => ({
     paper: {
@@ -21,6 +35,8 @@ const styleSheet = createStyleSheet(theme => ({
         height: theme.spacing.unit * 4,
     },
 }));
+
+
 
 const IssueRow = (props) => {
     function onDeleteClick() {
@@ -58,18 +74,12 @@ const IssueTable = (props) => {
     return (
         <Paper className={classes.paper}>
             <Table>
-                <TableHead>
-                    <TableRow>
-                        <TableCell>Id</TableCell>
-                        <TableCell>Status</TableCell>
-                        <TableCell>Owner</TableCell>
-                        <TableCell>Created</TableCell>
-                        <TableCell>Effort</TableCell>
-                        <TableCell>Completion Date</TableCell>
-                        <TableCell>Title</TableCell>
-                        <TableCell></TableCell>
-                    </TableRow>
-                </TableHead>
+                <EnhancedTableHead
+                    order={order}
+                    orderBy={orderBy}
+                    onSelectAllClick={this.handleSelectAllClick}
+                    onRequestSort={this.handleRequestSort}
+                />
                 <TableBody>{issueRows}</TableBody>
             </Table>
         </Paper>

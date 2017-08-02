@@ -42,10 +42,6 @@ class SimpleSnackbar extends Component {
     return (
       <div>
         <Snackbar
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'right',
-          }}
           open={this.state.open}
           autoHideDuration={6e3}
           onRequestClose={this.handleRequestClose}
@@ -53,7 +49,6 @@ class SimpleSnackbar extends Component {
             'aria-describedby': 'message-id',
           }}
           message={<span id="message-id">{this.state.message}</span>}
-
         />
       </div>
     );

@@ -6,13 +6,19 @@ import { Button, Glyphicon } from 'react-bootstrap';
 import { withStyles, createStyleSheet } from 'material-ui/styles';
 import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
 import Paper from 'material-ui/Paper';
+import IconButton from 'material-ui/IconButton';
 import DeleteForever from 'material-ui-icons/DeleteForever';
+
 
 const styleSheet = createStyleSheet(theme => ({
     paper: {
         width: '100%',
         marginTop: theme.spacing.unit * 3,
         overflowX: 'auto',
+    },
+    delete: {
+        width: theme.spacing.unit * 4,
+        height: theme.spacing.unit * 4,
     },
 }));
 
@@ -33,7 +39,7 @@ const IssueRow = (props) => {
                 issue.completionDate.toDateString() : ''}</TableCell>
             <TableCell>{issue.title}</TableCell>
             <TableCell>
-                <Button bsSize="xsmall" onClick={onDeleteClick}><DeleteForever/></Button>
+                <IconButton onClick={onDeleteClick}><DeleteForever /></IconButton>
             </TableCell>
         </TableRow>
     )

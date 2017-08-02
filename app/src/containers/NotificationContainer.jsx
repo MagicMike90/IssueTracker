@@ -10,27 +10,19 @@ class NotificationContainer extends Component {
     super(props);
   }
 
-  componentDidMount() {
-  }
-   componentWillReceiveProps(newProps) {
-    const { message, level } = newProps.notification;
-    this.notificationSystem.addNotification({
-      message,
-      level
-    });
-  }
   render() {
+    const open = this.props.notification.message ? true : false;
+    const message = this.props.notification.message ? this.props.notification.message : "";
+    
     return (
-      <Snackbar open={this.props.open} message={this.props.message}/>
+      <Snackbar open={open} message={message} />
     );
   }
 }
 
 function mapStateToProps(state) {
-  const { notification } = state;
   return {
-    open: notification.message ? true : false,
-    message: notification.message
+    notification: state.notification
   };
 }
 

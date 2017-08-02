@@ -1,43 +1,62 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-
+import PropTypes from 'prop-types';
+import { withStyles, createStyleSheet } from 'material-ui/styles';
 import Button from 'material-ui/Button';
 import Snackbar from 'material-ui/Snackbar';
+import IconButton from 'material-ui/IconButton';
+import CloseIcon from 'material-ui-icons/Close';
 import Slide from 'material-ui/transitions/Slide';
 
+const styleSheet = createStyleSheet(theme => ({
+  close: {
+    width: theme.spacing.unit * 4,
+    height: theme.spacing.unit * 4,
+  },
+}));
 
-class DirectionSnackbar extends Component {
+class SimpleSnackbar extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       open: false,
-      direction: "up",
+      message: null,
     };
-
+    this.handleClick = this.handleClick.bind(this);
     this.handleRequestClose = this.handleRequestClose.bind(this);
   }
+  componentWillReceiveProps(props) {
+    this.setState({ open: props.open, message: props.message });
+  }
 
-  handleRequestClose () {
+  handleClick() {
+    this.setState({ open: true });
+  };
+
+  handleRequestClose() {
     this.setState({ open: false });
   };
 
   render() {
+    const { classes } = this.props;
     return (
       <div>
         <Snackbar
-          open={this.props.open}
+          open={this.state.open}
           onRequestClose={this.handleRequestClose}
-          transition={<Slide direction="up" />}
-          autoHideDuration={1000}
           SnackbarContentProps={{
             'aria-describedby': 'message-id',
           }}
-          message={<span id="message-id">{this.props.message}</span>}
+          message={<span id="message-id">{this.state.message}</span>}
+
         />
       </div>
     );
   }
 }
 
-export default connect()(DirectionSnackbar);
+SimpleSnackbar.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
+
+export default withStyles(styleSheet)(SimpleSnackbar);

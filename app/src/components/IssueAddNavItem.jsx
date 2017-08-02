@@ -104,10 +104,10 @@ IssueAddNavItem.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => {
-  const issuesReducer = state.issuesReducer;
+  const issuesState = state.issuesState;
   return {
-    updatedIssue: issuesReducer.updatedIssue,
-    error: issuesReducer.error,
+    updatedIssue: issuesState.updatedIssue,
+    error: issuesState.error,
   }
 };
 

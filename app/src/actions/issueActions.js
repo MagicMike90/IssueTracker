@@ -1,4 +1,5 @@
 import * as types from './actionTypes'
+import addNotification from './notificationActions'
 import issueApi from '../api/IssuesApi';
 import qs from 'qs'
 
@@ -68,14 +69,14 @@ export const fetchIssues = (location, page_size) => dispatch => {
 };
 
 const shouldFetchIssues = (state) => {
-  const issuesReducer = state.issuesReducer;
-  if (issuesReducer.issues.length == 0) {
+  const issuesState = state.issuesState;
+  if (issuesState.issues.length == 0) {
     return true
   }
-  if (issuesReducer.isFetching) {
+  if (issuesState.isFetching) {
     return false;
   }
-  return issuesReducer.failed;
+  return issuesState.failed;
 }
 export const fetchIssuesIfNeeded = (location, page_size) => (dispatch, getState) => {
 
@@ -96,6 +97,7 @@ export const createIssue = (issue, history) => {
       response.json().then(updatedIssue => {
         updatedIssue = convertedIssue(updatedIssue);
         dispatch(createIssueSuccess(updatedIssue, history));
+        dispatch(addNotification('Create issue successfully', 'success'));
       })
     }).catch(error => {
       const errorMsg = `Error in sending data to server: ${error.message}`;

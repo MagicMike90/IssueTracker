@@ -49,27 +49,6 @@ const renderTextField = ({ input, label, meta: { touched, error }, ...custom }) 
   />
 )
 
-// const formatDate = (date, name) => {
-
-//   if (date == 'Invalid Date') {
-//     console.log('return');
-//     return date;
-//   }
-//   var d = new Date(date),
-//     month = '' + (d.getMonth() + 1),
-//     day = '' + d.getDate(),
-//     year = d.getFullYear();
-
-
-//   if (month.length < 2) month = '0' + month;
-//   if (day.length < 2) day = '0' + day;
-
-//   return [year, month, day].join('-');
-// }
-// const parseDate = (date, name) => {
-//   console.log('date', date);
-//   return new Date(date);
-// }
 
 let EditIssueForm = props => {
   const { handleSubmit, issue, initialValues } = props;
@@ -124,7 +103,7 @@ let EditIssueForm = props => {
           </div>
         </FormGroup>
         <FormGroup className={classes.FormGroup} row={true}>
-          <Button type="submit" className={classes.button} color="primary" raised>Create</Button>
+          <Button type="submit" className={classes.button} color="primary" raised>Submit</Button>
         </FormGroup>
       </form>
     </div>

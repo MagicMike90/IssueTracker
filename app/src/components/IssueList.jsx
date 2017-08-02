@@ -106,13 +106,13 @@ const IssueListWithToast = withToast(IssueList);
 
 
 const mapStateToProps = (state, ownProps) => {
-    const issuesReducer = state.issuesReducer;
+    const issuesState = state.issuesState;
     return {
-        issues: issuesReducer.issues,
-        totalCount: issuesReducer.totalCount,
-        isFetching: issuesReducer.isFetching,
-        lastUpdated: issuesReducer.lastUpdated,
-        updatedIssue: issuesReducer.updatedIssue,
+        issues: issuesState.issues,
+        totalCount: issuesState.totalCount,
+        isFetching: issuesState.isFetching,
+        lastUpdated: issuesState.lastUpdated,
+        updatedIssue: issuesState.updatedIssue,
     }
 };
 

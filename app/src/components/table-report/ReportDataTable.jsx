@@ -27,37 +27,25 @@ import EnhancedTableHead from './EnhancedTableHead.jsx';
 import EnhancedTableToolbar from './EnhancedTableToolbar.jsx';
 
 
-const IssueRow = (props) => {
-  function onDeleteClick() {
-    props.deleteIssue(props.issue);
-  }
-  const { issue, isSelected } = props;
+const columnData = [
+  { id: 'new', numeric: true, disablePadding: false, label: 'New' },
+  { id: 'open', numeric: true, disablePadding: false, label: 'Open' },
+  { id: 'assigned', numeric: true, disablePadding: false, label: 'Assigned' },
+  { id: 'fixed', numeric: true, disablePadding: false, label: 'Fixed' },
+  { id: 'verified', numeric: true, disablePadding: false, label: 'Verified' },
+  { id: 'closed', numeric: true, disablePadding: false, label: 'Closed' },
+];
+
+const StatRow = (props) => {
 
   return (
-    <TableRow
-      hover
-      onClick={event => props.handleClick(event, issue._id)}
-      onKeyDown={event => props.handleKeyDown(event, issue._id)}
-      role="checkbox"
-      aria-checked={isSelected}
-      tabIndex="-1"
-      key={issue._id}
-      selected={isSelected}
-    >
-
-      <TableCell><Link to={`/stats/${issue._id}`}>
-        {issue._id.substr(-4)}</Link></TableCell>
-      <TableCell>{issue.status}</TableCell>
-      <TableCell>{issue.owner}</TableCell>
-      <TableCell>{issue.created.toDateString()}</TableCell>
-      <TableCell>{issue.effort}</TableCell>
-      <TableCell>{issue.completionDate ?
-        issue.completionDate.toDateString() : ''}</TableCell>
-      <TableCell>{issue.title}</TableCell>
+    <TableRow hover>
+      <TableCell>{props.owner}</TableCell>
+      {columnData.map((data, index) => (<TableCell numeric key={index}>{props.counts[data.label]}</TableCell>))}
     </TableRow>
   )
 }
-IssueRow.propTypes = {
+StatRow.propTypes = {
   issue: PropTypes.object.isRequired,
 };
 
@@ -73,14 +61,7 @@ const styleSheet = createStyleSheet(theme => ({
     height: 2
   }
 }));
-const columnData = [
-  { id: 'new', numeric: false, disablePadding: false, label: 'New' },
-  { id: 'open', numeric: false, disablePadding: false, label: 'Open' },
-  { id: 'assigned', numeric: false, disablePadding: false, label: 'Assigned' },
-  { id: 'fixed', numeric: false, disablePadding: false, label: 'Fixed' },
-  { id: 'verified', numeric: false, disablePadding: false, label: 'Verified' },
-  { id: 'closed', numeric: false, disablePadding: false, label: 'Closed' },
-];
+
 class ReportDataTable extends Component {
   constructor(props) {
     super(props);
@@ -88,16 +69,16 @@ class ReportDataTable extends Component {
       order: 'asc',
       orderBy: 'calories',
       selected: [],
-      stats: []
+      stats: {}
     };
 
     this.handleRequestSort = this.handleRequestSort.bind(this);
-    this.handleSelectAllClick = this.handleSelectAllClick.bind(this);
     this.handleKeyDown = this.handleKeyDown.bind(this);
     this.handleClick = this.handleClick.bind(this);
   }
 
-  componentWillReceiveProps(nextProps, ) {
+  componentWillReceiveProps(nextProps) {
+    console.log(nextProps);
     this.setState({ stats: nextProps.stats });
   }
   handleRequestSort(event, property) {
@@ -116,13 +97,6 @@ class ReportDataTable extends Component {
     this.setState({ stats, order, orderBy });
   };
 
-  handleSelectAllClick(event, checked) {
-    if (checked) {
-      this.setState({ selected: this.state.stats.map(stats => stats._id) });
-      return;
-    }
-    this.setState({ selected: [] });
-  };
 
   handleKeyDown(event, id) {
     if (keycode(event) === 'space') {
@@ -158,23 +132,28 @@ class ReportDataTable extends Component {
   render() {
     const { classes, isFetching } = this.props;
     const { order, orderBy, selected } = this.state;
-    const issueRows = this.state.stats.map(issue => <IssueRow key={issue._id} issue={issue} isSelected={this.isSelected(issue._id)}
-      handleClick={this.handleClick} handleKeyDown={this.handleKeyDown} />)
+    // const issueRows = this.state.stats.map(issue => <IssueRow key={issue._id} issue={issue} isSelected={this.isSelected(issue._id)}
+    //   handleClick={this.handleClick} handleKeyDown={this.handleKeyDown} />)
 
 
+    // console.log('Object.keys(this.state.stats)',Object.keys(this.state.stats));
     return (
       <Paper className={classes.paper}>
-        <EnhancedTableToolbar title="Issues" numSelected={selected.length} />
+        <EnhancedTableToolbar title="Statistics" numSelected={selected.length} />
         {isFetching && <LinearProgress className={classes.progress} />}
         <Table>
           <EnhancedTableHead
             columnData={columnData}
             order={order}
             orderBy={orderBy}
-            onSelectAllClick={this.handleSelectAllClick}
             onRequestSort={this.handleRequestSort}
           />
-          <TableBody>{issueRows}</TableBody>
+          <TableBody>
+            {Object.keys(this.state.stats).map((owner, index) =>
+              < StatRow key={index} owner={owner}
+                counts={this.state.stats[owner]} />
+            )}
+          </TableBody>
         </Table>
       </Paper>
     );
@@ -183,7 +162,7 @@ class ReportDataTable extends Component {
 
 ReportDataTable.propTypes = {
   classes: PropTypes.object.isRequired,
-  stats: PropTypes.array.isRequired,
+  stats: PropTypes.object.isRequired,
 };
 
 export default withStyles(styleSheet)(ReportDataTable);

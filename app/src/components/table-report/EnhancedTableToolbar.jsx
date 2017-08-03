@@ -12,8 +12,6 @@ import FilterListIcon from 'material-ui-icons/FilterList';
 import { withStyles, createStyleSheet } from 'material-ui/styles';
 
 
-import IssueAddTableItem from './IssueAddTableItem.jsx';
-
 
 const toolbarStyleSheet = createStyleSheet(theme => ({
   root: {
@@ -69,9 +67,6 @@ class EnhancedTableToolbar extends Component {
             : <IconButton aria-label="Filter list">
               <FilterListIcon />
             </IconButton>}
-        </div>
-        <div className={classes.actions}>
-          <IssueAddTableItem />
         </div>
 
       </Toolbar>

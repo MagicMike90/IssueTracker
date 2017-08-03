@@ -101,7 +101,7 @@ class IssueDataTable extends Component {
     this.handleClick = this.handleClick.bind(this);
   }
 
-  componentWillReceiveProps(nextProps, ) {
+  componentWillReceiveProps(nextProps) {
     this.setState({ issues: nextProps.issues });
   }
   handleRequestSort(event, property) {

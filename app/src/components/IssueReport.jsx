@@ -69,21 +69,7 @@ class IssueReport extends React.Component {
   render() {
     return (
       <div>
-         <Table bordered condensed hover responsive>
-          <thead>
-            <tr>
-              <th></th>
-              {statuses.map((status, index) => <td key={index}>{status}</td>)}
-            </tr>
-          </thead>
-          <tbody>
-            {Object.keys(this.state.stats).map((owner, index) =>
-              < StatRow key={index} owner={owner}
-                counts={this.state.stats[owner]} />
-            )}
-          </tbody>
-        </Table> 
-        {/* <ReportDataTable stats={this.state.stats}/> */}
+         <ReportDataTable stats={this.state.stats}/> 
       </div>
     );
   }

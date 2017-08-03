@@ -21,7 +21,7 @@ export default class EnhancedTableHead extends Component {
         this.props.onRequestSort(event, property);
     }
     render() {
-        const { columnData, onSelectAllClick, order, orderBy } = this.props;
+        const { columnData, order, orderBy } = this.props;
         const headCols = columnData.map(column =>
             <TableCell
                 key={column.id}
@@ -47,7 +47,6 @@ export default class EnhancedTableHead extends Component {
 }
 EnhancedTableHead.propTypes = {
     onRequestSort: PropTypes.func.isRequired,
-    onSelectAllClick: PropTypes.func.isRequired,
     order: PropTypes.string.isRequired,
     orderBy: PropTypes.string.isRequired,
 };

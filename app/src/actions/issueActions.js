@@ -14,6 +14,10 @@ export const requestIssuesError = error => ({
   receivedAt: Date.now()
 });
 
+export const sendRequest = () => ({
+  type: types.SEND_REQUEST
+})
+
 export const requestIssuesSuccess = data => ({
   type: types.LOAD_ISSUES_SUCCESS,
   data,
@@ -52,7 +56,7 @@ export const fetchIssues = (location, page_size) => dispatch => {
 
   const search = Object.keys(query).map(k => `${k}=${query[k]}`).join('&');
 
-
+  // dispatch(sendRequest());
   return issueApi.getAllIssues(search).then(response => {
     if (!response.ok) return response.json().then(error => Promise.reject(error));
     response.json().then(data => {
@@ -71,7 +75,7 @@ export const fetchIssues = (location, page_size) => dispatch => {
     });
   }).catch(err => {
     const errorMsg = `Error in fetching data from server: ${err}`;
-    console.log('errorMsg',errorMsg);
+    console.log('errorMsg', errorMsg);
     dispatch(addNotification(errorMsg, 'error'));
   });
 };
@@ -95,6 +99,8 @@ export const fetchIssuesIfNeeded = (location, page_size) => (dispatch, getState)
 
 export const createIssue = (issue, history) => {
   return dispatch => {
+    dispatch(sendRequest);
+
     issueApi.createIssue(issue).then(response => {
       if (!response.ok) {
         return response.json().then(error => {
@@ -116,6 +122,7 @@ export const createIssue = (issue, history) => {
 }
 export const deleteIssue = (issue, history) => {
   return dispatch => {
+    dispatch(sendRequest);
     issueApi.deleteIssue(issue).then(response => {
       if (!response.ok) {
         return response.json().then(error => {

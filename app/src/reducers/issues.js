@@ -11,6 +11,12 @@ Call non-pure functions, e.g. Date.now() or Math.random().
 
 const issues = (state = initialState, action) => {
   switch (action.type) {
+    case types.SEND_REQUEST:
+      console.log('SEND_REQUEST', action);
+      return Object.assign({}, state, {
+        isFetching: true,
+      });
+
     case types.REQUEST_SERVER_ERROR:
       console.log('REQUEST_SERVER_ERROR', action);
       return Object.assign({}, state, {

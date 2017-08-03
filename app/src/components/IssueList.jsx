@@ -69,7 +69,7 @@ class IssueList extends React.Component {
                     activePage={parseInt(this.props.location.search._page || '1', 10)}
                     onSelect={this.selectPage} maxButtons={7} next prev boundaryLinks
                 />
-                <IssueDataTable issues={this.props.issues} />
+                <IssueDataTable issues={this.props.issues} isFetching={this.props.isFetching}/>
             </div>
         );
     }

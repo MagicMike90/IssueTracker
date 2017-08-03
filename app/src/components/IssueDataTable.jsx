@@ -24,8 +24,8 @@ import FilterListIcon from 'material-ui-icons/FilterList';
 
 import EnhancedTableHead from './datatable/EnhancedTableHead.jsx';
 import EnhancedTableToolbar from './datatable/EnhancedTableToolbar.jsx';
-
-
+import TableLinearProgress from './datatable/TableLinearProgress.jsx';
+import { LinearProgress } from 'material-ui/Progress';
 
 const IssueRow = (props) => {
   function onDeleteClick() {
@@ -70,8 +70,20 @@ const styleSheet = createStyleSheet(theme => ({
     marginTop: theme.spacing.unit * 3,
     overflowX: 'auto',
   },
+  progress: {
+    width: '100%',
+    height: 2
+  }
 }));
-
+const columnData = [
+  { id: 'id', numeric: false, disablePadding: false, label: 'Id' },
+  { id: 'status', numeric: false, disablePadding: false, label: 'Status' },
+  { id: 'owner', numeric: false, disablePadding: false, label: 'Owner' },
+  { id: 'created', numeric: false, disablePadding: false, label: 'Created' },
+  { id: 'effor', numeric: false, disablePadding: false, label: 'Effort' },
+  { id: 'completion', numeric: false, disablePadding: false, label: 'Completion Date' },
+  { id: 'title', numeric: false, disablePadding: false, label: 'Title' },
+];
 class EnhancedTable extends Component {
   constructor(props) {
     super(props);
@@ -144,16 +156,20 @@ class EnhancedTable extends Component {
   }
 
   render() {
-    const classes = this.props.classes;
+    const { classes, isFetching } = this.props;
     const { order, orderBy, selected } = this.state;
     const issueRows = this.props.issues.map(issue => <IssueRow key={issue._id} issue={issue} isSelected={this.isSelected(issue.id)}
       handleClick={this.handleClick} handleKeyDown={this.handleKeyDown} />)
 
+    console.log('isFetching',isFetching);
+
     return (
       <Paper className={classes.paper}>
         <EnhancedTableToolbar title="Issues" numSelected={selected.length} />
+        {isFetching && <LinearProgress className={classes.progress} />}
         <Table>
           <EnhancedTableHead
+            columnData={columnData}
             order={order}
             orderBy={orderBy}
             onSelectAllClick={this.handleSelectAllClick}

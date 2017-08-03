@@ -17,9 +17,9 @@ export default class App extends React.Component {
             <div>
                 <Header />
                 <div className="container-fluid">
+                    <Routes />
                 </div>
-                <Routes />
-                 <NotificationContainer />
+                <NotificationContainer />
             </div>
         );
     }

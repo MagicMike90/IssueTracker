@@ -1,14 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux';
-import { createIssue } from '../actions/issueActions'
-
 import { withRouter } from 'react-router-dom';
-// import {
-//   NavItem, Glyphicon, Modal, Form, FormGroup, FormControl,
-//   ControlLabel, Button, ButtonToolbar
-// } from 'react-bootstrap';
 
+import { createIssue } from '../actions/issueActions'
 import { withStyles, createStyleSheet } from 'material-ui/styles';
 import Button from 'material-ui/Button';
 import ModeEditIcon from 'material-ui-icons/ModeEdit';

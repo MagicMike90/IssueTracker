@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types'
+import PropTypes from 'prop-types';
 
 import Table, {
     TableBody,
@@ -9,16 +9,6 @@ import Table, {
     TableSortLabel,
 } from 'material-ui/Table';
 import Checkbox from 'material-ui/Checkbox';
-
-const columnData = [
-    { id: 'id', numeric: false, disablePadding: false, label: 'Id' },
-    { id: 'status', numeric: false, disablePadding: false, label: 'Status' },
-    { id: 'owner', numeric: false, disablePadding: false, label: 'Owner' },
-    { id: 'created', numeric: false, disablePadding: false, label: 'Created' },
-    { id: 'effor', numeric: false, disablePadding: false, label: 'Effort' },
-    { id: 'completion', numeric: false, disablePadding: false, label: 'Completion Date' },
-    { id: 'title', numeric: false, disablePadding: false, label: 'Title' },
-];
 
 
 export default class EnhancedTableHead extends Component {
@@ -31,7 +21,7 @@ export default class EnhancedTableHead extends Component {
         this.props.onRequestSort(event, property);
     }
     render() {
-        const { onSelectAllClick, order, orderBy } = this.props;
+        const { columnData, onSelectAllClick, order, orderBy } = this.props;
         const headCols = columnData.map(column =>
             <TableCell
                 key={column.id}

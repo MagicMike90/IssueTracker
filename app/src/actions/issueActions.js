@@ -56,7 +56,7 @@ export const fetchIssues = (location, page_size) => dispatch => {
 
   const search = Object.keys(query).map(k => `${k}=${query[k]}`).join('&');
 
-  // dispatch(sendRequest());
+  dispatch(sendRequest());
   return issueApi.getAllIssues(search).then(response => {
     if (!response.ok) return response.json().then(error => Promise.reject(error));
     response.json().then(data => {
@@ -67,11 +67,14 @@ export const fetchIssues = (location, page_size) => dispatch => {
           issue.completionDate = new Date(issue.completionDate);
         }
       });
-      dispatch(requestIssuesSuccess({
-        issues,
-        totalCount: data.metadata.totalCount
-      }));
-      dispatch(addNotification('Load issues successfully', 'success'));
+      setTimeout(function () {
+        dispatch(requestIssuesSuccess({
+          issues,
+          totalCount: data.metadata.totalCount
+        }));
+        dispatch(addNotification('Load issues successfully', 'success'));
+      }, 1000);
+
     });
   }).catch(err => {
     const errorMsg = `Error in fetching data from server: ${err}`;

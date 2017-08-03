@@ -12,9 +12,8 @@ import { Button, Glyphicon, Table, Panel, Pagination } from 'react-bootstrap';
 // import IssueAdd from './IssueAdd.jsx'
 import IssueFilter from './IssueFilter.jsx'
 import withToast from './withToast.jsx';
-import IssueTable from './IssueTable.jsx'
 import IssueAddNavItem from './IssueAddNavItem.jsx';
-import IssueDataTable from './IssueDataTable.jsx'
+import IssueDataTable from './table-issue/IssueDataTable.jsx'
 
 const PAGE_SIZE = 10;
 class IssueList extends React.Component {

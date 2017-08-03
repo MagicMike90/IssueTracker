@@ -5,6 +5,7 @@ import qs from 'qs';
 
 import IssueFilter from './IssueFilter.jsx';
 import withToast from './withToast.jsx';
+import ReportDataTable from './table-report/ReportDataTable.jsx'
 
 
 const statuses = ['New', 'Open', 'Assigned', 'Fixed', 'Verified', 'Closed'];
@@ -68,11 +69,7 @@ class IssueReport extends React.Component {
   render() {
     return (
       <div>
-        <Panel collapsible header="Filter">
-          < IssueFilter setFilter={this.setFilter}
-            initFilter={qs.parse(this.props.location.search)} />
-        </Panel>
-        <Table bordered condensed hover responsive>
+         <Table bordered condensed hover responsive>
           <thead>
             <tr>
               <th></th>
@@ -85,7 +82,8 @@ class IssueReport extends React.Component {
                 counts={this.state.stats[owner]} />
             )}
           </tbody>
-        </Table>
+        </Table> 
+        {/* <ReportDataTable stats={this.state.stats}/> */}
       </div>
     );
   }

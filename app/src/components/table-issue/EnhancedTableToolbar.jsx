@@ -6,9 +6,13 @@ import classNames from 'classnames';
 import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
 import IconButton from 'material-ui/IconButton';
+import Add from 'material-ui-icons/Add';
 import DeleteIcon from 'material-ui-icons/Delete';
 import FilterListIcon from 'material-ui-icons/FilterList';
 import { withStyles, createStyleSheet } from 'material-ui/styles';
+
+
+import IssueAddTableItem from './IssueAddTableItem.jsx';
 
 
 const toolbarStyleSheet = createStyleSheet(theme => ({
@@ -66,6 +70,10 @@ class EnhancedTableToolbar extends Component {
               <FilterListIcon />
             </IconButton>}
         </div>
+        <div className={classes.actions}>
+          <IssueAddTableItem />
+        </div>
+
       </Toolbar>
     );
   }

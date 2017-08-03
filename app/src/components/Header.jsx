@@ -37,39 +37,13 @@ function Header(props) {
           </Typography>
           <Button color="contrast" onClick={() => props.history.push('/issues')}>Issues</Button>
           <Button color="contrast" onClick={() => props.history.push('/reports')}>Reports</Button>
-          <IssueAddNavItem />
+          {/* <IssueAddNavItem /> */}
         </Toolbar>
       </AppBar>
     </div>
   );
 }
 
-
-// import IssueAddNavItem from '../containers/IssueAddContainer.jsx';
-
-
-
-// const Header = (props) => (
-//   <Navbar fluid>
-//     <Navbar.Header>
-//       <Navbar.Brand>Issue Tracker</Navbar.Brand>
-//     </Navbar.Header>
-//     <Nav>
-//       <LinkContainer to="/issues">
-//         <NavItem>Issues</NavItem>
-//       </LinkContainer>
-//       <LinkContainer to="/reports">
-//         <NavItem>Reports</NavItem>
-//       </LinkContainer>
-//     </Nav>
-//     <Nav pullRight>
-//       <IssueAddNavItem showError={props.showError}/>
-//       < NavDropdown id="user-dropdown" title={<Glyphicon glyph="option-horizontal" />} noCaret>
-//         <MenuItem>Logout</MenuItem>
-//       </NavDropdown>
-//     </Nav>
-//   </Navbar>
-// );
 
 Header.prototypes = {
   showError: PropTypes.func.isRequired,

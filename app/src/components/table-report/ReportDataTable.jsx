@@ -21,11 +21,11 @@ import Checkbox from 'material-ui/Checkbox';
 import IconButton from 'material-ui/IconButton';
 import DeleteIcon from 'material-ui-icons/Delete';
 import FilterListIcon from 'material-ui-icons/FilterList';
-
-import EnhancedTableHead from './datatable/EnhancedTableHead.jsx';
-import EnhancedTableToolbar from './datatable/EnhancedTableToolbar.jsx';
-import TableLinearProgress from './datatable/TableLinearProgress.jsx';
 import { LinearProgress } from 'material-ui/Progress';
+
+import EnhancedTableHead from './EnhancedTableHead.jsx';
+import EnhancedTableToolbar from './EnhancedTableToolbar.jsx';
+
 
 const IssueRow = (props) => {
   function onDeleteClick() {
@@ -36,18 +36,16 @@ const IssueRow = (props) => {
   return (
     <TableRow
       hover
-      onClick={event => props.handleClick(event, issue.id)}
-      onKeyDown={event => props.handleKeyDown(event, issue.id)}
+      onClick={event => props.handleClick(event, issue._id)}
+      onKeyDown={event => props.handleKeyDown(event, issue._id)}
       role="checkbox"
       aria-checked={isSelected}
       tabIndex="-1"
-      key={issue.id}
+      key={issue._id}
       selected={isSelected}
     >
-      <TableCell checkbox>
-        <Checkbox checked={isSelected} />
-      </TableCell>
-      <TableCell><Link to={`/issues/${issue._id}`}>
+
+      <TableCell><Link to={`/stats/${issue._id}`}>
         {issue._id.substr(-4)}</Link></TableCell>
       <TableCell>{issue.status}</TableCell>
       <TableCell>{issue.owner}</TableCell>
@@ -76,21 +74,21 @@ const styleSheet = createStyleSheet(theme => ({
   }
 }));
 const columnData = [
-  { id: 'id', numeric: false, disablePadding: false, label: 'Id' },
-  { id: 'status', numeric: false, disablePadding: false, label: 'Status' },
-  { id: 'owner', numeric: false, disablePadding: false, label: 'Owner' },
-  { id: 'created', numeric: false, disablePadding: false, label: 'Created' },
-  { id: 'effor', numeric: false, disablePadding: false, label: 'Effort' },
-  { id: 'completion', numeric: false, disablePadding: false, label: 'Completion Date' },
-  { id: 'title', numeric: false, disablePadding: false, label: 'Title' },
+  { id: 'new', numeric: false, disablePadding: false, label: 'New' },
+  { id: 'open', numeric: false, disablePadding: false, label: 'Open' },
+  { id: 'assigned', numeric: false, disablePadding: false, label: 'Assigned' },
+  { id: 'fixed', numeric: false, disablePadding: false, label: 'Fixed' },
+  { id: 'verified', numeric: false, disablePadding: false, label: 'Verified' },
+  { id: 'closed', numeric: false, disablePadding: false, label: 'Closed' },
 ];
-class EnhancedTable extends Component {
+class ReportDataTable extends Component {
   constructor(props) {
     super(props);
     this.state = {
       order: 'asc',
       orderBy: 'calories',
       selected: [],
+      stats: []
     };
 
     this.handleRequestSort = this.handleRequestSort.bind(this);
@@ -99,7 +97,9 @@ class EnhancedTable extends Component {
     this.handleClick = this.handleClick.bind(this);
   }
 
-
+  componentWillReceiveProps(nextProps, ) {
+    this.setState({ stats: nextProps.stats });
+  }
   handleRequestSort(event, property) {
 
     const orderBy = property;
@@ -109,16 +109,16 @@ class EnhancedTable extends Component {
       order = 'asc';
     }
 
-    const data = this.state.data.sort(
+    const stats = this.state.stats.sort(
       (a, b) => (order === 'desc' ? b[orderBy] > a[orderBy] : a[orderBy] > b[orderBy]),
     );
 
-    this.setState({ data, order, orderBy });
+    this.setState({ stats, order, orderBy });
   };
 
   handleSelectAllClick(event, checked) {
     if (checked) {
-      this.setState({ selected: this.state.data.map(n => n.id) });
+      this.setState({ selected: this.state.stats.map(stats => stats._id) });
       return;
     }
     this.setState({ selected: [] });
@@ -158,10 +158,9 @@ class EnhancedTable extends Component {
   render() {
     const { classes, isFetching } = this.props;
     const { order, orderBy, selected } = this.state;
-    const issueRows = this.props.issues.map(issue => <IssueRow key={issue._id} issue={issue} isSelected={this.isSelected(issue.id)}
+    const issueRows = this.state.stats.map(issue => <IssueRow key={issue._id} issue={issue} isSelected={this.isSelected(issue._id)}
       handleClick={this.handleClick} handleKeyDown={this.handleKeyDown} />)
 
-    console.log('isFetching',isFetching);
 
     return (
       <Paper className={classes.paper}>
@@ -182,9 +181,9 @@ class EnhancedTable extends Component {
   }
 }
 
-EnhancedTable.propTypes = {
+ReportDataTable.propTypes = {
   classes: PropTypes.object.isRequired,
-  issues: PropTypes.array.isRequired,
+  stats: PropTypes.array.isRequired,
 };
 
-export default withStyles(styleSheet)(EnhancedTable);
+export default withStyles(styleSheet)(ReportDataTable);

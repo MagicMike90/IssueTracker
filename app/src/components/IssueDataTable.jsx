@@ -3,6 +3,8 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
+
 import { withStyles, createStyleSheet } from 'material-ui/styles';
 import keycode from 'keycode';
 import Table, {
@@ -20,14 +22,46 @@ import IconButton from 'material-ui/IconButton';
 import DeleteIcon from 'material-ui-icons/Delete';
 import FilterListIcon from 'material-ui-icons/FilterList';
 
-let counter = 0;
-function createData(name, calories, fat, carbs, protein) {
-  counter += 1;
-  return { id: counter, name, calories, fat, carbs, protein };
-}
+import EnhancedTableHead from './datatable/EnhancedTableHead.jsx';
+import EnhancedTableToolbar from './datatable/EnhancedTableToolbar.jsx';
 
-import EnhancedTableHead from './EnhancedTableHead.jsx';
-import EnhancedTableToolbar from './EnhancedTableToolbar.jsx';
+
+
+const IssueRow = (props) => {
+  function onDeleteClick() {
+    props.deleteIssue(props.issue);
+  }
+  const { issue, isSelected } = props;
+
+  return (
+    <TableRow
+      hover
+      onClick={event => props.handleClick(event, issue.id)}
+      onKeyDown={event => props.handleKeyDown(event, issue.id)}
+      role="checkbox"
+      aria-checked={isSelected}
+      tabIndex="-1"
+      key={issue.id}
+      selected={isSelected}
+    >
+      <TableCell checkbox>
+        <Checkbox checked={isSelected} />
+      </TableCell>
+      <TableCell><Link to={`/issues/${issue._id}`}>
+        {issue._id.substr(-4)}</Link></TableCell>
+      <TableCell>{issue.status}</TableCell>
+      <TableCell>{issue.owner}</TableCell>
+      <TableCell>{issue.created.toDateString()}</TableCell>
+      <TableCell>{issue.effort}</TableCell>
+      <TableCell>{issue.completionDate ?
+        issue.completionDate.toDateString() : ''}</TableCell>
+      <TableCell>{issue.title}</TableCell>
+    </TableRow>
+  )
+}
+IssueRow.propTypes = {
+  issue: PropTypes.object.isRequired,
+};
 
 
 const styleSheet = createStyleSheet(theme => ({
@@ -45,13 +79,6 @@ class EnhancedTable extends Component {
       order: 'asc',
       orderBy: 'calories',
       selected: [],
-      data: [
-        createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-        createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-        createData('Eclair', 262, 16.0, 24, 6.0),
-        createData('Cupcake', 305, 3.7, 67, 4.3),
-        createData('Gingerbread', 356, 16.0, 49, 3.9),
-      ],
     };
 
     this.handleRequestSort = this.handleRequestSort.bind(this);
@@ -62,6 +89,7 @@ class EnhancedTable extends Component {
 
 
   handleRequestSort(event, property) {
+
     const orderBy = property;
     let order = 'desc';
 
@@ -111,61 +139,28 @@ class EnhancedTable extends Component {
     this.setState({ selected: newSelected });
   };
 
-  isSelected( id) {
+  isSelected(id) {
     return this.state.selected.indexOf(id) !== -1;
-  } 
+  }
 
   render() {
     const classes = this.props.classes;
-    const { data, order, orderBy, selected } = this.state;
+    const { order, orderBy, selected } = this.state;
+    const issueRows = this.props.issues.map(issue => <IssueRow key={issue._id} issue={issue} isSelected={this.isSelected(issue.id)}
+      handleClick={this.handleClick} handleKeyDown={this.handleKeyDown} />)
 
     return (
       <Paper className={classes.paper}>
-         <EnhancedTableToolbar numSelected={selected.length} /> 
-        {/* <Table>
+        <EnhancedTableToolbar title="Issues" numSelected={selected.length} />
+        <Table>
           <EnhancedTableHead
             order={order}
             orderBy={orderBy}
             onSelectAllClick={this.handleSelectAllClick}
             onRequestSort={this.handleRequestSort}
           />
-          <TableBody>
-            {data.map(n => {
-              const isSelected = this.isSelected(n.id);
-              return (
-                <TableRow
-                  hover
-                  onClick={event => this.handleClick(event, n.id)}
-                  onKeyDown={event => this.handleKeyDown(event, n.id)}
-                  role="checkbox"
-                  aria-checked={isSelected}
-                  tabIndex="-1"
-                  key={n.id}
-                  selected={isSelected}
-                >
-                  <TableCell checkbox>
-                    <Checkbox checked={isSelected} />
-                  </TableCell>
-                  <TableCell disablePadding>
-                    {n.name}
-                  </TableCell>
-                  <TableCell numeric>
-                    {n.calories}
-                  </TableCell>
-                  <TableCell numeric>
-                    {n.fat}
-                  </TableCell>
-                  <TableCell numeric>
-                    {n.carbs}
-                  </TableCell>
-                  <TableCell numeric>
-                    {n.protein}
-                  </TableCell>
-                </TableRow>
-              );
-            })}
-          </TableBody>
-        </Table> */}
+          <TableBody>{issueRows}</TableBody>
+        </Table>
       </Paper>
     );
   }
@@ -173,6 +168,7 @@ class EnhancedTable extends Component {
 
 EnhancedTable.propTypes = {
   classes: PropTypes.object.isRequired,
+  issues: PropTypes.array.isRequired,
 };
 
 export default withStyles(styleSheet)(EnhancedTable);

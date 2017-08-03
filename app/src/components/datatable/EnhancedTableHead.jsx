@@ -11,14 +11,15 @@ import Table, {
 import Checkbox from 'material-ui/Checkbox';
 
 const columnData = [
-    { id: 'id', numeric: false, disablePadding: true, label: 'Id' },
-    { id: 'status', numeric: true, disablePadding: false, label: 'Status' },
-    { id: 'owner', numeric: true, disablePadding: false, label: 'Owner' },
-    { id: 'created', numeric: true, disablePadding: false, label: 'Created' },
-    { id: 'effor', numeric: true, disablePadding: false, label: 'Effort' },
-    { id: 'completion', numeric: true, disablePadding: false, label: 'Completion Date' },
-    { id: 'title', numeric: true, disablePadding: false, label: 'Title' },
+    { id: 'id', numeric: false, disablePadding: false, label: 'Id' },
+    { id: 'status', numeric: false, disablePadding: false, label: 'Status' },
+    { id: 'owner', numeric: false, disablePadding: false, label: 'Owner' },
+    { id: 'created', numeric: false, disablePadding: false, label: 'Created' },
+    { id: 'effor', numeric: false, disablePadding: false, label: 'Effort' },
+    { id: 'completion', numeric: false, disablePadding: false, label: 'Completion Date' },
+    { id: 'title', numeric: false, disablePadding: false, label: 'Title' },
 ];
+
 
 export default class EnhancedTableHead extends Component {
     constructor(props) {
@@ -26,36 +27,30 @@ export default class EnhancedTableHead extends Component {
         this.createSortHandler = this.createSortHandler.bind(this);
     }
 
-    createSortHandler(property, event) {
+    createSortHandler(event, property) {
         this.props.onRequestSort(event, property);
     }
-
     render() {
         const { onSelectAllClick, order, orderBy } = this.props;
-
+        const headCols = columnData.map(column =>
+            <TableCell
+                key={column.id}
+                numeric={column.numeric}
+                disablePadding={column.disablePadding}>
+                <TableSortLabel
+                    active={orderBy === column.id}
+                    direction={order}
+                    onClick={(evt)=> this.createSortHandler(evt, column.id)}>
+                    {column.label}
+                </TableSortLabel>
+            </TableCell>);
         return (
             <TableHead>
                 <TableRow>
                     <TableCell checkbox>
                         <Checkbox onChange={onSelectAllClick} />
                     </TableCell>
-                    {columnData.map(column => {
-                        return (
-                            <TableCell
-                                key={column.id}
-                                numeric={column.numeric}
-                                disablePadding={column.disablePadding}
-                            >
-                                <TableSortLabel
-                                    active={orderBy === column.id}
-                                    direction={order}
-                                    onClick={this.createSortHandler(column.id)}
-                                >
-                                    {column.label}
-                                </TableSortLabel>
-                            </TableCell>
-                        );
-                    }, this)}
+                    {headCols}
                 </TableRow>
             </TableHead>
         );

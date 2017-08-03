@@ -35,39 +35,47 @@ const toolbarStyleSheet = createStyleSheet(theme => ({
     flex: '0 0 auto',
   },
 }));
-let EnhancedTableToolbar = props => {
-  const { numSelected, classes } = props;
 
-  return (
-    <Toolbar
-      className={classNames(classes.root, {
-        [classes.highlight]: numSelected > 0,
-      })}
-    >
-      <div className={classes.title}>
-        {numSelected > 0
-          ? <Typography type="subheading">
+
+class EnhancedTableToolbar extends Component {
+  constructor(props) {
+    super(props);
+  }
+  render() {
+    const { numSelected, classes } = this.props;
+    return (
+      <Toolbar
+        className={classNames(classes.root, {
+          [classes.highlight]: numSelected > 0,
+        })}
+      >
+        <div className={classes.title}>
+          {numSelected > 0
+            ? <Typography type="subheading">
               {numSelected} selected
             </Typography>
-          : <Typography type="title">Nutrition</Typography>}
-      </div>
-      <div className={classes.spacer} />
-      <div className={classes.actions}>
-        {numSelected > 0
-          ? <IconButton aria-label="Delete">
+            : <Typography type="title">{this.props.title}</Typography>}
+        </div>
+        <div className={classes.spacer} />
+        <div className={classes.actions}>
+          {numSelected > 0
+            ? <IconButton aria-label="Delete">
               <DeleteIcon />
             </IconButton>
-          : <IconButton aria-label="Filter list">
+            : <IconButton aria-label="Filter list">
               <FilterListIcon />
             </IconButton>}
-      </div>
-    </Toolbar>
-  );
-};
+        </div>
+      </Toolbar>
+    );
+  }
+}
+
 
 EnhancedTableToolbar.propTypes = {
   classes: PropTypes.object.isRequired,
   numSelected: PropTypes.number.isRequired,
 };
 
-export default EnhancedTableToolbar = withStyles(toolbarStyleSheet)(EnhancedTableToolbar);
+
+export default withStyles(toolbarStyleSheet)(EnhancedTableToolbar);

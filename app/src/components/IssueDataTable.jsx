@@ -108,14 +108,24 @@ class IssueDataTable extends Component {
     this.deleteIssue = this.deleteIssue.bind(this);
     this.selectPage = this.selectPage.bind(this);
   }
+  componentWillReceiveProps(nextPros) {
+
+    const newSelected = this.state.selected.filter(function (id) {
+      return nextPros.deletedIssues.indexOf(id) === -1;
+    });
+
+    this.setState({ selected: newSelected });
+  }
   componentDidMount() {
     this.props.dispatch(fetchIssues(this.props.location, this.state.pageSize));
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.location.search == this.props.location.search) return;
-
-    this.props.dispatch(fetchIssuesIfNeeded(this.props.location, this.state.pageSize));
+    console.log('prevProps', prevProps);
+    if (prevProps.location.search != this.props.location.search
+      || prevProps.deletedIssues.length != this.props.deletedIssues.length) {
+      this.props.dispatch(fetchIssues(this.props.location, this.state.pageSize));
+    }
   }
 
   setFilter(query) {
@@ -124,7 +134,6 @@ class IssueDataTable extends Component {
   }
 
   deleteIssue() {
-    console.log(this.state.selected);
     this.props.dispatch(deleteBulkIssue(this.state.selected, this.props.location));
   }
   selectPage(eventKey) {
@@ -191,7 +200,7 @@ class IssueDataTable extends Component {
   }
 
   render() {
-    const { classes, isFetching ,totalCount } = this.props;
+    const { classes, isFetching, totalCount } = this.props;
     const { order, orderBy, selected } = this.state;
     const issueRows = this.props.issues.map(issue => <IssueRow key={issue._id} issue={issue} isSelected={this.isSelected(issue._id)}
       handleClick={this.handleClick} handleKeyDown={this.handleKeyDown} />)
@@ -199,7 +208,7 @@ class IssueDataTable extends Component {
 
     return (
       <Paper className={classes.paper}>
-        <EnhancedTableToolbar title="Issues" numSelected={selected.length} deleteIssue={this.deleteIssue}/>
+        <EnhancedTableToolbar title="Issues" numSelected={selected.length} deleteIssue={this.deleteIssue} />
         {isFetching && <LinearProgress className={classes.progress} />}
         <Table>
           <EnhancedTableHead
@@ -211,7 +220,7 @@ class IssueDataTable extends Component {
           />
           <TableBody>{issueRows}</TableBody>
         </Table>
-        <EnhancedTableFooter pageSize={this.state.pageSize} totalCount={totalCount}/>
+        <EnhancedTableFooter pageSize={this.state.pageSize} totalCount={totalCount} />
       </Paper>
     );
   }
@@ -227,13 +236,13 @@ IssueDataTable.propTypes = {
   dispatch: PropTypes.func.isRequired
 };
 const mapStateToProps = (state, ownProps) => {
-  const issuesState = state.issuesState;
+  const { issues, totalCount, isFetching, lastUpdated, deletedIssues } = state.issuesState;
   return {
-    issues: issuesState.issues,
-    totalCount: issuesState.totalCount,
-    isFetching: issuesState.isFetching,
-    lastUpdated: issuesState.lastUpdated,
-    updatedIssue: issuesState.updatedIssue,
+    issues: issues,
+    totalCount: totalCount,
+    isFetching: isFetching,
+    lastUpdated: lastUpdated,
+    deletedIssues: deletedIssues
   }
 };
 

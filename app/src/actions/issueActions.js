@@ -29,12 +29,14 @@ export const createIssueSuccess = (issue, history) => {
   })
   return {
     type: types.CREATE_ISSUE_SUCCESS,
-    issue
+    issue,
+    receivedAt: Date.now()
   }
 };
 export const deleteIssueSuccess = (issueIds, history) => ({
   type: types.DELETE_ISSUE_SUCCESS,
-  issueIds
+  issueIds,
+  receivedAt: Date.now()
 });
 
 
@@ -101,7 +103,7 @@ export const fetchIssuesIfNeeded = (location, page_size) => (dispatch, getState)
 
 export const createIssue = (issue, history) => {
   return dispatch => {
-    dispatch(sendRequest);
+    dispatch(sendRequest());
 
     issueApi.createIssue(issue).then(response => {
       if (!response.ok) {
@@ -124,7 +126,7 @@ export const createIssue = (issue, history) => {
 }
 export const deleteIssue = (issue, history) => {
   return dispatch => {
-    dispatch(sendRequest);
+    dispatch(sendRequest());
     issueApi.deleteIssue(issue).then(response => {
       if (!response.ok) {
         return response.json().then(error => {
@@ -141,7 +143,7 @@ export const deleteIssue = (issue, history) => {
 }
 export const deleteBulkIssue = (issueIds, history) => {
   return dispatch => {
-    dispatch(sendRequest);
+    dispatch(sendRequest());
     issueApi.deleteBulkIssue(issueIds).then(response => {
       if (!response.ok) {
         return response.json().then(error => {

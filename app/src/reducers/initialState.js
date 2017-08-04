@@ -3,5 +3,6 @@ export default {
   updatedIssue:{},
   totalCount: 0,
   isFetching: false,
-  failed: false
+  failed: false,
+  deletedIssues: []
 }

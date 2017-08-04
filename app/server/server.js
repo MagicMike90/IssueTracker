@@ -206,7 +206,6 @@ app.delete('/api/issues/', (req, res) => {
     }
   
     db.collection('issues').deleteMany({ _id: {'$in':issueIds} }).then((deleteResult) => {
-        console.log('deleteResult',deleteResult);
         if (deleteResult.result.n === issueIds.length) res.json({ status: 'OK' });
         else res.json({ status: 'Warning: object not found' });
     }).catch(error => {

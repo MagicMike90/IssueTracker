@@ -95,7 +95,8 @@ class IssueDataTable extends Component {
       order: 'asc',
       orderBy: 'calories',
       selected: [],
-      pageSize: 10
+      pageSize: 10,
+      pageNum: 1
     };
 
     this.handleRequestSort = this.handleRequestSort.bind(this);
@@ -107,6 +108,7 @@ class IssueDataTable extends Component {
     this.setFilter = this.setFilter.bind(this);
     this.deleteIssue = this.deleteIssue.bind(this);
     this.selectPage = this.selectPage.bind(this);
+    this.travelPage = this.travelPage.bind(this);
   }
   componentWillReceiveProps(nextPros) {
 
@@ -121,7 +123,6 @@ class IssueDataTable extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    console.log('prevProps', prevProps);
     if (prevProps.location.search != this.props.location.search
       || prevProps.deletedIssues.length != this.props.deletedIssues.length) {
       this.props.dispatch(fetchIssues(this.props.location, this.state.pageSize));
@@ -136,6 +137,21 @@ class IssueDataTable extends Component {
   deleteIssue() {
     this.props.dispatch(deleteBulkIssue(this.state.selected, this.props.location));
   }
+  travelPage(eventKey) {
+    console.log('travelPage', eventKey);
+    let page_num = this.state.pageNum;
+    // // console.log('location', this.props.location.search);
+    // const query = Object.assign(this.props.location.search, { _page: eventKey });
+    // // console.log('selectPage', query);
+    // let query_string = qs.stringify({ _page: eventKey });
+    // // console.log('qs', qs);
+    // this.props.history.push({ pathname: this.props.location.pathname, search: query_string })
+
+    this.setState({
+      pageNum: page_num
+    });
+  }
+
   selectPage(eventKey) {
     // console.log('location', this.props.location.search);
     const query = Object.assign(this.props.location.search, { _page: eventKey });
@@ -217,10 +233,15 @@ class IssueDataTable extends Component {
             orderBy={orderBy}
             onSelectAllClick={this.handleSelectAllClick}
             onRequestSort={this.handleRequestSort}
+            checked={selected.length == this.state.pageSize}
           />
           <TableBody>{issueRows}</TableBody>
         </Table>
-        <EnhancedTableFooter pageSize={this.state.pageSize} totalCount={totalCount} />
+        <EnhancedTableFooter
+          pageSize={this.state.pageSize}
+          totalCount={totalCount}
+          pageNum={this.state.pageNum}
+          travelPage={this.travelPage} />
       </Paper>
     );
   }

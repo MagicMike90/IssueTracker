@@ -21,7 +21,7 @@ export default class EnhancedTableHead extends Component {
         this.props.onRequestSort(event, property);
     }
     render() {
-        const { columnData, onSelectAllClick, order, orderBy } = this.props;
+        const { columnData, onSelectAllClick, order, orderBy ,checked} = this.props;
         const headCols = columnData.map(column =>
             <TableCell
                 key={column.id}
@@ -30,7 +30,7 @@ export default class EnhancedTableHead extends Component {
                 <TableSortLabel
                     active={orderBy === column.id}
                     direction={order}
-                    onClick={(evt)=> this.createSortHandler(evt, column.id)}>
+                    onClick={(evt) => this.createSortHandler(evt, column.id)}>
                     {column.label}
                 </TableSortLabel>
             </TableCell>);
@@ -38,7 +38,7 @@ export default class EnhancedTableHead extends Component {
             <TableHead>
                 <TableRow>
                     <TableCell checkbox>
-                        <Checkbox onChange={onSelectAllClick} />
+                        <Checkbox onChange={onSelectAllClick} checked={checked}/>
                     </TableCell>
                     {headCols}
                 </TableRow>
@@ -51,4 +51,5 @@ EnhancedTableHead.propTypes = {
     onSelectAllClick: PropTypes.func.isRequired,
     order: PropTypes.string.isRequired,
     orderBy: PropTypes.string.isRequired,
+    checked: PropTypes.bool.isRequired
 };

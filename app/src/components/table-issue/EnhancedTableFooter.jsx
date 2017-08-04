@@ -44,26 +44,23 @@ const toolbarStyleSheet = createStyleSheet(theme => ({
 class EnhancedTableToolbar extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      pageNum: 1
-    };
   }
   render() {
-    const { classes, pageSize, totalCount } = this.props;
+    const { classes, pageSize, totalCount, pageNum } = this.props;
     return (
       <Toolbar className={classNames(classes.root, { [classes.highlight]: false })}>
         <div className={classes.spacer} />
         <TableFooterDrowdown />
         <div className={classes.title}>
-          <Typography type="caption" noWrap={true}>{this.state.pageNum} - {pageSize} of {totalCount}</Typography>
+          <Typography type="caption" noWrap={true}>{pageNum} - {pageSize} of {totalCount}</Typography>
         </div>
         <div className={classNames(classes.actions, classes.leftNavBtn)}>
-          <IconButton aria-label="last page">
+          <IconButton aria-label="last page" disabled={pageNum == 1} onClick={this.props.travelPage}>
             <ChevronLeft />
           </IconButton>
         </div>
         <div className={classes.actions}>
-          <IconButton aria-label="next page">
+          <IconButton aria-label="next page" onClick={this.props.travelPage}>
             <ChevronRight />
           </IconButton>
         </div>
@@ -77,6 +74,8 @@ EnhancedTableToolbar.propTypes = {
   classes: PropTypes.object.isRequired,
   pageSize: PropTypes.number.isRequired,
   totalCount: PropTypes.number.isRequired,
+  pageNum: PropTypes.number.isRequired,
+  travelPage: PropTypes.func.isRequired
 };
 
 

@@ -48,7 +48,7 @@ app.get('/api/issues', (req, res) => {
 
     if (req.query._summary === undefined) {
         const offset = req.query._offset ? parseInt(req.query._offset, 10) : 0;
-        let limit = req.query.limit ? parseInt(req.query._limit, 10) : 20;
+        let limit = req.query._limit ? parseInt(req.query._limit, 10) : 20;
 
         console.log('offset', offset);
         console.log('limit', limit);
@@ -187,22 +187,32 @@ app.delete('/api/issues/:id', (req, res) => {
     });
 });
 
+// For bulk delete
 app.delete('/api/issues/', (req, res) => {
-    console.log('req',req);
-    // let issueId;
-    // try {
-    //     issueId = new ObjectId(req.params.id);
-    // } catch (error) {
-    //     res.status(422).json({ message: `Invalid issue ID format: ${error}` });
-    //     return;
-    // }
-    // db.collection('issues').deleteOne({ _id: issueId }).then((deleteResult) => {
-    //     if (deleteResult.result.n === 1) res.json({ status: 'OK' });
-    //     else res.json({ status: 'Warning: object not found' });
-    // }).catch(error => {
-    //     console.log(error);
-    //     res.status(500).json({ message: `Internal Server Error: ${error}` });
-    // });
+
+    let issueIds = req.body.issueIds
+
+    try {
+        issueIds = issueIds.map(id => new ObjectId(id));
+
+        // for(let i = 0; i < issueIds.length; i++) {
+        //     issueIds[i] =  new ObjectId( issueIds[i] );
+        // }
+    } catch (error) {
+        res.status(422).json({
+            message: `Invalid issue ID format: ${error}`
+        });
+        return;
+    }
+  
+    db.collection('issues').deleteMany({ _id: {'$in':issueIds} }).then((deleteResult) => {
+        console.log('deleteResult',deleteResult);
+        if (deleteResult.result.n === issueIds.length) res.json({ status: 'OK' });
+        else res.json({ status: 'Warning: object not found' });
+    }).catch(error => {
+        console.log(error);
+        res.status(500).json({ message: `Internal Server Error: ${error}` });
+    });
 });
 // It has to be placed at the end of all routes
 app.get('*', (req, res) => {

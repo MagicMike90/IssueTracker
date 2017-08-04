@@ -44,15 +44,18 @@ const toolbarStyleSheet = createStyleSheet(theme => ({
 class EnhancedTableToolbar extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      pageNum: 1
+    };
   }
   render() {
-    const { classes } = this.props;
+    const { classes, pageSize, totalCount } = this.props;
     return (
       <Toolbar className={classNames(classes.root, { [classes.highlight]: false })}>
         <div className={classes.spacer} />
         <TableFooterDrowdown />
         <div className={classes.title}>
-          <Typography type="caption" noWrap={true}>1 - 5 of 883</Typography>
+          <Typography type="caption" noWrap={true}>{this.state.pageNum} - {pageSize} of {totalCount}</Typography>
         </div>
         <div className={classNames(classes.actions, classes.leftNavBtn)}>
           <IconButton aria-label="last page">
@@ -72,6 +75,8 @@ class EnhancedTableToolbar extends Component {
 
 EnhancedTableToolbar.propTypes = {
   classes: PropTypes.object.isRequired,
+  pageSize: PropTypes.number.isRequired,
+  totalCount: PropTypes.number.isRequired,
 };
 
 

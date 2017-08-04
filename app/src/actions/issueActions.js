@@ -32,9 +32,9 @@ export const createIssueSuccess = (issue, history) => {
     issue
   }
 };
-export const deleteIssueSuccess = (issue, history) => ({
+export const deleteIssueSuccess = (issueIds, history) => ({
   type: types.DELETE_ISSUE_SUCCESS,
-  issue
+  issueIds
 });
 
 
@@ -46,6 +46,7 @@ const convertedIssue = issue => {
   return issue;
 }
 export const fetchIssues = (location, page_size) => dispatch => {
+
   const query = Object.assign({}, qs.parse(location.search));
   const pageStr = query._page;
   if (pageStr) {
@@ -67,13 +68,11 @@ export const fetchIssues = (location, page_size) => dispatch => {
           issue.completionDate = new Date(issue.completionDate);
         }
       });
-      setTimeout(function () {
-        dispatch(requestIssuesSuccess({
-          issues,
-          totalCount: data.metadata.totalCount
-        }));
-        dispatch(addNotification('Load issues successfully', 'success'));
-      }, 1000);
+      dispatch(requestIssuesSuccess({
+        issues,
+        totalCount: data.metadata.totalCount
+      }));
+      dispatch(addNotification('Load issues successfully', 'success'));
 
     });
   }).catch(err => {
@@ -140,17 +139,17 @@ export const deleteIssue = (issue, history) => {
     });
   }
 }
-export const deleteBulkIssue = (ids, history) => {
+export const deleteBulkIssue = (issueIds, history) => {
   return dispatch => {
     dispatch(sendRequest);
-    issueApi.deleteBulkIssue(ids).then(response => {
+    issueApi.deleteBulkIssue(issueIds).then(response => {
       if (!response.ok) {
         return response.json().then(error => {
           const errorMsg = `Failed to delete issue`;
           dispatch(requestIssuesError(errorMsg))
         });
       }
-      return dispatch(deleteIssueSuccess(issue, history));
+      return dispatch(deleteIssueSuccess(issueIds, history));
     }).catch(error => {
       const errorMsg = `Error in sending data to server: ${error.message}`;
       dispatch(requestIssuesError(errorMsg))

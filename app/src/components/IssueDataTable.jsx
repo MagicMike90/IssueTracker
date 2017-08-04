@@ -191,7 +191,7 @@ class IssueDataTable extends Component {
   }
 
   render() {
-    const { classes, isFetching } = this.props;
+    const { classes, isFetching ,totalCount } = this.props;
     const { order, orderBy, selected } = this.state;
     const issueRows = this.props.issues.map(issue => <IssueRow key={issue._id} issue={issue} isSelected={this.isSelected(issue._id)}
       handleClick={this.handleClick} handleKeyDown={this.handleKeyDown} />)
@@ -211,7 +211,7 @@ class IssueDataTable extends Component {
           />
           <TableBody>{issueRows}</TableBody>
         </Table>
-        <EnhancedTableFooter />
+        <EnhancedTableFooter pageSize={this.state.pageSize} totalCount={totalCount}/>
       </Paper>
     );
   }

@@ -44,7 +44,7 @@ const issues = (state = initialState, action) => {
     case types.DELETE_ISSUE_SUCCESS:
       console.log('DELETE_ISSUE_SUCCESS');
 
-      const newIssues = state.issues.filter(issue => issue._id != action.issue._id);
+      const newIssues = state.issues.filter(issue => action.issueIds.indexOf(issue._id) == -1);
       return Object.assign({}, state, {
         issues: newIssues,
         receivedAt: action.receivedAt

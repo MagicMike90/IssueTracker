@@ -55,17 +55,17 @@ class IssuesApi {
     return fetch(request);
   }
 
-  static deleteBulkIssue(ids) {
-    console.log('deleteBulkIssue',ids);
+  static deleteBulkIssue(issueIds) {
+
     const headers = Object.assign({
       'Content-Type': 'application/json'
     }, this.requestHeaders());
     const request = new Request(`/api/issues`, {
       method: 'DELETE',
       headers: headers,
-      body: {
-        ids:ids
-      }
+      body: JSON.stringify({ 
+        issueIds:issueIds
+      })
     });
 
     return fetch(request);

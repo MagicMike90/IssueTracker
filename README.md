@@ -115,4 +115,4 @@ This way, even if a hacker gains access to the server via unknown security vulne
 
 
 # Execute a JavaScript file
-mongo localhost:27017/test myjsfile.js
+mongo localhost:27018/issueTracker generate_data.mongo.js

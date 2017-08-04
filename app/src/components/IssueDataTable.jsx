@@ -4,6 +4,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
+import { fetchIssuesIfNeeded, fetchIssues, deleteBulkIssue } from '../actions/issueActions'
 
 import { withStyles, createStyleSheet } from 'material-ui/styles';
 import keycode from 'keycode';
@@ -23,9 +26,9 @@ import DeleteIcon from 'material-ui-icons/Delete';
 import FilterListIcon from 'material-ui-icons/FilterList';
 import { LinearProgress } from 'material-ui/Progress';
 
-import EnhancedTableHead from './EnhancedTableHead.jsx';
-import EnhancedTableToolbar from './EnhancedTableToolbar.jsx';
-import EnhancedTableFooter from './EnhancedTableFooter.jsx';
+import EnhancedTableHead from './table-issue/EnhancedTableHead.jsx';
+import EnhancedTableToolbar from './table-issue/EnhancedTableToolbar.jsx';
+import EnhancedTableFooter from './table-issue/EnhancedTableFooter.jsx';
 
 
 const IssueRow = (props) => {
@@ -92,17 +95,45 @@ class IssueDataTable extends Component {
       order: 'asc',
       orderBy: 'calories',
       selected: [],
-      issues: []
+      pageSize: 10
     };
 
     this.handleRequestSort = this.handleRequestSort.bind(this);
     this.handleSelectAllClick = this.handleSelectAllClick.bind(this);
     this.handleKeyDown = this.handleKeyDown.bind(this);
     this.handleClick = this.handleClick.bind(this);
+
+    // this.createIssue = this.createIssue.bind(this);
+    this.setFilter = this.setFilter.bind(this);
+    this.deleteIssue = this.deleteIssue.bind(this);
+    this.selectPage = this.selectPage.bind(this);
+  }
+  componentDidMount() {
+    this.props.dispatch(fetchIssues(this.props.location, this.state.pageSize));
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.setState({ issues: nextProps.issues });
+  componentDidUpdate(prevProps) {
+    if (prevProps.location.search == this.props.location.search) return;
+
+    this.props.dispatch(fetchIssuesIfNeeded(this.props.location, this.state.pageSize));
+  }
+
+  setFilter(query) {
+    let query_string = qs.stringify(query);
+    this.props.history.push({ pathname: this.props.location.pathname, search: query_string })
+  }
+
+  deleteIssue() {
+    console.log(this.state.selected);
+    this.props.dispatch(deleteBulkIssue(this.state.selected, this.props.location));
+  }
+  selectPage(eventKey) {
+    // console.log('location', this.props.location.search);
+    const query = Object.assign(this.props.location.search, { _page: eventKey });
+    // console.log('selectPage', query);
+    let query_string = qs.stringify({ _page: eventKey });
+    // console.log('qs', qs);
+    this.props.history.push({ pathname: this.props.location.pathname, search: query_string })
   }
   handleRequestSort(event, property) {
 
@@ -113,7 +144,7 @@ class IssueDataTable extends Component {
       order = 'asc';
     }
 
-    const issues = this.state.issues.sort(
+    const issues = this.props.issues.sort(
       (a, b) => (order === 'desc' ? b[orderBy] > a[orderBy] : a[orderBy] > b[orderBy]),
     );
 
@@ -122,7 +153,7 @@ class IssueDataTable extends Component {
 
   handleSelectAllClick(event, checked) {
     if (checked) {
-      this.setState({ selected: this.state.issues.map(issues => issues._id) });
+      this.setState({ selected: this.props.issues.map(issues => issues._id) });
       return;
     }
     this.setState({ selected: [] });
@@ -162,13 +193,13 @@ class IssueDataTable extends Component {
   render() {
     const { classes, isFetching } = this.props;
     const { order, orderBy, selected } = this.state;
-    const issueRows = this.state.issues.map(issue => <IssueRow key={issue._id} issue={issue} isSelected={this.isSelected(issue._id)}
+    const issueRows = this.props.issues.map(issue => <IssueRow key={issue._id} issue={issue} isSelected={this.isSelected(issue._id)}
       handleClick={this.handleClick} handleKeyDown={this.handleKeyDown} />)
 
 
     return (
       <Paper className={classes.paper}>
-        <EnhancedTableToolbar title="Issues" numSelected={selected.length} />
+        <EnhancedTableToolbar title="Issues" numSelected={selected.length} deleteIssue={this.deleteIssue}/>
         {isFetching && <LinearProgress className={classes.progress} />}
         <Table>
           <EnhancedTableHead
@@ -188,7 +219,24 @@ class IssueDataTable extends Component {
 
 IssueDataTable.propTypes = {
   classes: PropTypes.object.isRequired,
+  location: PropTypes.object.isRequired,
   issues: PropTypes.array.isRequired,
+  totalCount: PropTypes.number.isRequired,
+  isFetching: PropTypes.bool.isRequired,
+  lastUpdated: PropTypes.number,
+  dispatch: PropTypes.func.isRequired
+};
+const mapStateToProps = (state, ownProps) => {
+  const issuesState = state.issuesState;
+  return {
+    issues: issuesState.issues,
+    totalCount: issuesState.totalCount,
+    isFetching: issuesState.isFetching,
+    lastUpdated: issuesState.lastUpdated,
+    updatedIssue: issuesState.updatedIssue,
+  }
 };
 
-export default withStyles(styleSheet)(IssueDataTable);
+
+const componentWithStyles = withStyles(styleSheet)(IssueDataTable);
+export default withRouter(connect(mapStateToProps)(componentWithStyles));

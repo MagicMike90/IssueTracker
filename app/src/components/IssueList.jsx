@@ -13,7 +13,7 @@ import { Button, Glyphicon, Table, Panel, Pagination } from 'react-bootstrap';
 import IssueFilter from './IssueFilter.jsx'
 import withToast from './withToast.jsx';
 import IssueAddNavItem from './IssueAddNavItem.jsx';
-import IssueDataTable from './table-issue/IssueDataTable.jsx'
+import IssueDataTable from './IssueDataTable.jsx'
 
 const PAGE_SIZE = 10;
 class IssueList extends React.Component {
@@ -26,28 +26,28 @@ class IssueList extends React.Component {
         };
         // this.createIssue = this.createIssue.bind(this);
         this.setFilter = this.setFilter.bind(this);
-        this.deleteIssue = this.deleteIssue.bind(this);
-        this.selectPage = this.selectPage.bind(this);
+        // this.deleteIssue = this.deleteIssue.bind(this);
+        // this.selectPage = this.selectPage.bind(this);
     }
-    componentDidMount() {
-        this.props.dispatch(fetchIssues(this.props.location, PAGE_SIZE));
-    }
+    // componentDidMount() {
+    //     this.props.dispatch(fetchIssues(this.props.location, PAGE_SIZE));
+    // }
 
-    componentDidUpdate(prevProps) {
-        if(prevProps.location.search == this.props.location.search) return;
+    // componentDidUpdate(prevProps) {
+    //     if(prevProps.location.search == this.props.location.search) return;
 
-        this.props.dispatch(fetchIssuesIfNeeded(this.props.location, PAGE_SIZE));
-    }
+    //     this.props.dispatch(fetchIssuesIfNeeded(this.props.location, PAGE_SIZE));
+    // }
 
     setFilter(query) {
         let query_string = qs.stringify(query);
         this.props.history.push({ pathname: this.props.location.pathname, search: query_string })
     }
 
-    deleteIssue(issue) {
-        console.log('deleteIssue', issue);
-        this.props.dispatch(deleteIssue(issue,this.props.location));
-    }
+    // deleteIssue(issue) {
+    //     console.log('deleteIssue', issue);
+    //     this.props.dispatch(deleteIssue(issue,this.props.location));
+    // }
     selectPage(eventKey) {
         // console.log('location', this.props.location.search);
         const query = Object.assign(this.props.location.search, { _page: eventKey });

@@ -140,3 +140,20 @@ export const deleteIssue = (issue, history) => {
     });
   }
 }
+export const deleteBulkIssue = (ids, history) => {
+  return dispatch => {
+    dispatch(sendRequest);
+    issueApi.deleteBulkIssue(ids).then(response => {
+      if (!response.ok) {
+        return response.json().then(error => {
+          const errorMsg = `Failed to delete issue`;
+          dispatch(requestIssuesError(errorMsg))
+        });
+      }
+      return dispatch(deleteIssueSuccess(issue, history));
+    }).catch(error => {
+      const errorMsg = `Error in sending data to server: ${error.message}`;
+      dispatch(requestIssuesError(errorMsg))
+    });
+  }
+}

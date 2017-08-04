@@ -40,6 +40,29 @@ const toolbarStyleSheet = createStyleSheet(theme => ({
   },
 }));
 
+class ContextMenu extends Component {
+  constructor(props) {
+    super(props);
+  }
+  render() {
+    const { classes } = this.props;
+
+    return (
+      <div>
+        <div className={classes.actions}>
+          <IconButton aria-label="Filter list">
+            <FilterListIcon />
+          </IconButton>}
+        </div>
+        <div className={classes.actions}>
+          <IssueAddTableItem />
+        </div>
+      </div>
+    );
+  }
+}
+const StyleContextMenu = withStyles(toolbarStyleSheet)(ContextMenu);
+
 
 class EnhancedTableToolbar extends Component {
   constructor(props) {
@@ -47,6 +70,29 @@ class EnhancedTableToolbar extends Component {
   }
   render() {
     const { numSelected, classes } = this.props;
+    
+    if (numSelected > 0) return (
+      <Toolbar
+        className={classNames(classes.root, {
+          [classes.highlight]: numSelected > 0,
+        })}
+      >
+        <div className={classes.title}>
+          <Typography type="subheading">
+            {numSelected} selected
+            </Typography>
+        </div>
+
+        <div className={classes.spacer} />
+
+        <div className={classes.actions}>
+          <IconButton aria-label="Delete" onClick={this.props.deleteIssue}>
+            <DeleteIcon />
+          </IconButton>
+        </div>
+
+      </Toolbar>
+    )
     return (
       <Toolbar
         className={classNames(classes.root, {
@@ -54,21 +100,14 @@ class EnhancedTableToolbar extends Component {
         })}
       >
         <div className={classes.title}>
-          {numSelected > 0
-            ? <Typography type="subheading">
-              {numSelected} selected
-            </Typography>
-            : <Typography type="title">{this.props.title}</Typography>}
+          <Typography type="title">{this.props.title}</Typography>
         </div>
         <div className={classes.spacer} />
+
         <div className={classes.actions}>
-          {numSelected > 0
-            ? <IconButton aria-label="Delete">
-              <DeleteIcon />
-            </IconButton>
-            : <IconButton aria-label="Filter list">
-              <FilterListIcon />
-            </IconButton>}
+          <IconButton aria-label="Filter list">
+            <FilterListIcon />
+          </IconButton>
         </div>
         <div className={classes.actions}>
           <IssueAddTableItem />
@@ -83,6 +122,7 @@ class EnhancedTableToolbar extends Component {
 EnhancedTableToolbar.propTypes = {
   classes: PropTypes.object.isRequired,
   numSelected: PropTypes.number.isRequired,
+  deleteIssue: PropTypes.func.isRequired
 };
 
 

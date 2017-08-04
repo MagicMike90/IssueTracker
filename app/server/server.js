@@ -186,6 +186,24 @@ app.delete('/api/issues/:id', (req, res) => {
         res.status(500).json({ message: `Internal Server Error: ${error}` });
     });
 });
+
+app.delete('/api/issues/', (req, res) => {
+    console.log('req',req);
+    // let issueId;
+    // try {
+    //     issueId = new ObjectId(req.params.id);
+    // } catch (error) {
+    //     res.status(422).json({ message: `Invalid issue ID format: ${error}` });
+    //     return;
+    // }
+    // db.collection('issues').deleteOne({ _id: issueId }).then((deleteResult) => {
+    //     if (deleteResult.result.n === 1) res.json({ status: 'OK' });
+    //     else res.json({ status: 'Warning: object not found' });
+    // }).catch(error => {
+    //     console.log(error);
+    //     res.status(500).json({ message: `Internal Server Error: ${error}` });
+    // });
+});
 // It has to be placed at the end of all routes
 app.get('*', (req, res) => {
     console.log('route to no where');

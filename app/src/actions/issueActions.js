@@ -3,7 +3,7 @@ import {
   addNotification
 } from './notificationActions'
 import issueApi from '../api/IssuesApi';
-import qs from 'qs';
+import queryString from 'query-string';
 import reduxStore from '../store/reduxStore';
 
 
@@ -39,6 +39,22 @@ export const deleteIssueSuccess = (issueIds, history) => ({
   receivedAt: Date.now()
 });
 
+// export const nextIssuePage = (location) => {
+//   const query = Object.assign({}, qs.parse(location.search));
+//   const pageStr = (parseInt(query._page, 10) + 1);
+
+//   let query_string = qs.stringify({ _page: pageStr });
+
+
+//   location.history.push({ pathname: location.pathname, search: query_string });
+
+//   return {
+//     type: types.NEXT_ISSUE_PAGE,
+//     issueIds,
+//     receivedAt: Date.now()
+//   }
+// };
+
 
 const convertedIssue = issue => {
   issue.created = new Date(issue.created);
@@ -49,7 +65,8 @@ const convertedIssue = issue => {
 }
 export const fetchIssues = (location, page_size) => dispatch => {
 
-  const query = Object.assign({}, qs.parse(location.search));
+  const query = Object.assign({}, queryString.parse(location.search));
+
   const pageStr = query._page;
   if (pageStr) {
     delete query._page;
@@ -70,7 +87,10 @@ export const fetchIssues = (location, page_size) => dispatch => {
           issue.completionDate = new Date(issue.completionDate);
         }
       });
+
       dispatch(requestIssuesSuccess({
+        pageNum: pageStr ? parseInt(pageStr) : 1,
+        offset: query._offset ? _offset : 0,
         issues,
         totalCount: data.metadata.totalCount
       }));
@@ -80,6 +100,7 @@ export const fetchIssues = (location, page_size) => dispatch => {
   }).catch(err => {
     const errorMsg = `Error in fetching data from server: ${err}`;
     console.log('errorMsg', errorMsg);
+    dispatch(requestIssuesError(errorMsg))
     dispatch(addNotification(errorMsg, 'error'));
   });
 };
@@ -109,7 +130,7 @@ export const createIssue = (issue, history) => {
       if (!response.ok) {
         return response.json().then(error => {
           const errorMsg = `Failed to add issue: ${error.message}`;
-          // dispatch(requestIssuesError(errorMsg))
+          dispatch(requestIssuesError(errorMsg))
           dispatch(addNotification(errorMsg, 'error'));;
         });
       }
@@ -158,3 +179,6 @@ export const deleteBulkIssue = (issueIds, history) => {
     });
   }
 }
+
+// export const deleteBulkIssue = (issueIds, history) => {
+// }

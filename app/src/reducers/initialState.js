@@ -4,5 +4,7 @@ export default {
   totalCount: 0,
   isFetching: false,
   failed: false,
-  deletedIssues: []
+  deletedIssues: [],
+  pageSize : 10,
+  pageNum : 1
 }

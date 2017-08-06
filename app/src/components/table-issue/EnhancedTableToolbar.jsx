@@ -78,7 +78,7 @@ class EnhancedTableToolbar extends Component {
         })}
       >
         <div className={classes.title}>
-          <Typography type="subheading">
+          <Typography type="subheading" color="secondary">
             {numSelected} selected
             </Typography>
         </div>

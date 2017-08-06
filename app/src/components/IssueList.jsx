@@ -6,7 +6,7 @@ import { fetchIssuesIfNeeded, fetchIssues, deleteIssue } from '../actions/issueA
 
 import 'whatwg-fetch';
 import { Link } from 'react-router-dom';
-import qs from 'qs';
+import qs from 'query-string';
 import { Button, Glyphicon, Table, Panel, Pagination } from 'react-bootstrap';
 
 // import IssueAdd from './IssueAdd.jsx'

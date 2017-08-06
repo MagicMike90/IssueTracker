@@ -3,6 +3,8 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import qs from 'query-string';
+
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
@@ -108,7 +110,8 @@ class IssueDataTable extends Component {
     this.setFilter = this.setFilter.bind(this);
     this.deleteIssue = this.deleteIssue.bind(this);
     this.selectPage = this.selectPage.bind(this);
-    this.travelPage = this.travelPage.bind(this);
+    this.nextPage = this.nextPage.bind(this);
+    this.lastPage = this.lastPage.bind(this);
   }
   componentWillReceiveProps(nextPros) {
 
@@ -137,19 +140,20 @@ class IssueDataTable extends Component {
   deleteIssue() {
     this.props.dispatch(deleteBulkIssue(this.state.selected, this.props.location));
   }
-  travelPage(eventKey) {
-    console.log('travelPage', eventKey);
-    let page_num = this.state.pageNum;
-    // // console.log('location', this.props.location.search);
-    // const query = Object.assign(this.props.location.search, { _page: eventKey });
-    // // console.log('selectPage', query);
-    // let query_string = qs.stringify({ _page: eventKey });
-    // // console.log('qs', qs);
-    // this.props.history.push({ pathname: this.props.location.pathname, search: query_string })
 
-    this.setState({
-      pageNum: page_num
-    });
+  nextPage(eventKey) {
+    const query = Object.assign({}, qs.parse(location.search));
+    const pageStr = (parseInt(query._page, 10) + 1);
+
+    let query_string = qs.stringify({ _page: pageStr });
+    this.props.history.push({ pathname: this.props.location.pathname, search: query_string });
+  }
+  lastPage(eventKey) {
+    const query = Object.assign({}, qs.parse(location.search));
+    const pageStr = (parseInt(query._page, 10) - 1);
+
+    let query_string = qs.stringify({ _page: pageStr });
+    this.props.history.push({ pathname: this.props.location.pathname, search: query_string });
   }
 
   selectPage(eventKey) {
@@ -240,8 +244,9 @@ class IssueDataTable extends Component {
         <EnhancedTableFooter
           pageSize={this.state.pageSize}
           totalCount={totalCount}
-          pageNum={this.state.pageNum}
-          travelPage={this.travelPage} />
+          pageNum={this.props.pageNum}
+          lastPage={this.lastPage}
+          nextPage={this.nextPage} />
       </Paper>
     );
   }
@@ -257,13 +262,14 @@ IssueDataTable.propTypes = {
   dispatch: PropTypes.func.isRequired
 };
 const mapStateToProps = (state, ownProps) => {
-  const { issues, totalCount, isFetching, lastUpdated, deletedIssues } = state.issuesState;
+  const { issues, totalCount, isFetching, lastUpdated, deletedIssues, pageSize, pageNum } = state.issuesState;
   return {
     issues: issues,
     totalCount: totalCount,
     isFetching: isFetching,
     lastUpdated: lastUpdated,
-    deletedIssues: deletedIssues
+    deletedIssues: deletedIssues,
+    pageNum: pageNum
   }
 };
 

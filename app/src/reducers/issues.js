@@ -22,6 +22,7 @@ const issues = (state = initialState, action) => {
       return Object.assign({}, state, {
         error: action.error,
         receivedAt: action.receivedAt,
+        isFetching: false
       });
 
     case types.LOAD_ISSUES_SUCCESS:
@@ -30,6 +31,7 @@ const issues = (state = initialState, action) => {
         issues: action.data.issues,
         totalCount: action.data.totalCount,
         isFetching: false,
+        pageNum: action.data.pageNum,
         receivedAt: action.receivedAt
       });
 

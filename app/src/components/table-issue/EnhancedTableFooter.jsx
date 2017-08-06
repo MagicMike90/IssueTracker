@@ -2,6 +2,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types'
 import classNames from 'classnames';
+import qs from 'query-string';
+import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
@@ -45,22 +48,23 @@ class EnhancedTableToolbar extends Component {
   constructor(props) {
     super(props);
   }
+  
   render() {
     const { classes, pageSize, totalCount, pageNum } = this.props;
     return (
       <Toolbar className={classNames(classes.root, { [classes.highlight]: false })}>
         <div className={classes.spacer} />
-        <TableFooterDrowdown />
+        {/* <TableFooterDrowdown /> */}
         <div className={classes.title}>
-          <Typography type="caption" noWrap={true}>{pageNum} - {pageSize} of {totalCount}</Typography>
+          <Typography type="caption" noWrap={true}>{pageNum} - {pageSize + pageNum - 1} of {totalCount}</Typography>
         </div>
         <div className={classNames(classes.actions, classes.leftNavBtn)}>
-          <IconButton aria-label="last page" disabled={pageNum == 1} onClick={this.props.travelPage}>
+          <IconButton aria-label="last page" disabled={pageNum == 1} onClick={this.props.lastPage}>
             <ChevronLeft />
           </IconButton>
         </div>
         <div className={classes.actions}>
-          <IconButton aria-label="next page" onClick={this.props.travelPage}>
+          <IconButton aria-label="next page" onClick={this.props.nextPage}>
             <ChevronRight />
           </IconButton>
         </div>
@@ -75,8 +79,7 @@ EnhancedTableToolbar.propTypes = {
   pageSize: PropTypes.number.isRequired,
   totalCount: PropTypes.number.isRequired,
   pageNum: PropTypes.number.isRequired,
-  travelPage: PropTypes.func.isRequired
 };
 
-
-export default withStyles(toolbarStyleSheet)(EnhancedTableToolbar);
+const componentWithStyles = withStyles(toolbarStyleSheet)(EnhancedTableToolbar);
+export default withRouter(connect()(componentWithStyles));

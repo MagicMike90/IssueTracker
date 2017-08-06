@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types'
 import { Panel, Table } from 'react-bootstrap';
-import qs from 'qs';
+import qs from 'query-string';
 
 import IssueFilter from './IssueFilter.jsx';
 import withToast from './withToast.jsx';

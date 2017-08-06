@@ -90,7 +90,6 @@ export const fetchIssues = (location, page_size) => dispatch => {
 
       dispatch(requestIssuesSuccess({
         pageNum: pageStr ? parseInt(pageStr) : 1,
-        offset: query._offset ? _offset : 0,
         issues,
         totalCount: data.metadata.totalCount
       }));

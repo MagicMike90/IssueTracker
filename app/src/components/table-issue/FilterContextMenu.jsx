@@ -67,7 +67,7 @@ class FilterContextMenu extends Component {
                         Status:
                     </Typography>
                 </div>
-                <FilterStatusDropdown />
+                <FilterStatusDropdown history={this.props.history} />
 
                 <div className={classes.spacer} />
 

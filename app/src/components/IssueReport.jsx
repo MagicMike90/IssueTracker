@@ -8,17 +8,17 @@ import withToast from './withToast.jsx';
 import ReportDataTable from './table-report/ReportDataTable.jsx'
 
 
-const statuses = ['New', 'Open', 'Assigned', 'Fixed', 'Verified', 'Closed'];
-const StatRow = (props) => (
-  <tr>
-    <td>{props.owner}</td>
-    {statuses.map((status, index) => (<td key={index}>{props.counts[status]}</td>))}
-  </tr>
-);
-StatRow.propTypes = {
-  owner: PropTypes.string.isRequired,
-  counts: PropTypes.object.isRequired,
-};
+// const statuses = ['New', 'Open', 'Assigned', 'Fixed', 'Verified', 'Closed'];
+// const StatRow = (props) => (
+//   <tr>
+//     <td>{props.owner}</td>
+//     {statuses.map((status, index) => (<td key={index}>{props.counts[status]}</td>))}
+//   </tr>
+// );
+// StatRow.propTypes = {
+//   owner: PropTypes.string.isRequired,
+//   counts: PropTypes.object.isRequired,
+// };
 
 class IssueReport extends React.Component {
   static dataFetcher({ urlBase, location }) {

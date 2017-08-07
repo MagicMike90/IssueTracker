@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import qs from 'query-string';
 import { withStyles, createStyleSheet } from 'material-ui/styles';
 import List, { ListItem, ListItemText } from 'material-ui/List';
 import Menu, { MenuItem } from 'material-ui/Menu';
@@ -16,12 +17,12 @@ const styleSheet = createStyleSheet(theme => ({
 }));
 
 const options = [
-  '(Any)',
-  'Open',
-  'Assigned',
-  'Fixed',
-  'Verified',
-  'Closed'
+  { label: '(Any)', value: '' },
+  { label: 'Open', value: 'open' },
+  { label: 'Assigned', value: 'assigned' },
+  { label: 'Fixed', value: 'fixed' },
+  { label: 'Verified', value: 'verified' },
+  { label: 'Closed', value: 'closed' }
 ];
 
 class FilterStatus extends Component {
@@ -37,15 +38,23 @@ class FilterStatus extends Component {
     this.handleMenuItemClick = this.handleMenuItemClick.bind(this);
     this.handleRequestClose = this.handleRequestClose.bind(this);
   }
-
+  componentWillReceiveProps(nextPros) {
+    console.log('componentWillReceiveProps');
+  }
+  componentDidUpdate(prevProps) {
+    console.log('componentDidUpdate');
+  }
   handleClickListItem(event) {
-    // console.log('event.currentTarget', event.currentTarget);
     this.setState({ open: true, anchorEl: event.currentTarget });
   };
 
   handleMenuItemClick(event, index) {
-    this.setState({ selectedIndex: index, open: false });
-  };
+    console.log('index', index);
+    this.setState({ selectedIndex: index, open: false }, () => {
+      let query_string = qs.stringify({ status: options[this.state.selectedIndex].label });
+      this.props.history.push({ search: query_string })
+    });
+  }
 
   handleRequestClose() {
     this.setState({ open: false });
@@ -65,7 +74,7 @@ class FilterStatus extends Component {
             onClick={this.handleClickListItem}
           >
             <ListItemText
-              secondary={options[this.state.selectedIndex]}
+              secondary={options[this.state.selectedIndex].label}
             />
           </ListItem>
         </List>
@@ -77,11 +86,11 @@ class FilterStatus extends Component {
         >
           {options.map((option, index) =>
             <MenuItem
-              key={option}
+              key={option.label}
               selected={index === this.state.selectedIndex}
               onClick={event => this.handleMenuItemClick(event, index)}
             >
-              {option}
+              {option.label}
             </MenuItem>,
           )}
         </Menu>

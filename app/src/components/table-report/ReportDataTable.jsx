@@ -46,7 +46,8 @@ const StatRow = (props) => {
   )
 }
 StatRow.propTypes = {
-  issue: PropTypes.object.isRequired,
+  owner: PropTypes.string.isRequired,
+  counts: PropTypes.object.isRequired
 };
 
 
@@ -78,7 +79,6 @@ class ReportDataTable extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log(nextProps);
     this.setState({ stats: nextProps.stats });
   }
   handleRequestSort(event, property) {

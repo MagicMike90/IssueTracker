@@ -13,6 +13,7 @@ import DeleteIcon from 'material-ui-icons/Delete';
 
 import FilterListIcon from 'material-ui-icons/FilterList';
 import { withStyles, createStyleSheet } from 'material-ui/styles';
+import { withRouter } from 'react-router-dom';
 
 
 import FilterStatusAddTableItem from './AddTableItem.jsx';
@@ -115,7 +116,7 @@ class EnhancedTableToolbar extends Component {
         </div>
       </Toolbar>
     )
-    if (this.state.openFilter) return (<FilterContextMenu closeFilter={this.closeFilter}/>);
+    if (this.state.openFilter) return (<FilterContextMenu history={this.props.history} closeFilter={this.closeFilter}/>);
     return (
 
       <Toolbar
@@ -150,4 +151,4 @@ EnhancedTableToolbar.propTypes = {
 };
 
 const componentWithStyles = withStyles(toolbarStyleSheet)(EnhancedTableToolbar);
-export default connect()(componentWithStyles);
+export default withRouter(connect()(componentWithStyles));

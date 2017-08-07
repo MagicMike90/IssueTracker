@@ -51,11 +51,10 @@ class SimpleListMenu extends Component {
             button
             aria-haspopup="true"
             aria-controls="lock-menu"
-            aria-label="When device is locked"
+            aria-label="Filter status"
             onClick={this.handleClickListItem}
           >
             <ListItemText
-              primary="When device is locked"
               secondary={options[this.state.selectedIndex]}
             />
           </ListItem>

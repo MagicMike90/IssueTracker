@@ -16,7 +16,7 @@ import { withStyles, createStyleSheet } from 'material-ui/styles';
 
 
 import IssueAddTableItem from './IssueAddTableItem.jsx';
-
+import FilterStatus from './FilterStatus.jsx';
 
 const toolbarStyleSheet = createStyleSheet(theme => ({
   root: {
@@ -130,6 +130,7 @@ class EnhancedTableToolbar extends Component {
             'aria-label': 'Search',
           }}
         />
+        <FilterStatus />
         <div className={classes.spacer} />
 
         <div className={classes.actions}>

@@ -102,9 +102,7 @@ class IssueDataTable extends Component {
     this.handleKeyDown = this.handleKeyDown.bind(this);
     this.handleClick = this.handleClick.bind(this);
 
-    // this.createIssue = this.createIssue.bind(this);
     this.setFilter = this.setFilter.bind(this);
-    this.deleteIssue = this.deleteIssue.bind(this);
     this.selectPage = this.selectPage.bind(this);
   }
   componentWillReceiveProps(nextPros) {

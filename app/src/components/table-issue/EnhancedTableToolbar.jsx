@@ -69,9 +69,17 @@ const StyleContextMenu = withStyles(toolbarStyleSheet)(ContextMenu);
 class EnhancedTableToolbar extends Component {
   constructor(props) {
     super(props);
+
+    this.state= {
+      isFilter: false,
+    }
+
+    this.openFilter = this.openFilter.bind(this);
     this.deleteIssue = this.deleteIssue.bind(this);
   }
+  openFilter() {
 
+  }
   deleteIssue() {
     this.props.dispatch(deleteBulkIssue(this.props.selected, this.props.location));
   }
@@ -111,7 +119,7 @@ class EnhancedTableToolbar extends Component {
         <div className={classes.spacer} />
 
         <div className={classes.actions}>
-          <IconButton aria-label="Filter list">
+          <IconButton aria-label="Filter list" onClick={this.openFilter}>
             <FilterListIcon />
           </IconButton>
         </div>
@@ -127,8 +135,7 @@ class EnhancedTableToolbar extends Component {
 
 EnhancedTableToolbar.propTypes = {
   classes: PropTypes.object.isRequired,
-  selected: PropTypes.array.isRequired,
-  deleteIssue: PropTypes.func.isRequired
+  selected: PropTypes.array.isRequired
 };
 
 const componentWithStyles = withStyles(toolbarStyleSheet)(EnhancedTableToolbar);

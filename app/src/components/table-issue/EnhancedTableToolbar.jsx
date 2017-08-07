@@ -16,7 +16,7 @@ import { withStyles, createStyleSheet } from 'material-ui/styles';
 import { withRouter } from 'react-router-dom';
 
 
-import FilterStatusAddTableItem from './AddTableItem.jsx';
+import IssueAddTableItem from './AddTableItem.jsx';
 import FilterContextMenu from './FilterContextMenu.jsx';
 
 
@@ -48,28 +48,6 @@ const toolbarStyleSheet = createStyleSheet(theme => ({
   },
 }));
 
-class ContextMenu extends Component {
-  constructor(props) {
-    super(props);
-  }
-  render() {
-    const { classes } = this.props;
-
-    return (
-      <div>
-        <div className={classes.actions}>
-          <IconButton aria-label="Filter list">
-            <FilterListIcon />
-          </IconButton>}
-        </div>
-        <div className={classes.actions}>
-          <FilterStatusAddTableItem />
-        </div>
-      </div>
-    );
-  }
-}
-const StyleContextMenu = withStyles(toolbarStyleSheet)(ContextMenu);
 
 
 class EnhancedTableToolbar extends Component {
@@ -95,7 +73,7 @@ class EnhancedTableToolbar extends Component {
     this.props.dispatch(deleteBulkIssue(this.props.selected, this.props.location));
   }
   render() {
-    const { selected, classes } = this.props;
+    const { selected, classes ,dispatch} = this.props;
 
     if (selected.length > 0) return (
       <Toolbar
@@ -138,7 +116,7 @@ class EnhancedTableToolbar extends Component {
           </IconButton>
         </div>
         <div className={classes.actions}>
-          <FilterStatusAddTableItem />
+          <IssueAddTableItem />
         </div>
 
       </Toolbar>

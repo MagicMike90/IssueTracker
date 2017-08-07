@@ -4,10 +4,13 @@ import Typography from 'material-ui/Typography';
 import IconButton from 'material-ui/IconButton';
 import SearchIcon from 'material-ui-icons/Search';
 import ClearIcon from 'material-ui-icons/Clear';
+import ClearAllIcon from 'material-ui-icons/ClearAll';
 import Input from 'material-ui/Input/Input';
 import classNames from 'classnames';
 import { withStyles, createStyleSheet } from 'material-ui/styles';
 
+
+import IssueAddTableItem from './AddTableItem.jsx';
 import FilterStatusDropdown from './FilterStatusDropdown.jsx';
 
 const toolbarStyleSheet = createStyleSheet(theme => ({
@@ -37,12 +40,21 @@ const toolbarStyleSheet = createStyleSheet(theme => ({
     title: {
         flex: '0 0 auto',
         marginLeft: theme.spacing.unit,
-    },
-    input: {
-        margin: theme.spacing.unit,
-    },
+    }
 }))
 class FilterContextMenu extends Component {
+    constructor(props) {
+        super(props);
+
+        this.onChange = this.onChange.bind(this);
+        this.clearSearchField = this.clearSearchField.bind(this);
+    }
+    onChange(event) {
+        console.log('event', event.target.value);
+    }
+    clearSearchField() {
+
+    }
     render() {
         const classes = this.props.classes;
         return (
@@ -58,10 +70,15 @@ class FilterContextMenu extends Component {
                     placeholder="Search..."
                     className={classes.input}
                     fullWidth
+                    disableUnderline
                     inputProps={{
                         'aria-label': 'Search',
                     }}
+                    onChange={this.onChange}
                 />
+                <IconButton aria-label="Clear" onClick={this.clearSearchField}>
+                    <ClearIcon />
+                </IconButton>
                 <div className={classes.title}>
                     <Typography type="subheading" >
                         Status:
@@ -70,10 +87,12 @@ class FilterContextMenu extends Component {
                 <FilterStatusDropdown history={this.props.history} />
 
                 <div className={classes.spacer} />
-
                 <IconButton aria-label="Clear" onClick={this.props.closeFilter}>
-                    <ClearIcon />
+                    <ClearAllIcon />
                 </IconButton>
+
+                <IssueAddTableItem />
+
             </Toolbar>
         )
     }

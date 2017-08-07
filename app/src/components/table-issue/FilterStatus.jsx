@@ -6,16 +6,18 @@ import Menu, { MenuItem } from 'material-ui/Menu';
 
 const styleSheet = createStyleSheet(theme => ({
   root: {
-    width: '100%',
     maxWidth: 360,
     background: theme.palette.background.paper,
   },
 }));
 
 const options = [
-  'Show all notification content',
-  'Hide sensitive notification content',
-  'Hide all notification content',
+  '(Any)',
+  'Open',
+  'Assigned',
+  'Fixed',
+  'Verified',
+  'Closed'
 ];
 
 class SimpleListMenu extends Component {
@@ -24,21 +26,24 @@ class SimpleListMenu extends Component {
     this.state = {
       anchorEl: undefined,
       open: false,
-      selectedIndex: 1,
+      selectedIndex: 0,
     };
 
     this.handleClickListItem = this.handleClickListItem.bind(this);
+    this.handleMenuItemClick = this.handleMenuItemClick.bind(this);
+    this.handleRequestClose = this.handleRequestClose.bind(this);
   }
 
   handleClickListItem(event) {
+    console.log('event.currentTarget',event.currentTarget);
     this.setState({ open: true, anchorEl: event.currentTarget });
   };
 
-  handleMenuItemClick(event, index){
+  handleMenuItemClick(event, index) {
     this.setState({ selectedIndex: index, open: false });
   };
 
-  handleRequestClose(){
+  handleRequestClose() {
     this.setState({ open: false });
   };
 

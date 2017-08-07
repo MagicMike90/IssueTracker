@@ -23,8 +23,8 @@ import DeleteIcon from 'material-ui-icons/Delete';
 import FilterListIcon from 'material-ui-icons/FilterList';
 import { LinearProgress } from 'material-ui/Progress';
 
-import EnhancedTableHead from './EnhancedTableHead.jsx';
-import EnhancedTableToolbar from './EnhancedTableToolbar.jsx';
+import EnhancedTableHead from './table-report/EnhancedTableHead.jsx';
+import EnhancedTableToolbar from './table-report/EnhancedTableToolbar.jsx';
 
 
 const columnData = [

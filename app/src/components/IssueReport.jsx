@@ -5,7 +5,7 @@ import qs from 'query-string';
 
 import IssueFilter from './IssueFilter.jsx';
 import withToast from './withToast.jsx';
-import ReportDataTable from './table-report/ReportDataTable.jsx'
+import ReportDataTable from './ReportDataTable.jsx'
 
 
 // const statuses = ['New', 'Open', 'Assigned', 'Fixed', 'Verified', 'Closed'];

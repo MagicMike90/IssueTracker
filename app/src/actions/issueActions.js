@@ -38,23 +38,12 @@ export const deleteIssueSuccess = (issueIds) => ({
   issueIds,
   receivedAt: Date.now()
 });
-
-// export const nextIssuePage = (location) => {
-//   const query = Object.assign({}, qs.parse(location.search));
-//   const pageStr = (parseInt(query._page, 10) + 1);
-
-//   let query_string = qs.stringify({ _page: pageStr });
-
-
-//   location.history.push({ pathname: location.pathname, search: query_string });
-
-//   return {
-//     type: types.NEXT_ISSUE_PAGE,
-//     issueIds,
-//     receivedAt: Date.now()
-//   }
-// };
-
+export const turnOnFilter = () => ({
+  type: types.TURN_ON_FILTER
+})
+export const turnOffFilter = () => ({
+    type: types.TURN_OFF_FILTER
+})
 
 const convertedIssue = issue => {
   issue.created = new Date(issue.created);

@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux';
-import { deleteBulkIssue } from '../../actions/issueActions'
+import { deleteBulkIssue , turnOnFilter , turnOffFilter} from '../../actions/issueActions'
 import classNames from 'classnames';
 
 import Toolbar from 'material-ui/Toolbar';
@@ -84,10 +84,12 @@ class EnhancedTableToolbar extends Component {
     this.closeFilter = this.closeFilter.bind(this);
   }
   openFilter() {
-    this.setState({ openFilter: true });
+     this.props.dispatch(turnOnFilter());
+    // this.setState({ openFilter: true });
   }
   closeFilter() {
-    this.setState({ openFilter: false });
+    this.props.dispatch(turnOffFilter());
+    // this.setState({ openFilter: false });
   }
   deleteIssue() {
     this.props.dispatch(deleteBulkIssue(this.props.selected, this.props.location));
@@ -116,7 +118,7 @@ class EnhancedTableToolbar extends Component {
         </div>
       </Toolbar>
     )
-    if (this.state.openFilter) return (<FilterContextMenu history={this.props.history} closeFilter={this.closeFilter}/>);
+    if (this.props.openFilter) return (<FilterContextMenu history={this.props.history} closeFilter={this.closeFilter}/>);
     return (
 
       <Toolbar
@@ -149,6 +151,11 @@ EnhancedTableToolbar.propTypes = {
   classes: PropTypes.object.isRequired,
   selected: PropTypes.array.isRequired
 };
-
+const mapStateToProps = (state, ownProps) => {
+  const { openFilter } = state.issuesState;
+  return {
+    openFilter: openFilter
+  }
+};
 const componentWithStyles = withStyles(toolbarStyleSheet)(EnhancedTableToolbar);
-export default withRouter(connect()(componentWithStyles));
+export default withRouter(connect(mapStateToProps)(componentWithStyles));

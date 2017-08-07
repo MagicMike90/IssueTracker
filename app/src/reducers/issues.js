@@ -16,7 +16,14 @@ const issues = (state = initialState, action) => {
       return Object.assign({}, state, {
         isFetching: true,
       });
-
+    case types.TURN_ON_FILTER:
+      return Object.assign({}, state, {
+        openFilter: true,
+      });
+    case types.TURN_OFF_FILTER:
+      return Object.assign({}, state, {
+        openFilter: false,
+      });
     case types.REQUEST_SERVER_ERROR:
       // console.log('REQUEST_SERVER_ERROR', action);
       return Object.assign({}, state, {

@@ -37,6 +37,7 @@ if (process.env.NODE_ENV !== 'production') {
     console.log('Enable webpackDevMiddleware and webpackHotMiddleware');
 }
 
+// TODO: should implement range pagination instead of using skip to result in better server performance
 app.get('/api/issues', (req, res) => {
 
     const filter = {};
@@ -49,12 +50,20 @@ app.get('/api/issues', (req, res) => {
     if (req.query._summary === undefined) {
         const offset = req.query._offset ? parseInt(req.query._offset, 10) : 0;
         let limit = req.query._limit ? parseInt(req.query._limit, 10) : 20;
+        const last_id = req.query._last_id;
 
         console.log('offset', offset);
         console.log('limit', limit);
+        console.log('last_id', last_id);
 
         if (limit > 50) limit = 50;
         const cursor = db.collection('issues').find(filter).sort({ _id: 1 }).skip(offset).limit(limit);
+        // let cursor;
+        // if(last_id != 'undefined') {
+        //     cursor = db.collection('issues').find(filter,{'_id': {'$gt': last_id}}).sort({ _id: 1 }).limit(limit);
+        // }else {
+        //     cursor = db.collection('issues').find(filter).sort({ _id: 1 }).limit(limit);
+        // } 
 
         let totalCount;
         // ensures that the effects of skip() and limit() will be ignored

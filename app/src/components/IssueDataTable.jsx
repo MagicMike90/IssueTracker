@@ -8,7 +8,7 @@ import qs from 'query-string';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { fetchIssuesIfNeeded, fetchIssues, deleteBulkIssue } from '../actions/issueActions'
+import { fetchIssuesIfNeeded, fetchIssues } from '../actions/issueActions'
 
 import { withStyles, createStyleSheet } from 'material-ui/styles';
 import keycode from 'keycode';
@@ -19,13 +19,9 @@ import Table, {
   TableRow,
   TableSortLabel,
 } from 'material-ui/Table';
-import Toolbar from 'material-ui/Toolbar';
-import Typography from 'material-ui/Typography';
+
 import Paper from 'material-ui/Paper';
 import Checkbox from 'material-ui/Checkbox';
-import IconButton from 'material-ui/IconButton';
-import DeleteIcon from 'material-ui-icons/Delete';
-import FilterListIcon from 'material-ui-icons/FilterList';
 import { LinearProgress } from 'material-ui/Progress';
 
 import EnhancedTableHead from './table-issue/EnhancedTableHead.jsx';
@@ -110,15 +106,11 @@ class IssueDataTable extends Component {
     this.setFilter = this.setFilter.bind(this);
     this.deleteIssue = this.deleteIssue.bind(this);
     this.selectPage = this.selectPage.bind(this);
-    this.nextPage = this.nextPage.bind(this);
-    this.lastPage = this.lastPage.bind(this);
   }
   componentWillReceiveProps(nextPros) {
-
     const newSelected = this.state.selected.filter(function (id) {
       return nextPros.deletedIssues.indexOf(id) === -1;
     });
-
     this.setState({ selected: newSelected });
   }
   componentDidMount() {
@@ -128,6 +120,7 @@ class IssueDataTable extends Component {
   componentDidUpdate(prevProps) {
     if (prevProps.location.search != this.props.location.search
       || prevProps.deletedIssues.length != this.props.deletedIssues.length) {
+      const { issues } = this.props;
       this.props.dispatch(fetchIssues(this.props.location, this.state.pageSize));
     }
   }
@@ -137,24 +130,6 @@ class IssueDataTable extends Component {
     this.props.history.push({ pathname: this.props.location.pathname, search: query_string })
   }
 
-  deleteIssue() {
-    this.props.dispatch(deleteBulkIssue(this.state.selected, this.props.location));
-  }
-
-  nextPage(eventKey) {
-    const query = Object.assign({}, qs.parse(location.search));
-    const pageStr = (parseInt(query._page, 10) + 1);
-
-    let query_string = qs.stringify({ _page: pageStr });
-    this.props.history.push({ pathname: this.props.location.pathname, search: query_string });
-  }
-  lastPage(eventKey) {
-    const query = Object.assign({}, qs.parse(location.search));
-    const pageStr = (parseInt(query._page, 10) - 1);
-
-    let query_string = qs.stringify({ _page: pageStr });
-    this.props.history.push({ pathname: this.props.location.pathname, search: query_string });
-  }
 
   selectPage(eventKey) {
     // console.log('location', this.props.location.search);
@@ -228,7 +203,7 @@ class IssueDataTable extends Component {
 
     return (
       <Paper className={classes.paper}>
-        <EnhancedTableToolbar title="Issues" numSelected={selected.length} deleteIssue={this.deleteIssue} />
+        <EnhancedTableToolbar title="Issues" selected={selected} deleteIssue={this.deleteIssue} />
         {isFetching && <LinearProgress className={classes.progress} />}
         <Table>
           <EnhancedTableHead
@@ -242,9 +217,8 @@ class IssueDataTable extends Component {
           <TableBody>{issueRows}</TableBody>
         </Table>
         <EnhancedTableFooter
+          issueSize={this.props.issues.length}
           pageSize={this.state.pageSize}
-          totalCount={totalCount}
-          pageNum={this.props.pageNum}
           lastPage={this.lastPage}
           nextPage={this.nextPage} />
       </Paper>
@@ -262,14 +236,15 @@ IssueDataTable.propTypes = {
   dispatch: PropTypes.func.isRequired
 };
 const mapStateToProps = (state, ownProps) => {
-  const { issues, totalCount, isFetching, lastUpdated, deletedIssues, pageSize, pageNum } = state.issuesState;
+  const { issues, totalCount, isFetching, lastUpdated, deletedIssues, pageSize, pageNum, offset } = state.issuesState;
   return {
     issues: issues,
     totalCount: totalCount,
     isFetching: isFetching,
     lastUpdated: lastUpdated,
     deletedIssues: deletedIssues,
-    pageNum: pageNum
+    pageNum: pageNum,
+    offset: offset
   }
 };
 

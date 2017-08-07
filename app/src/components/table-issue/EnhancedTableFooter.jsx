@@ -47,24 +47,40 @@ const toolbarStyleSheet = createStyleSheet(theme => ({
 class EnhancedTableToolbar extends Component {
   constructor(props) {
     super(props);
+
+    this.nextPage = this.nextPage.bind(this);
+    this.lastPage = this.lastPage.bind(this);
   }
-  
+  travelPage(page) {
+    const next_page = parseInt(this.props.pageNum, 10) + page;
+    let query_string = qs.stringify({ _page: next_page });
+    this.props.history.push({ pathname: this.props.location.pathname, search: query_string });
+  }
+  nextPage(eventKey) {
+    this.travelPage(1);
+  }
+  lastPage(eventKey) {
+    this.travelPage(-1);
+  }
   render() {
-    const { classes, pageSize, totalCount, pageNum } = this.props;
+    const { classes, totalCount, offset, issueSize } = this.props;
+    const rowBegin = offset + 1;
+    const rowEnd = offset + issueSize;
+
     return (
       <Toolbar className={classNames(classes.root, { [classes.highlight]: false })}>
         <div className={classes.spacer} />
         {/* <TableFooterDrowdown /> */}
         <div className={classes.title}>
-          <Typography type="caption" noWrap={true}>{pageNum} - {pageSize + pageNum - 1} of {totalCount}</Typography>
+          <Typography type="caption" noWrap={true}>{rowBegin} - {rowEnd} of {totalCount}</Typography>
         </div>
         <div className={classNames(classes.actions, classes.leftNavBtn)}>
-          <IconButton aria-label="last page" disabled={pageNum == 1} onClick={this.props.lastPage}>
+          <IconButton aria-label="last page" disabled={rowBegin == 1} onClick={this.lastPage}>
             <ChevronLeft />
           </IconButton>
         </div>
         <div className={classes.actions}>
-          <IconButton aria-label="next page" onClick={this.props.nextPage}>
+          <IconButton aria-label="next page" disabled={rowEnd == totalCount} onClick={this.nextPage}>
             <ChevronRight />
           </IconButton>
         </div>
@@ -76,10 +92,19 @@ class EnhancedTableToolbar extends Component {
 
 EnhancedTableToolbar.propTypes = {
   classes: PropTypes.object.isRequired,
-  pageSize: PropTypes.number.isRequired,
+  location: PropTypes.object.isRequired,
   totalCount: PropTypes.number.isRequired,
-  pageNum: PropTypes.number.isRequired,
+  offset: PropTypes.number.isRequired,
+  issueSize: PropTypes.number.isRequired,
 };
-
+const mapStateToProps = (state, ownProps) => {
+  const { issues, totalCount, isFetching, lastUpdated, deletedIssues, pageSize, pageNum, offset } = state.issuesState;
+  return {
+    issues: issues,
+    totalCount: totalCount,
+    pageNum: pageNum,
+    offset: offset
+  }
+};
 const componentWithStyles = withStyles(toolbarStyleSheet)(EnhancedTableToolbar);
-export default withRouter(connect()(componentWithStyles));
+export default withRouter(connect(mapStateToProps)(componentWithStyles));

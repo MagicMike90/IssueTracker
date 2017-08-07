@@ -32,6 +32,7 @@ const issues = (state = initialState, action) => {
         totalCount: action.data.totalCount,
         isFetching: false,
         pageNum: action.data.pageNum,
+        offset: action.data.offset,
         receivedAt: action.receivedAt
       });
 

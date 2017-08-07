@@ -1,6 +1,8 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux';
+import { deleteBulkIssue } from '../../actions/issueActions'
 import classNames from 'classnames';
 
 import Toolbar from 'material-ui/Toolbar';
@@ -67,36 +69,40 @@ const StyleContextMenu = withStyles(toolbarStyleSheet)(ContextMenu);
 class EnhancedTableToolbar extends Component {
   constructor(props) {
     super(props);
+    this.deleteIssue = this.deleteIssue.bind(this);
+  }
+
+  deleteIssue() {
+    this.props.dispatch(deleteBulkIssue(this.props.selected, this.props.location));
   }
   render() {
-    const { numSelected, classes } = this.props;
-    
-    if (numSelected > 0) return (
+    const { selected, classes } = this.props;
+
+    if (selected.length > 0) return (
       <Toolbar
         className={classNames(classes.root, {
-          [classes.highlight]: numSelected > 0,
+          [classes.highlight]: selected.length > 0,
         })}
       >
         <div className={classes.title}>
           <Typography type="subheading" color="secondary">
-            {numSelected} selected
+            {selected.length} selected
             </Typography>
         </div>
 
         <div className={classes.spacer} />
 
         <div className={classes.actions}>
-          <IconButton aria-label="Delete" onClick={this.props.deleteIssue}>
+          <IconButton aria-label="Delete" onClick={this.deleteIssue}>
             <DeleteIcon />
           </IconButton>
         </div>
-
       </Toolbar>
     )
     return (
       <Toolbar
         className={classNames(classes.root, {
-          [classes.highlight]: numSelected > 0,
+          [classes.highlight]: selected.length > 0,
         })}
       >
         <div className={classes.title}>
@@ -121,9 +127,9 @@ class EnhancedTableToolbar extends Component {
 
 EnhancedTableToolbar.propTypes = {
   classes: PropTypes.object.isRequired,
-  numSelected: PropTypes.number.isRequired,
+  selected: PropTypes.array.isRequired,
   deleteIssue: PropTypes.func.isRequired
 };
 
-
-export default withStyles(toolbarStyleSheet)(EnhancedTableToolbar);
+const componentWithStyles = withStyles(toolbarStyleSheet)(EnhancedTableToolbar);
+export default connect()(componentWithStyles);

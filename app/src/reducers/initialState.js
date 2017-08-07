@@ -6,5 +6,6 @@ export default {
   failed: false,
   deletedIssues: [],
   pageSize : 10,
-  pageNum : 1
+  pageNum : 1,
+  offset: 0
 }

@@ -33,7 +33,7 @@ export const createIssueSuccess = (issue, history) => {
     receivedAt: Date.now()
   }
 };
-export const deleteIssueSuccess = (issueIds, history) => ({
+export const deleteIssueSuccess = (issueIds) => ({
   type: types.DELETE_ISSUE_SUCCESS,
   issueIds,
   receivedAt: Date.now()
@@ -64,14 +64,11 @@ const convertedIssue = issue => {
   return issue;
 }
 export const fetchIssues = (location, page_size) => dispatch => {
-
   const query = Object.assign({}, queryString.parse(location.search));
-
   const pageStr = query._page;
-  if (pageStr) {
-    delete query._page;
-    query._offset = (parseInt(pageStr, 10) - 1) * page_size;
-  }
+
+  delete query._page;
+  query._offset = pageStr ? (parseInt(pageStr, 10) - 1) * page_size : 0;
   query._limit = page_size;
 
   const search = Object.keys(query).map(k => `${k}=${query[k]}`).join('&');
@@ -90,6 +87,7 @@ export const fetchIssues = (location, page_size) => dispatch => {
 
       dispatch(requestIssuesSuccess({
         pageNum: pageStr ? parseInt(pageStr) : 1,
+        offset: query._offset,
         issues,
         totalCount: data.metadata.totalCount
       }));
@@ -161,7 +159,7 @@ export const deleteIssue = (issue, history) => {
     });
   }
 }
-export const deleteBulkIssue = (issueIds, history) => {
+export const deleteBulkIssue = (issueIds) => {
   return dispatch => {
     dispatch(sendRequest());
     issueApi.deleteBulkIssue(issueIds).then(response => {
@@ -171,7 +169,7 @@ export const deleteBulkIssue = (issueIds, history) => {
           dispatch(requestIssuesError(errorMsg))
         });
       }
-      return dispatch(deleteIssueSuccess(issueIds, history));
+      return dispatch(deleteIssueSuccess(issueIds));
     }).catch(error => {
       const errorMsg = `Error in sending data to server: ${error.message}`;
       dispatch(requestIssuesError(errorMsg))

@@ -10,13 +10,14 @@ import Typography from 'material-ui/Typography';
 import IconButton from 'material-ui/IconButton';
 import Add from 'material-ui-icons/Add';
 import DeleteIcon from 'material-ui-icons/Delete';
-import Input from 'material-ui/Input/Input';
+
 import FilterListIcon from 'material-ui-icons/FilterList';
 import { withStyles, createStyleSheet } from 'material-ui/styles';
 
 
-import IssueAddTableItem from './IssueAddTableItem.jsx';
-import FilterStatus from './FilterStatus.jsx';
+import FilterStatusAddTableItem from './AddTableItem.jsx';
+import FilterContextMenu from './FilterContextMenu.jsx';
+
 
 const toolbarStyleSheet = createStyleSheet(theme => ({
   root: {
@@ -61,7 +62,7 @@ class ContextMenu extends Component {
           </IconButton>}
         </div>
         <div className={classes.actions}>
-          <IssueAddTableItem />
+          <FilterStatusAddTableItem />
         </div>
       </div>
     );
@@ -79,10 +80,13 @@ class EnhancedTableToolbar extends Component {
     }
 
     this.openFilter = this.openFilter.bind(this);
-    this.deleteIssue = this.deleteIssue.bind(this);
+    this.closeFilter = this.closeFilter.bind(this);
   }
   openFilter() {
-
+    this.setState({ openFilter: true });
+  }
+  closeFilter() {
+    this.setState({ openFilter: false });
   }
   deleteIssue() {
     this.props.dispatch(deleteBulkIssue(this.props.selected, this.props.location));
@@ -111,7 +115,9 @@ class EnhancedTableToolbar extends Component {
         </div>
       </Toolbar>
     )
+    if (this.state.openFilter) return (<FilterContextMenu closeFilter={this.closeFilter}/>);
     return (
+
       <Toolbar
         className={classNames(classes.root, {
           [classes.highlight]: selected.length > 0,
@@ -122,16 +128,6 @@ class EnhancedTableToolbar extends Component {
         </div>
 
         <div className={classes.spacer} />
-        <Input
-          placeholder="Search..."
-          className={classes.input}
-          fullWidth
-          inputProps={{
-            'aria-label': 'Search',
-          }}
-        />
-        <FilterStatus />
-        <div className={classes.spacer} />
 
         <div className={classes.actions}>
           <IconButton aria-label="Filter list" onClick={this.openFilter}>
@@ -139,7 +135,7 @@ class EnhancedTableToolbar extends Component {
           </IconButton>
         </div>
         <div className={classes.actions}>
-          <IssueAddTableItem />
+          <FilterStatusAddTableItem />
         </div>
 
       </Toolbar>

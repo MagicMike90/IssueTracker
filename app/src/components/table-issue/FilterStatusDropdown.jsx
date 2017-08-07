@@ -3,11 +3,15 @@ import PropTypes from 'prop-types';
 import { withStyles, createStyleSheet } from 'material-ui/styles';
 import List, { ListItem, ListItemText } from 'material-ui/List';
 import Menu, { MenuItem } from 'material-ui/Menu';
+import Typography from 'material-ui/Typography';
 
 const styleSheet = createStyleSheet(theme => ({
   root: {
     maxWidth: 360,
     background: theme.palette.background.paper,
+  },
+  title: {
+    flex: '0 0 auto',
   },
 }));
 
@@ -20,7 +24,7 @@ const options = [
   'Closed'
 ];
 
-class SimpleListMenu extends Component {
+class FilterStatus extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -35,7 +39,7 @@ class SimpleListMenu extends Component {
   }
 
   handleClickListItem(event) {
-    console.log('event.currentTarget',event.currentTarget);
+    // console.log('event.currentTarget', event.currentTarget);
     this.setState({ open: true, anchorEl: event.currentTarget });
   };
 
@@ -54,6 +58,7 @@ class SimpleListMenu extends Component {
         <List>
           <ListItem
             button
+            dense
             aria-haspopup="true"
             aria-controls="lock-menu"
             aria-label="Filter status"
@@ -85,8 +90,8 @@ class SimpleListMenu extends Component {
   }
 }
 
-SimpleListMenu.propTypes = {
+FilterStatus.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styleSheet)(SimpleListMenu);
+export default withStyles(styleSheet)(FilterStatus);

@@ -60,14 +60,14 @@ class IssueList extends React.Component {
         let initFilter = qs.parse(this.props.location.search);
         return (
             <div>
-                <Panel collapsible header="Filter">
+                {/* <Panel collapsible header="Filter">
                     <IssueFilter setFilter={this.setFilter} initFilter={initFilter} />
                 </Panel>
                 <Pagination
                     items={Math.ceil(this.state.totalCount / PAGE_SIZE)}
                     activePage={parseInt(this.props.location.search._page || '1', 10)}
                     onSelect={this.selectPage} maxButtons={7} next prev boundaryLinks
-                />
+                /> */}
                 <IssueDataTable issues={this.props.issues} isFetching={this.props.isFetching}/>
             </div>
         );

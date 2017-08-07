@@ -10,6 +10,7 @@ import Typography from 'material-ui/Typography';
 import IconButton from 'material-ui/IconButton';
 import Add from 'material-ui-icons/Add';
 import DeleteIcon from 'material-ui-icons/Delete';
+import Input from 'material-ui/Input/Input';
 import FilterListIcon from 'material-ui-icons/FilterList';
 import { withStyles, createStyleSheet } from 'material-ui/styles';
 
@@ -39,6 +40,9 @@ const toolbarStyleSheet = createStyleSheet(theme => ({
   },
   title: {
     flex: '0 0 auto',
+  },
+  input: {
+    margin: theme.spacing.unit,
   },
 }));
 
@@ -70,7 +74,7 @@ class EnhancedTableToolbar extends Component {
   constructor(props) {
     super(props);
 
-    this.state= {
+    this.state = {
       isFilter: false,
     }
 
@@ -116,6 +120,16 @@ class EnhancedTableToolbar extends Component {
         <div className={classes.title}>
           <Typography type="title">{this.props.title}</Typography>
         </div>
+
+        <div className={classes.spacer} />
+        <Input
+          placeholder="Search..."
+          className={classes.input}
+          fullWidth
+          inputProps={{
+            'aria-label': 'Search',
+          }}
+        />
         <div className={classes.spacer} />
 
         <div className={classes.actions}>

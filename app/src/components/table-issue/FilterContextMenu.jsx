@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import qs from 'query-string';
+
 import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
 import IconButton from 'material-ui/IconButton';
@@ -46,11 +48,18 @@ class FilterContextMenu extends Component {
     constructor(props) {
         super(props);
 
+        this.state = {
+            search: ""
+        }
         this.onChange = this.onChange.bind(this);
         this.clearSearchField = this.clearSearchField.bind(this);
     }
     onChange(event) {
-        console.log('event', event.target.value);
+        this.setState({ search: event.target.value }, () => {
+            let query_string = qs.stringify({ search: this.state.search });
+            this.props.history.push({ search: query_string })
+        });
+        // this.setState({ search: event.target.value });
     }
     clearSearchField() {
 
@@ -67,9 +76,10 @@ class FilterContextMenu extends Component {
                     <SearchIcon />
                 </IconButton>
                 <Input
-                    placeholder="Search..."
+                    placeholder="Search Owner"
                     className={classes.input}
                     fullWidth
+                    value={this.state.search}
                     disableUnderline
                     inputProps={{
                         'aria-label': 'Search',

@@ -38,18 +38,12 @@ class FilterStatus extends Component {
     this.handleMenuItemClick = this.handleMenuItemClick.bind(this);
     this.handleRequestClose = this.handleRequestClose.bind(this);
   }
-  componentWillReceiveProps(nextPros) {
-    console.log('componentWillReceiveProps');
-  }
-  componentDidUpdate(prevProps) {
-    console.log('componentDidUpdate');
-  }
+
   handleClickListItem(event) {
     this.setState({ open: true, anchorEl: event.currentTarget });
   };
 
   handleMenuItemClick(event, index) {
-    console.log('index', index);
     this.setState({ selectedIndex: index, open: false }, () => {
       let query_string = qs.stringify({ status: options[this.state.selectedIndex].label });
       this.props.history.push({ search: query_string })

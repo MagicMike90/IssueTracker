@@ -51,13 +51,14 @@ const IssueRow = (props) => {
       </TableCell>
       <TableCell><Link to={`/issues/${issue._id}`}>
         {issue._id.substr(-4)}</Link></TableCell>
+      <TableCell>{issue.title}</TableCell>
       <TableCell>{issue.status}</TableCell>
       <TableCell>{issue.owner}</TableCell>
       <TableCell>{issue.created.toDateString()}</TableCell>
-      <TableCell>{issue.effort}</TableCell>
-      <TableCell>{issue.completionDate ?
-        issue.completionDate.toDateString() : ''}</TableCell>
-      <TableCell>{issue.title}</TableCell>
+      {/* <TableCell>{issue.effort}</TableCell> */}
+      {/* <TableCell>{issue.completionDate ?
+        issue.completionDate.toDateString() : ''}</TableCell> */}
+
     </TableRow>
   )
 }
@@ -79,12 +80,13 @@ const styleSheet = createStyleSheet(theme => ({
 }));
 const columnData = [
   { id: 'id', numeric: false, disablePadding: false, label: 'Id' },
+  { id: 'title', numeric: false, disablePadding: false, label: 'Title' },
   { id: 'status', numeric: false, disablePadding: false, label: 'Status' },
   { id: 'owner', numeric: false, disablePadding: false, label: 'Owner' },
   { id: 'created', numeric: false, disablePadding: false, label: 'Created' },
-  { id: 'effor', numeric: false, disablePadding: false, label: 'Effort' },
-  { id: 'completion', numeric: false, disablePadding: false, label: 'Completion Date' },
-  { id: 'title', numeric: false, disablePadding: false, label: 'Title' },
+  // { id: 'effor', numeric: false, disablePadding: false, label: 'Effort' },
+  // { id: 'completion', numeric: false, disablePadding: false, label: 'Completion Date' },
+
 ];
 class IssueDataTable extends Component {
   constructor(props) {

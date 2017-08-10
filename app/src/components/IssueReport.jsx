@@ -73,7 +73,6 @@ class IssueReport extends React.Component {
 IssueReport.propTypes = {
   location: PropTypes.object.isRequired,
   router: PropTypes.object,
-  showError: PropTypes.func.isRequired
 };
 
 export default IssueReport;

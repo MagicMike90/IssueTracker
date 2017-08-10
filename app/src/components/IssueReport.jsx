@@ -6,7 +6,7 @@ import Grid from 'material-ui/Grid';
 
 
 import ReportDataTable from './ReportDataTable.jsx'
-import EventTraker from './EventTraker.jsx'
+import EventTraker from './event-tracker/EventTraker.jsx'
 
 
 class IssueReport extends React.Component {
@@ -58,11 +58,11 @@ class IssueReport extends React.Component {
   render() {
     return (
 
-      <Grid container spacing={24}>
-        <Grid item xs={4}>
+      <Grid container spacing={8}>
+        <Grid item xs={6}>
           <EventTraker />
         </Grid>
-        <Grid item xs={8}>
+        <Grid item xs={6}>
           <ReportDataTable stats={this.state.stats} />
         </Grid>
       </Grid >

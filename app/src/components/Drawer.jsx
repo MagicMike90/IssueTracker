@@ -17,7 +17,8 @@ import MenuIcon from 'material-ui-icons/Menu';
 const styleSheet = createStyleSheet(theme => ({
   drawerHeader: {
     color: theme.palette.accent.A700,
-    backgroundColor: theme.palette.accent.A100,
+    backgroundColor: theme.palette.primary.A100,
+    height:250
   },
   profile: {
     paddingLeft: theme.spacing.unit * 2,

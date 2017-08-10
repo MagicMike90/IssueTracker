@@ -70,7 +70,6 @@ IssueRow.propTypes = {
 const styleSheet = createStyleSheet(theme => ({
   paper: {
     width: '100%',
-    marginTop: theme.spacing.unit * 3,
     overflowX: 'auto',
   },
   progress: {

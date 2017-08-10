@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { withStyles, createStyleSheet } from 'material-ui/styles';
 
 import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
+import Drawer from 'material-ui/Drawer';
 import Divider from 'material-ui/Divider';
 import DashboardIcon from 'material-ui-icons/Dashboard';
 import ListIcon from 'material-ui-icons/List';
@@ -34,7 +35,8 @@ class SideMenu extends Component {
     super(props);
 
     this.state = {
-      open: true
+      open: true,
+      docked:true
     };
 
     this.handleOpen = this.handleOpen.bind(this);
@@ -93,9 +95,14 @@ class SideMenu extends Component {
     );
 
     return (
-      <div className={classes.sideMenu}>
+      <Drawer
+        docked
+        open
+        onClick={this.handleClose}
+        style={{ zIndex: 10 }}
+      >
         {sideList}
-      </div>
+      </Drawer>
     );
   }
 }

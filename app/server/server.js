@@ -55,7 +55,7 @@ app.get('/api/issues', (req, res) => {
         console.log('limit', limit);
 
         if (limit > 50) limit = 50;
-        const cursor = db.collection('issues').find(filter).sort({ _id: 1 }).skip(offset).limit(limit);
+        const cursor = db.collection('issues').find(filter).sort({ created: -1 }).skip(offset).limit(limit);
 
         let totalCount;
         // ensures that the effects of skip() and limit() will be ignored

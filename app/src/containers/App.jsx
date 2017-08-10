@@ -6,32 +6,45 @@ import Header from '../components/Header.jsx';
 import Routes from './Routes.jsx';
 import NotificationContainer from './NotificationContainer.jsx';
 import SideMenu from '../components/SideMenu.jsx';
-import Grid from 'material-ui/Grid';
+import Grid from 'material-ui/Grid'
+import { withStyles, createStyleSheet } from 'material-ui/styles';
+
+
+const styleSheet = createStyleSheet(theme => ({
+    container: {
+
+    },
+    right: {
+        width: 'calc(100% - 250px)',
+        float: 'right'
+    },
+    content: {
+        margin: theme.spacing.unit,
+    }
+}));
 
 // withRouter IssueList can use this.props.router to access the router object.(this.props.location)
-export default class App extends React.Component {
+class App extends React.Component {
     constructor(props) {
         super(props);
     }
     render() {
-        return (
-            <div>
-                <Grid container spacing={0}>
-                    <Grid item xs={12} sm={2} only="md">
-                        <SideMenu />
-                    </Grid>
-                    <Grid item xs={12} sm={10}>
-                        <Header />
-                        <div className="container-fluid">
-                            <Routes />
-                        </div>
-                    </Grid>
+        const classes = this.props.classes;
 
-                </Grid>
-                <NotificationContainer />
-            </div>
+        return (
+            <div className={classes.container}>
+                <div className={classes.right} >
+                    <Header />
+                    <div className={classes.content}>
+                        <Routes />
+                        <NotificationContainer />
+                    </div>
+                </div>
+
+                <SideMenu className={classes.sidebar} />
+            </div >
         );
     }
 }
 
-
+export default withStyles(styleSheet)(App);

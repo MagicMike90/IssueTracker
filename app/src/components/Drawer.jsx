@@ -14,7 +14,15 @@ import ReportIcon from 'material-ui-icons/Report';
 import IconButton from 'material-ui/IconButton';
 import MenuIcon from 'material-ui-icons/Menu';
 
-const styleSheet = createStyleSheet({
+const styleSheet = createStyleSheet(theme => ({
+  drawerHeader: {
+    color: theme.palette.accent.A700,
+    backgroundColor: theme.palette.accent.A100,
+  },
+  profile: {
+    paddingLeft: theme.spacing.unit * 2,
+    paddingRight: theme.spacing.unit * 2,
+  },
   list: {
     width: 250,
     flex: 'initial',
@@ -23,7 +31,7 @@ const styleSheet = createStyleSheet({
     width: 'auto',
     flex: 'initial',
   },
-});
+}));
 
 class UndockedDrawer extends Component {
 
@@ -31,7 +39,7 @@ class UndockedDrawer extends Component {
     super(props);
 
     this.state = {
-      open: true
+      open: false
     };
 
     this.handleOpen = this.handleOpen.bind(this);
@@ -96,10 +104,17 @@ class UndockedDrawer extends Component {
           <MenuIcon />
         </IconButton>
         <Drawer
-          open={this.state.open}
-          onRequestClose={this.handleClose}
+          docked
+          open
           onClick={this.handleClose}
+          style={{zIndex: 10}}
         >
+          <div className={classes.drawerHeader}>
+            <div className={classes.profile}>
+              {"Side Panel"}
+            </div>
+
+          </div>
           {sideList}
         </Drawer>
       </div>

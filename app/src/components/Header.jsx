@@ -10,15 +10,12 @@ import Typography from 'material-ui/Typography';
 import Button from 'material-ui/Button';
 
 
-import SideMenu from './SideMenu.jsx';
+import Drawer from './Drawer.jsx';
 import AdminMenu from './AdminMenu.jsx';
 
 const styleSheet = createStyleSheet(theme => ({
   root: {
     width: '100%',
-  },
-  avatar: {
-    margin: theme.spacing.unit
   },
   flex: {
     flex: 1,
@@ -31,21 +28,19 @@ const styleSheet = createStyleSheet(theme => ({
 function Header(props) {
   const { classes, login } = props;
   return (
-    <div className={classes.root}>
-      <AppBar position="static">
-        <Toolbar>
-          {/* <div className={classes.drawer}>
-            <Drawer />
-          </div> */}
-          <Typography type="title" color="inherit" className={classes.flex}>
-            Issue Tracker
+    <AppBar position="static">
+      <Toolbar>
+         {/* <div className={classes.drawer}>
+             <Drawer /> 
+          </div>  */}
+        <Typography type="title" color="inherit" className={classes.flex}>
+          Issue Tracker
           </Typography>
-          <Button color="contrast" onClick={() => props.history.push('/issues')}>Issues</Button>
-          <Button color="contrast" onClick={() => props.history.push('/reports')}>Reports</Button>
-          <AdminMenu />
-        </Toolbar>
-      </AppBar>
-    </div>
+        <Button color="contrast" onClick={() => props.history.push('/issues')}>Issues</Button>
+        <Button color="contrast" onClick={() => props.history.push('/reports')}>Reports</Button>
+        <AdminMenu />
+      </Toolbar>
+    </AppBar>
   );
 }
 

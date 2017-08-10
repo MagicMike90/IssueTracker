@@ -2,23 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types'
 import { Panel, Table } from 'react-bootstrap';
 import qs from 'query-string';
+import Grid from 'material-ui/Grid';
 
-import IssueFilter from './IssueFilter.jsx';
-import withToast from './withToast.jsx';
+
 import ReportDataTable from './ReportDataTable.jsx'
+import EventTraker from './EventTraker.jsx'
 
-
-// const statuses = ['New', 'Open', 'Assigned', 'Fixed', 'Verified', 'Closed'];
-// const StatRow = (props) => (
-//   <tr>
-//     <td>{props.owner}</td>
-//     {statuses.map((status, index) => (<td key={index}>{props.counts[status]}</td>))}
-//   </tr>
-// );
-// StatRow.propTypes = {
-//   owner: PropTypes.string.isRequired,
-//   counts: PropTypes.object.isRequired,
-// };
 
 class IssueReport extends React.Component {
   static dataFetcher({ urlBase, location }) {
@@ -68,9 +57,16 @@ class IssueReport extends React.Component {
   }
   render() {
     return (
-      <div>
-         <ReportDataTable stats={this.state.stats}/> 
-      </div>
+
+      <Grid container spacing={24}>
+        <Grid item xs={4}>
+          <EventTraker />
+        </Grid>
+        <Grid item xs={8}>
+          <ReportDataTable stats={this.state.stats} />
+        </Grid>
+      </Grid >
+
     );
   }
 }
@@ -79,6 +75,5 @@ IssueReport.propTypes = {
   router: PropTypes.object,
   showError: PropTypes.func.isRequired
 };
-const IssueReportWithToast = withToast(IssueReport);
-IssueReportWithToast.dataFetcher = IssueReport.dataFetcher;
-export default IssueReportWithToast;
+
+export default IssueReport;

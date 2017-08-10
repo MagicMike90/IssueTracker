@@ -4,16 +4,15 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux';
 import { fetchIssuesIfNeeded, fetchIssues, deleteIssue } from '../actions/issueActions'
 
-import 'whatwg-fetch';
+
 import { Link } from 'react-router-dom';
 import qs from 'query-string';
 import { Button, Glyphicon, Table, Panel, Pagination } from 'react-bootstrap';
 
-// import IssueAdd from './IssueAdd.jsx'
-import IssueFilter from './IssueFilter.jsx'
-import withToast from './withToast.jsx';
+
 import IssueAddNavItem from './IssueAddNavItem.jsx';
 import IssueDataTable from './IssueDataTable.jsx'
+
 
 const PAGE_SIZE = 10;
 class IssueList extends React.Component {
@@ -44,30 +43,19 @@ class IssueList extends React.Component {
         this.props.history.push({ pathname: this.props.location.pathname, search: query_string })
     }
 
-    // deleteIssue(issue) {
-    //     console.log('deleteIssue', issue);
-    //     this.props.dispatch(deleteIssue(issue,this.props.location));
-    // }
+
     selectPage(eventKey) {
-        // console.log('location', this.props.location.search);
+
         const query = Object.assign(this.props.location.search, { _page: eventKey });
-        // console.log('selectPage', query);
+
         let query_string = qs.stringify({ _page: eventKey });
-        // console.log('qs', qs);
+
         this.props.history.push({ pathname: this.props.location.pathname, search: query_string })
     }
     render() {
         let initFilter = qs.parse(this.props.location.search);
         return (
             <div>
-                {/* <Panel collapsible header="Filter">
-                    <IssueFilter setFilter={this.setFilter} initFilter={initFilter} />
-                </Panel>
-                <Pagination
-                    items={Math.ceil(this.state.totalCount / PAGE_SIZE)}
-                    activePage={parseInt(this.props.location.search._page || '1', 10)}
-                    onSelect={this.selectPage} maxButtons={7} next prev boundaryLinks
-                /> */}
                 <IssueDataTable issues={this.props.issues} isFetching={this.props.isFetching}/>
             </div>
         );
@@ -81,7 +69,6 @@ IssueList.propTypes = {
     lastUpdated: PropTypes.number,
     dispatch: PropTypes.func.isRequired,
 };
-const IssueListWithToast = withToast(IssueList);
 
 
 const mapStateToProps = (state, ownProps) => {

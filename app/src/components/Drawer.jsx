@@ -39,7 +39,8 @@ class UndockedDrawer extends Component {
     super(props);
 
     this.state = {
-      open: false
+      open: false,
+      docked: false
     };
 
     this.handleOpen = this.handleOpen.bind(this);
@@ -104,8 +105,8 @@ class UndockedDrawer extends Component {
           <MenuIcon />
         </IconButton>
         <Drawer
-          docked
-          open
+          docked={this.state.docked}
+          open={this.state.open}
           onClick={this.handleClose}
           style={{zIndex: 10}}
         >

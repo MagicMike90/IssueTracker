@@ -13,10 +13,10 @@ const NoMatch = () => <p>Page Not Found</p>;
 const Routes = () => (
   <div>
     <Switch>
-      <Redirect exact from="/" to="/issues" />
+      <Redirect exact from="/" to="/reports" />
+      <Route exact path="/reports" component={withRouter(IssueReport)} />
       <Route exact path="/issues" component={withRouter(Issuelist)} />
       <Route exact path="/issues/:id" component={IssueEdit} />
-      <Route exact path="/reports" component={withRouter(IssueReport)} />
       <Route component={NoMatch} />
     </Switch>
   </div>

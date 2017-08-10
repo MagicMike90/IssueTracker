@@ -17,11 +17,11 @@ const styleSheet = createStyleSheet(theme => ({
   root: {
     width: '100%',
   },
-  flex: {
-    flex: 1,
-  },
   drawer: {
     flex: 0
+  },
+  flex: {
+    flex: 1,
   }
 }));
 
@@ -30,14 +30,13 @@ function Header(props) {
   return (
     <AppBar position="static">
       <Toolbar>
-         {/* <div className={classes.drawer}>
-             <Drawer /> 
-          </div>  */}
+        <Drawer className={classes.drawer} />
         <Typography type="title" color="inherit" className={classes.flex}>
           Issue Tracker
           </Typography>
-        <Button color="contrast" onClick={() => props.history.push('/issues')}>Issues</Button>
+
         <Button color="contrast" onClick={() => props.history.push('/reports')}>Reports</Button>
+        <Button color="contrast" onClick={() => props.history.push('/issues')}>Issues</Button>
         <AdminMenu />
       </Toolbar>
     </AppBar>

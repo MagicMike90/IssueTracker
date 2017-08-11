@@ -13,7 +13,7 @@ class StatCard extends React.Component {
     super(props);
   }
   render() {
-    const {classes ,type} = this.props;
+    const {classes ,title, type} = this.props;
     let border = classes.normal;
     switch(type) {
       case 'success': border = classes.success; break;
@@ -24,7 +24,7 @@ class StatCard extends React.Component {
     return (
       <Paper className={classNames(classes.paper, border)} elevation={4}>
         <div className={classes.title}>
-          <Typography type="title">{"Total Finish"}</Typography>
+          <Typography type="title">{title}</Typography>
         </div>
         <div className={classes.title}>
           <Typography type="subheading" color="secondary">{"12"}</Typography>

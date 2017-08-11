@@ -59,10 +59,10 @@ class IssueReport extends React.Component {
     return (
       <div>
         <Grid container spacing={24}>
-          <Grid item md={3}><StatCard type="success"/>  </Grid >
-          <Grid item md={3}> <StatCard /> </Grid >
-          <Grid item md={3}> <StatCard type="warning"/> </Grid >
-          <Grid item md={3}> <StatCard type="error"/> </Grid >
+          <Grid item md={3}> <StatCard title="Total Issues" /> </Grid >
+          <Grid item md={3}><StatCard title="Total Fixed" type="success" />  </Grid >
+          <Grid item md={3}> <StatCard title="Total Assigned" type="warning" /> </Grid >
+          <Grid item md={3}> <StatCard title="Total Verified" type="error" /> </Grid >
         </Grid >
         <Grid container spacing={24}>
           <Grid item xs={6}>

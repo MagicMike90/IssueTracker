@@ -92,7 +92,7 @@ class IssueDataTable extends Component {
     super(props);
     this.state = {
       order: 'asc',
-      orderBy: 'calories',
+      orderBy: 'created',
       selected: [],
       pageSize: 10,
       pageNum: 1

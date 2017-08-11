@@ -20,6 +20,7 @@ const styleSheet = createStyleSheet(theme => ({
     },
     content: {
         margin: theme.spacing.unit,
+        padding: theme.spacing.unit,
     }
 }));
 

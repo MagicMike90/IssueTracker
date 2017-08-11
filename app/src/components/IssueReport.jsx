@@ -4,7 +4,7 @@ import { Panel, Table } from 'react-bootstrap';
 import qs from 'query-string';
 import Grid from 'material-ui/Grid';
 
-
+import StatCard from './dashboard/StatCard.jsx'
 import ReportDataTable from './ReportDataTable.jsx'
 import EventTraker from './event-tracker/EventTraker.jsx'
 
@@ -57,16 +57,22 @@ class IssueReport extends React.Component {
   }
   render() {
     return (
-
-      <Grid container spacing={8}>
-        <Grid item xs={6}>
-          <EventTraker />
-        </Grid>
-        <Grid item xs={6}>
-          <ReportDataTable stats={this.state.stats} />
-        </Grid>
-      </Grid >
-
+      <div>
+        <Grid container spacing={24}>
+          <Grid item md={3}><StatCard type="success"/>  </Grid >
+          <Grid item md={3}> <StatCard /> </Grid >
+          <Grid item md={3}> <StatCard type="warning"/> </Grid >
+          <Grid item md={3}> <StatCard type="error"/> </Grid >
+        </Grid >
+        <Grid container spacing={24}>
+          <Grid item xs={6}>
+            <EventTraker />
+          </Grid>
+          <Grid item xs={12}>
+            <ReportDataTable stats={this.state.stats} />
+          </Grid>
+        </Grid >
+      </div>
     );
   }
 }

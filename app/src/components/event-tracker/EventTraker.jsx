@@ -29,18 +29,18 @@ function FolderList(props) {
   return (
     <Paper className={classes.paper} elevation={4}>
       <div className={classes.title}>
-        <Typography type="subheading" component="h2">{"Recent Activities"}</Typography>
+        <Typography type="title">{"Recent Activities"}</Typography>
       </div>
       <div className={classes.root}>
         <List>
-          <ListItem button>
+          <ListItem dense button>
             <Avatar>
               <AccountCircleIcon />
             </Avatar>
-            <ListItemText primary="Photos" secondary="Jan 9, 2016" />
+            <ListItemText primary="Ben Gao - bengao committed changeset d73c6137414c156333154e3fae13b8c108c24b90 saying:FLEAT-3043 tax invoice to AWS S3 " secondary="Jan 9, 2016" />
           </ListItem>
           <Divider />
-          <ListItem button>
+          <ListItem dense button>
             <Avatar>
               <AccountCircleIcon />
             </Avatar>

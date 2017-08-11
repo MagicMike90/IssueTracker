@@ -37,7 +37,8 @@ export default class EnhancedTableHead extends Component {
         return (
             <TableHead>
                 <TableRow>
-                    <TableCell checkbox>
+                    <TableCell>
+                        Name
                     </TableCell>
                     {headCols}
                 </TableRow>

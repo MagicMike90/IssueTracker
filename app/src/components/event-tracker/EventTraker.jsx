@@ -2,36 +2,24 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+
 import { withStyles, createStyleSheet } from 'material-ui/styles';
-import List, { ListItem, ListItemText } from 'material-ui/List';
+import List, { ListItem, ListItemText, ListSubheader } from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 import Avatar from 'material-ui/Avatar';
 import AccountCircleIcon from 'material-ui-icons/AccountCircle';
-import Paper from 'material-ui/Paper';
-import Typography from 'material-ui/Typography';
+// import Paper from 'material-ui/Paper';
+// import Card, { CardActions, CardContent, CardMedia } from 'material-ui/Card';
+// import Typography from 'material-ui/Typography';
+// import PaperStyle from '../../theme/Paper'
 
-const styleSheet = createStyleSheet(theme => ({
-  paper: theme.mixins.gutters({
-    paddingTop: 16,
-    paddingBottom: 16,
-  }),
-  root: {
-    width: '100%',
-    background: theme.palette.background.paper,
-  },
-  title: {
-    flex: '0 0 auto',
-  },
-}));
+import PaperWrapper from '../PaperWrapper.jsx'
 
-function FolderList(props) {
+
+function EventTraker(props) {
   const classes = props.classes;
   return (
-    <Paper className={classes.paper} elevation={4}>
-      <div className={classes.title}>
-        <Typography type="title">{"Recent Activities"}</Typography>
-      </div>
-      <div className={classes.root}>
+    <div>
         <List>
           <ListItem dense button>
             <Avatar>
@@ -47,13 +35,12 @@ function FolderList(props) {
             <ListItemText primary="Work" secondary="Jan 7, 2016" />
           </ListItem>
         </List>
-      </div>
-    </Paper>
+    </div>
   );
 }
 
-FolderList.propTypes = {
+EventTraker.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styleSheet)(FolderList);
+export default PaperWrapper(EventTraker, "Recent Activities");

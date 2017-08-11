@@ -7,6 +7,7 @@ import Grid from 'material-ui/Grid';
 import StatCard from './dashboard/StatCard.jsx'
 import ReportDataTable from './ReportDataTable.jsx'
 import EventTraker from './event-tracker/EventTraker.jsx'
+import LineChart from './charts/LineChart.jsx'
 
 
 class IssueReport extends React.Component {
@@ -58,21 +59,37 @@ class IssueReport extends React.Component {
   render() {
     return (
       <div>
-        <Grid container spacing={24}>
-          <Grid item md={3}> <StatCard title="Total Issues" /> </Grid >
-          <Grid item md={3}><StatCard title="Total Fixed" type="success" />  </Grid >
-          <Grid item md={3}> <StatCard title="Total Assigned" type="warning" /> </Grid >
-          <Grid item md={3}> <StatCard title="Total Verified" type="error" /> </Grid >
-        </Grid >
-        <Grid container spacing={24}>
-          <Grid item xs={6}>
+        <Grid container>
+          <Grid item xs={7}>
+            <LineChart />
+          </Grid>
+
+          <Grid item xs={5}>
             <EventTraker />
           </Grid>
-          <Grid item xs={12}>
+        </Grid>
+        <Grid container>
+          <Grid item md={7}>
             <ReportDataTable stats={this.state.stats} />
           </Grid>
         </Grid >
-      </div>
+
+        <Grid container>
+          <Grid item md={3}>
+            <StatCard title="Total Issues" />
+          </Grid >
+          <Grid item md={3}>
+            <StatCard title="Total Fixed" type="success" />
+          </Grid >
+          <Grid item md={3}>
+            <StatCard title="Total Assigned" type="warning" />
+          </Grid >
+          <Grid item md={3}>
+            <StatCard title="Total Verified" type="error" />
+          </Grid >
+        </Grid>
+
+      </div >
     );
   }
 }

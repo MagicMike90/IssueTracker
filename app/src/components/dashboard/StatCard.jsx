@@ -13,23 +13,25 @@ class StatCard extends React.Component {
     super(props);
   }
   render() {
-    const {classes ,title, type} = this.props;
+    const { classes, title, type } = this.props;
     let border = classes.normal;
-    switch(type) {
+    switch (type) {
       case 'success': border = classes.success; break;
       case 'warning': border = classes.warning; break;
       case 'error': border = classes.error; break;
     }
 
     return (
-      <Paper className={classNames(classes.paper, border)} elevation={4}>
-        <div className={classes.title}>
-          <Typography type="title">{title}</Typography>
-        </div>
-        <div className={classes.title}>
-          <Typography type="subheading" color="secondary">{"12"}</Typography>
-        </div>
-      </Paper>
+      <div className={classes.root}>
+        <Paper className={classNames( border)} true>
+          <div className={classes.title}>
+            <Typography type="title">{title}</Typography>
+          </div>
+          <div className={classes.title}>
+            <Typography type="subheading" color="secondary">{"12"} Issues</Typography>
+          </div>
+        </Paper>
+      </div>
     );
   }
 }

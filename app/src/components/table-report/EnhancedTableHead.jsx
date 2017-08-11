@@ -26,6 +26,7 @@ export default class EnhancedTableHead extends Component {
             <TableCell
                 key={column.id}
                 numeric={column.numeric}
+                compact
                 disablePadding={column.disablePadding}>
                 <TableSortLabel
                     active={orderBy === column.id}

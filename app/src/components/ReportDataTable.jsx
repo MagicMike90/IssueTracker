@@ -28,12 +28,12 @@ import EnhancedTableToolbar from './table-report/EnhancedTableToolbar.jsx';
 
 
 const columnData = [
-  { id: 'new', numeric: true, disablePadding: false, label: 'New' },
-  { id: 'open', numeric: true, disablePadding: false, label: 'Open' },
-  { id: 'assigned', numeric: true, disablePadding: false, label: 'Assigned' },
-  { id: 'fixed', numeric: true, disablePadding: false, label: 'Fixed' },
-  { id: 'verified', numeric: true, disablePadding: false, label: 'Verified' },
-  { id: 'closed', numeric: true, disablePadding: false, label: 'Closed' },
+  { id: 'new', numeric: true, disablePadding: true, label: 'New' },
+  { id: 'open', numeric: true, disablePadding: true, label: 'Open' },
+  { id: 'assigned', numeric: true, disablePadding: true, label: 'Assigned' },
+  { id: 'fixed', numeric: true, disablePadding: true, label: 'Fixed' },
+  { id: 'verified', numeric: true, disablePadding: true, label: 'Verified' },
+  { id: 'closed', numeric: true, disablePadding: true, label: 'Closed' },
 ];
 
 const StatRow = (props) => {
@@ -41,7 +41,7 @@ const StatRow = (props) => {
   return (
     <TableRow hover>
       <TableCell>{props.owner}</TableCell>
-      {columnData.map((data, index) => (<TableCell numeric key={index}>{props.counts[data.label]}</TableCell>))}
+      {columnData.map((data, index) => (<TableCell numeric disablePadding compact key={index}>{props.counts[data.label]}</TableCell>))}
     </TableRow>
   )
 }

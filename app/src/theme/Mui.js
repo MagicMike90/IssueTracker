@@ -7,7 +7,7 @@ import Blue from 'material-ui/colors/blue';
 
 const theme = createMuiTheme({
   palette: createPalette({
-    // primary: Blue, // Purple and green play nicely together
+    primary: Blue, // Purple and green play nicely together
     // accent: Blue
   }),
 });

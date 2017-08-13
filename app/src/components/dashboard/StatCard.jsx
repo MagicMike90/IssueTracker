@@ -22,8 +22,8 @@ class StatCard extends React.Component {
     }
 
     return (
-      <div className={classes.root}>
-        <Paper className={classNames( border)} true>
+      <div>
+        <Paper className={classNames( classes.root,border)}>
           <div className={classes.title}>
             <Typography type="title">{title}</Typography>
           </div>

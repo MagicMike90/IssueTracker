@@ -20,21 +20,36 @@ function EventTraker(props) {
   const classes = props.classes;
   return (
     <div>
-        <List>
-          <ListItem dense button>
-            <Avatar>
-              <AccountCircleIcon />
-            </Avatar>
-            <ListItemText primary="Ben Gao - bengao committed changeset d73c6137414c156333154e3fae13b8c108c24b90 saying:FLEAT-3043 tax invoice to AWS S3 " secondary="Jan 9, 2016" />
-          </ListItem>
-          <Divider />
-          <ListItem dense button>
-            <Avatar>
-              <AccountCircleIcon />
-            </Avatar>
-            <ListItemText primary="Work" secondary="Jan 7, 2016" />
-          </ListItem>
-        </List>
+      <List>
+        <ListItem dense button>
+          <Avatar>
+            <AccountCircleIcon />
+          </Avatar>
+          <ListItemText primary="Ben Gao - bengao committed changeset d73c6137414c156333154e3fae13b8c108c24b90 saying:FLEAT-3043 tax invoice to AWS S3 " secondary="Jan 9, 2016" />
+        </ListItem>
+        <Divider />
+        <ListItem dense button>
+          <Avatar>
+            <AccountCircleIcon />
+          </Avatar>
+          <ListItemText primary="Ben Gao - bengao committed changeset d73c6137414c156333154e3fae13b8c108c24b90 saying:FLEAT-3043 tax invoice to AWS S3 " secondary="Jan 9, 2016" />
+        </ListItem>
+        <Divider />
+        <ListItem dense button>
+          <Avatar>
+            <AccountCircleIcon />
+          </Avatar>
+          <ListItemText primary="Ben Gao - bengao committed changeset d73c6137414c156333154e3fae13b8c108c24b90 saying:FLEAT-3043 tax invoice to AWS S3 " secondary="Jan 9, 2016" />
+        </ListItem>
+        <Divider />
+        <ListItem dense button>
+          <Avatar>
+            <AccountCircleIcon />
+          </Avatar>
+          <ListItemText primary="Ben Gao - bengao committed changeset d73c6137414c156333154e3fae13b8c108c24b90 saying:FLEAT-3043 tax invoice to AWS S3 " secondary="Jan 9, 2016" />
+        </ListItem>
+        <Divider />
+      </List>
     </div>
   );
 }

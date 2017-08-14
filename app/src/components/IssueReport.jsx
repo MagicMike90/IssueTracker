@@ -59,32 +59,7 @@ class IssueReport extends React.Component {
   render() {
     return (
       <div>
-        <Grid container>
-          <Grid item md={3}>
-            <StatCard title="Total Issues" />
-
-            <StatCard title="Total Fixed" type="success" />
-
-            <StatCard title="Total Assigned" type="warning" />
-
-            <StatCard title="Total Verified" type="error" />
-          </Grid >
-          <Grid item xs={9}>
-            <LineChart />
-          </Grid>
-        </Grid>
-
-        <Grid container>
-          <Grid item xs={5}>
-            <EventTraker />
-          </Grid>
-          <Grid item md={7}>
-            <ReportDataTable stats={this.state.stats} />
-          </Grid>
-        </Grid >
-
-
-
+        <ReportDataTable stats={this.state.stats} />
       </div >
     );
   }

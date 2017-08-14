@@ -6,7 +6,9 @@ import { withStyles } from 'material-ui/styles';
 import Paper from 'material-ui/Paper';
 import PaperStyle from '../../theme/Paper'
 import Typography from 'material-ui/Typography';
-
+import ContentPasteIcon from 'material-ui-icons/ContentPaste';
+import List, { ListItem, ListItemSecondaryAction, ListItemText } from 'material-ui/List';
+import IconButton from 'material-ui/IconButton';
 
 class StatCard extends React.Component {
   constructor(props) {
@@ -22,16 +24,17 @@ class StatCard extends React.Component {
     }
 
     return (
-      <div>
-        <Paper className={classNames( classes.root,border)}>
-          <div className={classes.title}>
-            <Typography type="title">{title}</Typography>
-          </div>
-          <div className={classes.title}>
-            <Typography type="subheading" color="secondary">{"12"} Issues</Typography>
-          </div>
+        <Paper className={classNames(classes.paper, border)}>
+          <ListItem>
+            <ListItemText primary={title} secondary="12"/>
+            <ListItemSecondaryAction>
+              <IconButton disabled>
+                <ContentPasteIcon />
+              </IconButton>
+            </ListItemSecondaryAction>
+          </ListItem>
         </Paper>
-      </div>
+
     );
   }
 }

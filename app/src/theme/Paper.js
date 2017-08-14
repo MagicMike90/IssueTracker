@@ -15,6 +15,7 @@ const styleSheet = createStyleSheet(theme => ({
   paper: theme.mixins.gutters({
     paddingTop: 16,
     paddingBottom: 16,
+    width: 320
   }),
   title: {
     flex: '0 0 auto',

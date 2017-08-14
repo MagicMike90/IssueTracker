@@ -65,8 +65,8 @@ class IssueAddTableItem extends React.Component {
     this.hideModal();
 
     const newIssue = {
-      owner: values.title,
-      title: values.owner,
+      title: values.title,
+      owner: values.owner,
       status: 'New',
       created: new Date(),
     };

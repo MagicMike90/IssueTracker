@@ -75,7 +75,7 @@ let EditIssueForm = props => {
           <Field name="owner" label="Owner" component={renderTextField} className={classes.textField} fullWidth={true} />
         </FormGroup>
 
-        <Grid container gutter={24}>
+        <Grid container>
           <Grid item xs={4}>
             <FormGroup className={classes.FormGroup} row={true}>
               <Field type="number" name="effort" label="Effort" component={renderTextField} className={classes.textField} fullWidth={true} />
@@ -106,10 +106,14 @@ let EditIssueForm = props => {
           </Grid>
         </Grid>
 
-
-        {/* <FormGroup className={classes.FormGroup} row={true}>
-          <Button type="submit" className={classes.button} color="primary" raised>Submit</Button>
-        </FormGroup> */}
+        <FormGroup className={classes.FormGroup} row={true}>
+          <Field name="comment" label="Comment"
+            component={renderTextField}
+            className={classes.textField}
+            fullWidth={true}
+            multiline
+            rows="4" />
+        </FormGroup>
       </form>
     </div>
   )

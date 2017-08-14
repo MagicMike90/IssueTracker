@@ -15,7 +15,7 @@ const issueFieldType = {
     created: 'required',
     completionDate: 'optional',
     title: 'required',
-    comment: 'required',
+    comment: 'optional',
 }
 
 function convertIssue(issue) {

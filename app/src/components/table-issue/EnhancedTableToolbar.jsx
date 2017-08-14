@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux';
-import { deleteBulkIssue , turnOnFilter , turnOffFilter} from '../../actions/issueActions'
+import { deleteBulkIssue, turnOnFilter, turnOffFilter } from '../../actions/issueActions'
 import classNames from 'classnames';
 
 import Toolbar from 'material-ui/Toolbar';
@@ -60,9 +60,10 @@ class EnhancedTableToolbar extends Component {
 
     this.openFilter = this.openFilter.bind(this);
     this.closeFilter = this.closeFilter.bind(this);
+    this.deleteIssue = this.deleteIssue.bind(this);
   }
   openFilter() {
-     this.props.dispatch(turnOnFilter());
+    this.props.dispatch(turnOnFilter());
     // this.setState({ openFilter: true });
   }
   closeFilter() {
@@ -73,7 +74,7 @@ class EnhancedTableToolbar extends Component {
     this.props.dispatch(deleteBulkIssue(this.props.selected, this.props.location));
   }
   render() {
-    const { selected, classes ,dispatch} = this.props;
+    const { selected, classes, dispatch } = this.props;
 
     if (selected.length > 0) return (
       <Toolbar
@@ -96,7 +97,7 @@ class EnhancedTableToolbar extends Component {
         </div>
       </Toolbar>
     )
-    if (this.props.openFilter) return (<FilterContextMenu history={this.props.history} closeFilter={this.closeFilter}/>);
+    if (this.props.openFilter) return (<FilterContextMenu history={this.props.history} closeFilter={this.closeFilter} />);
     return (
 
       <Toolbar
@@ -127,7 +128,9 @@ class EnhancedTableToolbar extends Component {
 
 EnhancedTableToolbar.propTypes = {
   classes: PropTypes.object.isRequired,
-  selected: PropTypes.array.isRequired
+  selected: PropTypes.array.isRequired,
+  location: PropTypes.object.isRequired,
+  dispatch: PropTypes.func.isRequired
 };
 const mapStateToProps = (state, ownProps) => {
   const { openFilter } = state.issuesState;

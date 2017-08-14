@@ -60,8 +60,6 @@ class IssueAddTableItem extends React.Component {
 
   submit(values) {
     // e.preventDefault();
-    console.log(values)
-
     this.hideModal();
 
     const newIssue = {
